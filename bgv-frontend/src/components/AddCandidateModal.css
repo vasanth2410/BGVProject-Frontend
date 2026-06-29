@@ -1,0 +1,33 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-box {
+  background: white;
+
+  width: 600px;
+
+  padding: 20px;
+
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.modal-box input {
+  padding: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+}

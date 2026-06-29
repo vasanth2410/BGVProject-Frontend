@@ -1,0 +1,61 @@
+.page-container {
+  padding: 30px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.add-button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: #1d4ed8;
+}
+
+.candidate-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.candidate-table th {
+  background: #f5f7fb;
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.candidate-table td {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.status-pending {
+  color: orange;
+  font-weight: bold;
+}
+
+.status-completed {
+  color: green;
+  font-weight: bold;
+}
+
+.status-rejected {
+  color: red;
+  font-weight: bold;
+}

@@ -1,0 +1,47 @@
+.layout {
+
+  display: flex;
+
+  min-height: 100vh;
+
+  background: #f5f7fb;
+
+}
+
+.content {
+
+  flex: 1;
+
+  margin-left: 260px;
+
+  min-height: 100vh;
+
+  background: #f5f7fb;
+
+  overflow-x: hidden;
+
+}
+
+/* TABLET */
+
+@media (max-width: 1024px) {
+
+  .content {
+
+    margin-left: 220px;
+
+  }
+
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+  .content {
+
+    margin-left: 0;
+
+  }
+
+}

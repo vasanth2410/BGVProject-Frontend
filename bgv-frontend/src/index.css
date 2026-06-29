@@ -1,0 +1,93 @@
+* {
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    "Segoe UI",
+    sans-serif;
+}
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: #062b6b;
+  color: white;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h2 {
+  margin-bottom: 30px;
+}
+
+.menu-link {
+  color: white;
+  text-decoration: none;
+  margin-bottom: 15px;
+}
+
+.content {
+  flex: 1;
+  background: #f4f7fc;
+}
+
+.header {
+  height: 70px;
+  background: white;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  padding: 0 25px;
+
+  box-shadow:
+    0 2px 5px
+    rgba(0,0,0,0.1);
+}
+.dashboard-card {
+  background: white;
+
+  border-radius: 15px;
+
+  padding: 25px;
+
+  box-shadow:
+    0 2px 10px
+    rgba(0,0,0,0.1);
+}
+
+.dashboard-card h3 {
+  color: gray;
+}
+
+.dashboard-card h1 {
+  margin-top: 10px;
+}
+
+table {
+  width: 100%;
+  background: white;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 12px;
+}
+
+th {
+  background: #f5f5f5;
+}
