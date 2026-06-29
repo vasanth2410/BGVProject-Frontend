@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   Paper,
@@ -30,6 +31,8 @@ import type {
 } from "../../types/Verification";
 
 export default function ReviewerVerificationsPage() {
+
+  const navigate = useNavigate();
 
   const {
   enqueueSnackbar,
@@ -287,6 +290,23 @@ export default function ReviewerVerificationsPage() {
     minWidth: 220,
   }}
 >
+
+<Stack
+    direction="row"
+    spacing={1}
+></Stack>
+
+<Button
+    variant="outlined"
+    onClick={() =>
+        navigate(
+            `/reviewer/verifications/${v.id}`
+        )
+    }
+>
+    View
+</Button>
+
 
                     <Button
                       variant="contained"

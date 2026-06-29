@@ -1,59 +1,59 @@
-import {
-  useEffect,
-  useState
-} from "react";
+import { useEffect, useState } from "react";
 
 import {
   useParams,
-  useNavigate
+  useNavigate,
 } from "react-router-dom";
 
-import AdminLayout
-  from "../../layouts/AdminLayout";
+import {
+  Paper,
+  Typography,
+  Grid,
+  Divider,
+  Chip,
+  Button,
+  Stack,
+} from "@mui/material";
+
+import AdminLayout from "../../layouts/AdminLayout";
 
 import {
-  getCandidateById,
-  deleteCandidate
-}
-from "../../services/CandidateManagementService";
+  getCandidateDetails,
+  deleteCandidate,
+} from "../../services/CandidateService";
 
 export default function CandidateDetailsPage() {
+  const { id } = useParams();
 
-  const { id } =
-    useParams();
+  const navigate = useNavigate();
 
-  const navigate =
-    useNavigate();
-
-  const [candidate,
-    setCandidate] =
-      useState<any>(null);
+  const [candidate, setCandidate] =
+    useState<any>(null);
 
   useEffect(() => {
-
-    const loadCandidate =
-      async () => {
-
-        const result =
-          await getCandidateById(
-            Number(id)
-          );
-
-        setCandidate(
-          result
+    const loadCandidate = async () => {
+      const result =
+        await getCandidateDetails(
+          Number(id)
         );
-      };
+
+      setCandidate(result);
+    };
 
     loadCandidate();
-
   }, [id]);
 
   if (!candidate)
-    return <h3>Loading...</h3>;
+    return (
+      <AdminLayout>
+        <Typography sx={{ p: 4 }}>
+          Loading...
+        </Typography>
+      </AdminLayout>
+    );
 
   const handleDelete =
     async () => {
-
       if (
         !window.confirm(
           "Delete Candidate?"
@@ -66,7 +66,7 @@ export default function CandidateDetailsPage() {
       );
 
       alert(
-        "Candidate Deleted"
+        "Candidate Deleted Successfully"
       );
 
       navigate(
@@ -75,113 +75,132 @@ export default function CandidateDetailsPage() {
     };
 
   return (
-
     <AdminLayout>
-
-      <div
-        style={{
-          padding: "30px",
+      <Paper
+        elevation={3}
+        sx={{
+          p: 4,
+          m: 3,
         }}
       >
-
-        <h1>
-          Candidate Details
-        </h1>
-
-        <hr />
-
-        <p>
-          <b>Name:</b>
-          {" "}
-          {candidate.fullName}
-        </p>
-
-        <p>
-          <b>Email:</b>
-          {" "}
-          {candidate.email}
-        </p>
-
-        <p>
-          <b>Phone:</b>
-          {" "}
-          {candidate.phoneNumber}
-        </p>
-
-        <p>
-          <b>Address:</b>
-          {" "}
-          {candidate.address}
-        </p>
-
-        <p>
-          <b>DOB:</b>
-          {" "}
-          {candidate.dateOfBirth}
-        </p>
-
-        <p>
-          <b>Gender:</b>
-          {" "}
-          {candidate.gender}
-        </p>
-
-        <p>
-          <b>PAN:</b>
-          {" "}
-          {candidate.panNumber}
-        </p>
-
-        <p>
-          <b>Aadhaar:</b>
-          {" "}
-          {candidate.aadhaarNumber}
-        </p>
-
-        <p>
-          <b>Applied Role:</b>
-          {" "}
-          {candidate.appliedRole}
-        </p>
-
-        <p>
-          <b>Status:</b>
-          {" "}
-          {candidate.status}
-        </p>
-
-        <div
-          style={{
-            marginTop: "20px",
-          }}
+        <Typography
+          variant="h4"
+          gutterBottom
         >
+          Candidate Details
+        </Typography>
 
-          <button
-  onClick={() =>
-    navigate(
-      `/admin/candidates/edit/${candidate.id}`
-    )
-  }
->
-  Edit Candidate
-</button>
+        <Divider sx={{ mb: 3 }} />
 
-          <button
+        <Grid
+          container
+          spacing={3}
+        >
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Typography>
+              <strong>Name :</strong>{" "}
+              {candidate.fullName}
+            </Typography>
+
+            <Typography>
+              <strong>Email :</strong>{" "}
+              {candidate.email}
+            </Typography>
+
+            <Typography>
+              <strong>Phone :</strong>{" "}
+              {candidate.phoneNumber}
+            </Typography>
+
+            <Typography>
+              <strong>Gender :</strong>{" "}
+              {candidate.gender}
+            </Typography>
+
+            <Typography>
+              <strong>Date of Birth :</strong>{" "}
+              {candidate.dateOfBirth}
+            </Typography>
+          </Grid>
+
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Typography>
+              <strong>Address :</strong>{" "}
+              {candidate.address}
+            </Typography>
+
+            <Typography>
+              <strong>PAN :</strong>{" "}
+              {candidate.panNumber}
+            </Typography>
+
+            <Typography>
+              <strong>Aadhaar :</strong>{" "}
+              {candidate.aadhaarNumber}
+            </Typography>
+
+            <Typography>
+              <strong>Applied Role :</strong>{" "}
+              {candidate.appliedRole}
+            </Typography>
+
+            <Stack
+              direction="row"
+              spacing={1}
+              sx={{ mt: 2 }}
+            >
+              <Typography>
+                <strong>Status :</strong>
+              </Typography>
+
+              <Chip
+                label={candidate.status}
+                color={
+                  candidate.status ===
+                  "Approved"
+                    ? "success"
+                    : candidate.status ===
+                      "Rejected"
+                    ? "error"
+                    : "warning"
+                }
+              />
+            </Stack>
+          </Grid>
+        </Grid>
+
+        <Divider
+          sx={{
+            my: 4,
+          }}
+        />
+
+        <Stack
+          direction="row"
+          spacing={2}
+        >
+          <Button
+            variant="contained"
+            onClick={() =>
+              navigate(
+                `/admin/candidates/edit/${candidate.id}`
+              )
+            }
+          >
+            Edit Candidate
+          </Button>
+
+          <Button
+            variant="contained"
+            color="error"
             onClick={
               handleDelete
             }
-            style={{
-              marginLeft: "10px",
-            }}
           >
             Delete Candidate
-          </button>
-
-        </div>
-
-      </div>
-
+          </Button>
+        </Stack>
+      </Paper>
     </AdminLayout>
-
   );
 }

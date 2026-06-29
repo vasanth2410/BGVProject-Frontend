@@ -59,6 +59,9 @@ from "../pages/reviewer/ReviewerAssignmentsPage";
 import ReviewerVerificationsPage
 from "../pages/reviewer/ReviewerVerificationsPage";
 
+import VerificationDetailsPage
+from "../pages/reviewer/VerificationDetailsPage";
+
 import ReviewerDocumentsPage
 from "../pages/reviewer/ReviewerDocumentsPage";
 
@@ -193,6 +196,11 @@ export default function AppRoutes() {
     path="verifications"
     element={<ReviewerVerificationsPage />}
   />
+  
+  <Route
+  path="verifications/:id"
+  element={<VerificationDetailsPage />}
+/>
 
   <Route
     path="documents"

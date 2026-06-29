@@ -19,29 +19,57 @@ import ProgressCard from "../../components/reviewer/ProgressCard";
 
 import {
   getMyAssignments,
+  getReviewerDashboard,
 } from "../../services/ReviewerService";
 
 import type {
   ReviewerAssignment,
 } from "../../types/ReviewerAssignment";
 
+import type {
+  ReviewerDashboard,
+} from "../../types/ReviewerDashboard";
+
 export default function ReviewerDashboardPage() {
 
   const [assignments, setAssignments] =
     useState<ReviewerAssignment[]>([]);
 
+  const [dashboard, setDashboard] =
+    useState<ReviewerDashboard>({
+      assigned: 0,
+      pending: 0,
+      approved: 0,
+      rejected: 0,
+      completionPercentage: 0,
+    });
+
   const [loading, setLoading] =
     useState(true);
 
-  const loadAssignments =
+  const loadData =
     async () => {
 
       try {
 
-        const result =
-          await getMyAssignments(4);
+        const [
+          dashboardResult,
+          assignmentResult,
+        ] = await Promise.all([
 
-        setAssignments(result);
+          getReviewerDashboard(),
+
+          getMyAssignments(4),
+
+        ]);
+
+        setDashboard(
+          dashboardResult
+        );
+
+        setAssignments(
+          assignmentResult
+        );
 
       }
       catch (error) {
@@ -59,27 +87,9 @@ export default function ReviewerDashboardPage() {
 
   useEffect(() => {
 
-    void loadAssignments();
+    void loadData();
 
   }, []);
-
-  const assignedCount =
-    assignments.length;
-
-  const pendingCount =
-    assignments.length;
-
-  const approvedCount =
-    assignments.filter(
-      (x: any) =>
-        x.status === "Approved"
-    ).length;
-
-  const rejectedCount =
-    assignments.filter(
-      (x: any) =>
-        x.status === "Rejected"
-    ).length;
 
   const today =
     useMemo(() => {
@@ -103,8 +113,6 @@ export default function ReviewerDashboardPage() {
         p: 4,
       }}
     >
-
-      {/* Header */}
 
       <Box
         sx={{
@@ -130,8 +138,7 @@ export default function ReviewerDashboardPage() {
           <Typography
             color="text.secondary"
           >
-            Welcome back. Here's your
-            verification summary.
+            Welcome back. Here's your verification summary.
           </Typography>
 
         </Box>
@@ -146,8 +153,6 @@ export default function ReviewerDashboardPage() {
         </Typography>
 
       </Box>
-
-      {/* Statistics */}
 
       <Grid
         container
@@ -167,12 +172,10 @@ export default function ReviewerDashboardPage() {
 
           <StatCard
             title="Assigned"
-            value={assignedCount}
-            note="Total Candidates"
+            value={dashboard.assigned}
+            note="Total Verifications"
             icon={
-              <AssignmentIcon
-                color="primary"
-              />
+              <AssignmentIcon color="primary" />
             }
             color="#1976d2"
           />
@@ -189,12 +192,10 @@ export default function ReviewerDashboardPage() {
 
           <StatCard
             title="Pending"
-            value={pendingCount}
+            value={dashboard.pending}
             note="Awaiting Review"
             icon={
-              <PendingActionsIcon
-                color="warning"
-              />
+              <PendingActionsIcon color="warning" />
             }
             color="#f59e0b"
           />
@@ -211,12 +212,10 @@ export default function ReviewerDashboardPage() {
 
           <StatCard
             title="Approved"
-            value={approvedCount}
+            value={dashboard.approved}
             note="Completed"
             icon={
-              <CheckCircleIcon
-                color="success"
-              />
+              <CheckCircleIcon color="success" />
             }
             color="#16a34a"
           />
@@ -233,12 +232,10 @@ export default function ReviewerDashboardPage() {
 
           <StatCard
             title="Rejected"
-            value={rejectedCount}
+            value={dashboard.rejected}
             note="Need Attention"
             icon={
-              <CancelIcon
-                color="error"
-              />
+              <CancelIcon color="error" />
             }
             color="#dc2626"
           />
@@ -247,14 +244,10 @@ export default function ReviewerDashboardPage() {
 
       </Grid>
 
-      {/* Main */}
-
       <Grid
         container
         spacing={3}
       >
-
-        {/* Left */}
 
         <Grid
           size={{
@@ -289,50 +282,32 @@ export default function ReviewerDashboardPage() {
             />
 
             {loading && (
-
               <Typography>
-
                 Loading assignments...
-
               </Typography>
-
             )}
 
             {!loading &&
               assignments.length === 0 && (
-
-              <Typography
-                color="text.secondary"
-              >
-                No assignments found.
-              </Typography>
-
-            )}
+                <Typography color="text.secondary">
+                  No assignments found.
+                </Typography>
+              )}
 
             {!loading &&
               assignments.map(
-                (
-                  assignment
-                ) => (
+                (assignment) => (
 
                   <CandidateRow
-                    key={
-                      assignment.id
-                    }
-                    candidateId={
-                      assignment.candidateId
-                    }
-                    name={
-                      assignment.candidateName
-                    }
+                    key={assignment.id}
+                    candidateId={assignment.candidateId}
+                    name={assignment.candidateName}
                     email={
-                      (assignment as any)
-                        .candidateEmail ??
+                      (assignment as any).candidateEmail ??
                       "Email unavailable"
                     }
                     status={
-                      (assignment as any)
-                        .status ??
+                      (assignment as any).status ??
                       "Pending"
                     }
                   />
@@ -343,8 +318,6 @@ export default function ReviewerDashboardPage() {
           </Paper>
 
         </Grid>
-
-        {/* Right */}
 
         <Grid
           size={{
@@ -379,41 +352,27 @@ export default function ReviewerDashboardPage() {
             />
 
             {loading && (
-
               <Typography>
-
                 Loading...
-
               </Typography>
-
             )}
 
             {!loading &&
               assignments.length === 0 && (
-
-              <Typography
-                color="text.secondary"
-              >
-                No progress available.
-              </Typography>
-
-            )}
+                <Typography color="text.secondary">
+                  No progress available.
+                </Typography>
+              )}
 
             {!loading &&
               assignments.map(
-                (
-                  assignment
-                ) => (
+                (assignment) => (
 
                   <ProgressCard
-                    key={
-                      assignment.id
-                    }
-                    name={
-                      assignment.candidateName
-                    }
-                    completed={2}
-                    total={4}
+                    key={assignment.id}
+                    name={assignment.candidateName}
+                    completed={dashboard.approved}
+                    total={dashboard.assigned}
                   />
 
                 )

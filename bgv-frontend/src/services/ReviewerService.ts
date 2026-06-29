@@ -83,3 +83,23 @@ export const rejectVerification =
 
     return response.data;
   };
+  export const getReviewerDashboard =
+  async () => {
+
+    const response =
+      await apiClient.get(
+        "/Reviewer/dashboard"
+      );
+
+    return response.data;
+};
+export const getVerificationById =
+async (id: number) => {
+
+    const response =
+        await apiClient.get(
+            `/Verification/${id}`
+        );
+
+    return response.data;
+};

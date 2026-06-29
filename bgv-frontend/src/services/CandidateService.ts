@@ -1,5 +1,7 @@
 import apiClient from "../api/apiClient";
 
+import type { CandidateDetails } from "../types/CandidateDetails";
+
 import type {
   Candidate,
   CreateCandidateRequest,
@@ -61,6 +63,16 @@ export async function deleteCandidate(
   const response =
     await apiClient.delete(
       `/Candidates/${id}`
+    );
+
+  return response.data;
+}
+export async function getCandidateDetails(
+  id: number
+) {
+  const response =
+    await apiClient.get<CandidateDetails>(
+      `/Candidates/details/${id}`
     );
 
   return response.data;
