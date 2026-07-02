@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+
 import AssignCandidateModal
 from "../../components/AssignCandidateModal";
 
@@ -8,8 +9,6 @@ import { useNavigate }
 
 import AddCandidateModal
   from "../../components/AddCandidateModal";
-
-import "./CandidatesPage.css";
 
 import AdminLayout
   from "../../layouts/AdminLayout";
@@ -51,24 +50,25 @@ export default function CandidatesPage() {
   setShowAssignModal
 ] = useState(false);
 
-  const loadCandidates =
-    async () => {
+ const loadCandidates =
+  async () => {
 
-      try {
+    try {
 
-        const result =
-          await getCandidates();
+      const result =
+        await getCandidates();
 
-        setCandidates(result);
+      setCandidates(result);
 
-      }
-      catch (error) {
+    }
 
-        console.error(error);
+    catch (error) {
 
-      }
+      console.error(error);
 
-    };
+    }
+
+  };
 
   const handleDelete =
     async (id: number) => {
@@ -106,49 +106,68 @@ export default function CandidatesPage() {
 
   useEffect(() => {
 
-    const fetchCandidates =
-      async () => {
+  const fetchData = async () => {
 
-        try {
+    try {
 
-          const result =
-            await getCandidates();
+      setLoading(true);
 
-          setCandidates(result);
+      await loadCandidates();
 
-        }
-        catch (error) {
+    }
 
-          console.error(error);
+    finally {
 
-        }
-        finally {
+      setLoading(false);
 
-          setLoading(false);
+    }
 
-        }
+  };
 
-      };
+  fetchData();
 
-    fetchCandidates();
+}, []);
 
-  }, []);
+ const filteredCandidates =
+  candidates.filter((candidate) => {
 
-  const filteredCandidates =
-  candidates.filter(
-    (candidate) =>
+    const keyword =
+      search.toLowerCase();
+
+    return (
+
       candidate.fullName
         .toLowerCase()
-        .includes(
-          search.toLowerCase()
-        ) ||
+        .includes(keyword)
+
+      ||
 
       candidate.email
         .toLowerCase()
-        .includes(
-          search.toLowerCase()
-        )
-  );
+        .includes(keyword)
+
+      ||
+
+      candidate.phoneNumber
+        .toLowerCase()
+        .includes(keyword)
+
+      ||
+
+      candidate.status
+        .toLowerCase()
+        .includes(keyword)
+
+      ||
+
+      candidate.id
+        .toString()
+        .includes(keyword)
+
+    );
+
+  });
+
   console.log(candidates);
 console.log(filteredCandidates);
 
@@ -206,161 +225,141 @@ console.log(filteredCandidates);
 
 </div>
 
-        {loading && (
+    {loading ? (
 
-          <h3>
-            Loading...
-          </h3>
+  <h3>Loading...</h3>
 
-        )}
+) : (
 
-        {!loading && (
+  <table className="candidate-table">
 
-          <table
-            className="candidate-table"
+    <thead>
+
+      <tr>
+
+        <th>ID</th>
+
+        <th>Name</th>
+
+        <th>Email</th>
+
+        <th>Phone</th>
+
+        <th>Status</th>
+
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      {filteredCandidates.length === 0 ? (
+
+        <tr>
+
+          <td
+            colSpan={6}
+            style={{
+              textAlign: "center",
+              padding: "30px",
+            }}
+          >
+            No candidates found.
+          </td>
+
+        </tr>
+
+      ) : (
+
+        filteredCandidates.map((candidate) => (
+
+          <tr
+            key={candidate.id}
+            onClick={() =>
+              navigate(`/admin/candidates/${candidate.id}`)
+            }
+            style={{
+              cursor: "pointer",
+            }}
           >
 
-            <thead>
+            <td>{candidate.id}</td>
 
-              <tr>
+            <td>{candidate.fullName}</td>
 
-                <th>ID</th>
+            <td>{candidate.email}</td>
 
-                <th>Name</th>
+            <td>{candidate.phoneNumber}</td>
 
-                <th>Email</th>
+            <td>
 
-                <th>Phone</th>
+              <span
+                className={
+                  candidate.status === "Pending"
+                    ? "status-pending"
+                    : candidate.status === "Completed"
+                    ? "status-completed"
+                    : "status-rejected"
+                }
+              >
+                {candidate.status}
+              </span>
 
-                <th>Status</th>
+            </td>
 
-                <th>Actions</th>
+            <td>
 
-              </tr>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/admin/candidates/${candidate.id}`);
+                }}
+              >
+                View
+              </button>
 
-            </thead>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/admin/candidates/edit/${candidate.id}`);
+                }}
+              >
+                Edit
+              </button>
 
-            <tbody>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(candidate.id);
+                }}
+              >
+                Delete
+              </button>
 
-              {filteredCandidates.map(
-  (candidate) => (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowAssignModal(true);
+                }}
+              >
+                Assign
+              </button>
 
-                  <tr
-                    key={candidate.id}
-                    onClick={() =>
-                      navigate(
-                        `/admin/candidates/${candidate.id}`
-                      )
-                    }
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  >
+            </td>
 
-                    <td>
-                      {candidate.id}
-                    </td>
+          </tr>
 
-                    <td>
-                      {candidate.fullName}
-                    </td>
+        ))
 
-                    <td>
-                      {candidate.email}
-                    </td>
+      )}
 
-                    <td>
-                      {candidate.phoneNumber}
-                    </td>
+    </tbody>
 
-                    <td>
+  </table>
 
-                      <span
-                        className={
-                          candidate.status ===
-                          "Pending"
-                            ? "status-pending"
-                            : candidate.status ===
-                              "Completed"
-                            ? "status-completed"
-                            : "status-rejected"
-                        }
-                      >
-                        {candidate.status}
-                      </span>
-
-                    </td>
-
-                    <td>
-
-                      <button
-                        onClick={(e) => {
-
-                          e.stopPropagation();
-
-                          navigate(
-                            `/admin/candidates/${candidate.id}`
-                          );
-
-                        }}
-                      >
-                        View
-                      </button>
-
-                      <button
-                        onClick={(e) => {
-
-                          e.stopPropagation();
-
-                          navigate(
-                            `/admin/candidates/edit/${candidate.id}`
-                          );
-
-                        }}
-                      >
-                        Edit
-                      </button>
-
-                      <button
-                        onClick={(e) => {
-
-                          e.stopPropagation();
-
-                          handleDelete(
-                            candidate.id
-                          );
-
-                        }}
-                      >
-                        Delete
-                      </button>
-
-                      <button
-  onClick={(e) => {
-
-    e.stopPropagation();
-
-    setShowAssignModal(
-      true
-    );
-
-  }}
->
-  Assign
-</button>
-
-                    </td>
-
-                  </tr>
-
-                )
-              )}
-
-            </tbody>
-
-          </table>
-
-        )}
+)}
 
         {showModal && (
 

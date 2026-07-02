@@ -1,4 +1,6 @@
 import apiClient from "../api/apiClient";
+import type { RecentCandidate }
+from "../types/AdminDashboard";
 
 export const getPendingCandidates =
   async () => {
@@ -32,3 +34,16 @@ export const getRejectedCandidates =
 
     return response.data;
   };
+  export const getRecentCandidates =
+async () => {
+
+    const response =
+        await apiClient.get<
+            RecentCandidate[]
+        >(
+            "/AdminDashboard/recent-candidates"
+        );
+
+    return response.data;
+
+};

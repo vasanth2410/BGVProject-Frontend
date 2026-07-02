@@ -1,5 +1,19 @@
 import { useEffect, useState } from "react";
 
+import {
+  People,
+  HourglassTop,
+  CheckCircle,
+  Cancel,
+  PersonAdd,
+  Assignment,
+  Assessment,
+} from "@mui/icons-material";
+
+import {
+  Chip,
+} from "@mui/material";
+
 import StatusBreakdownChart
 from "../../components/charts/StatusBreakdownChart";
 
@@ -20,7 +34,7 @@ import {
 from "../../services/DashboardService";
 
 import {
-  getPendingCandidates,
+  getRecentCandidates,
 }
 from "../../services/AdminDashboardService";
 
@@ -30,11 +44,30 @@ import type {
 from "../../types/Dashboard";
 
 import type {
-  CandidateWorkQueue,
+  RecentCandidate,
 }
-from "../../types/Candidate";
+from "../../types/AdminDashboard";
+
+import {
+  useNavigate,
+}
+from "react-router-dom";
 
 export default function AdminDashboardPage() {
+
+  const navigate =
+    useNavigate();
+
+    const today =
+  new Date().toLocaleDateString(
+    "en-IN",
+    {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }
+  );
 
   const [summary, setSummary] =
     useState<DashboardSummary | null>(null);
@@ -43,14 +76,16 @@ export default function AdminDashboardPage() {
     useState(true);
 
   const [
-    pendingCandidates,
-    setPendingCandidates
+    recentCandidates,
+    setRecentCandidates,
   ] =
-    useState<CandidateWorkQueue[]>([]);
+    useState<RecentCandidate[]>([]);
 
-  const [showModal,
-    setShowModal] =
-      useState(false);
+  const [
+    showModal,
+    setShowModal,
+  ] =
+    useState(false);
 
   const fetchDashboard =
     async () => {
@@ -66,11 +101,11 @@ export default function AdminDashboardPage() {
           dashboardResult
         );
 
-        const pendingResult =
-          await getPendingCandidates();
+        const recentResult =
+          await getRecentCandidates();
 
-        setPendingCandidates(
-          pendingResult
+        setRecentCandidates(
+          recentResult
         );
 
       }
@@ -101,32 +136,86 @@ export default function AdminDashboardPage() {
 
         <div className="dashboard-header">
 
-          <div>
+  <div>
 
-            <h1 className="dashboard-title">
-              Dashboard
-            </h1>
+    <h1 className="dashboard-title">
+      Dashboard
+    </h1>
 
-            <p className="dashboard-subtitle">
-              Welcome back, Admin
-            </p>
+    <p className="dashboard-subtitle">
+      Welcome back, Admin
+    </p>
 
-          </div>
+    <small
+      style={{
+        color: "#777",
+      }}
+    >
+      {today}
+    </small>
 
-          <button
-            className="add-btn"
-            onClick={() =>
-              setShowModal(true)
-            }
-          >
-            + Add Candidate
-          </button>
+  </div>
 
-        </div>
+  <div
+    style={{
+      display: "flex",
+      gap: "10px",
+    }}
+  >
 
-        {loading && (
+    <button
+      className="add-btn"
+      onClick={() =>
+        setShowModal(true)
+      }
+    >
+      <PersonAdd
+        fontSize="small"
+      />
+
+      Add Candidate
+
+    </button>
+
+    <button
+      className="add-btn"
+      onClick={() =>
+        navigate(
+          "/admin/assignments"
+        )
+      }
+    >
+      <Assignment
+        fontSize="small"
+      />
+
+      Assignments
+
+    </button>
+
+    <button
+      className="add-btn"
+      onClick={() =>
+        navigate(
+          "/admin/reports"
+        )
+      }
+    >
+      <Assessment
+        fontSize="small"
+      />
+
+      Reports
+
+    </button>
+
+  </div>
+
+</div>
+
+        {loading &&
           <h3>Loading...</h3>
-        )}
+        }
 
         {!loading && summary && (
 
@@ -136,17 +225,31 @@ export default function AdminDashboardPage() {
 
               <div className="dashboard-card">
 
-                <h4>Total Candidates</h4>
+               <People
+  color="primary"
+  sx={{
+    fontSize: 40,
+  }}
+/>
 
-                <h1 className="blue">
-                  {summary.totalCandidates}
-                </h1>
+<h4>Total Candidates</h4>
+
+<h1 className="blue">
+  {summary.totalCandidates}
+</h1>
 
               </div>
 
               <div className="dashboard-card">
 
-                <h4>Pending</h4>
+                <HourglassTop
+  color="warning"
+  sx={{
+    fontSize: 40,
+  }}
+/>
+
+<h4>Pending</h4>
 
                 <h1 className="orange">
                   {summary.pendingCandidates}
@@ -156,7 +259,14 @@ export default function AdminDashboardPage() {
 
               <div className="dashboard-card">
 
-                <h4>Approved</h4>
+               <CheckCircle
+  color="success"
+  sx={{
+    fontSize: 40,
+  }}
+/>
+
+<h4>Approved</h4>
 
                 <h1 className="green">
                   {summary.completedCandidates}
@@ -166,7 +276,14 @@ export default function AdminDashboardPage() {
 
               <div className="dashboard-card">
 
-                <h4>Rejected</h4>
+               <Cancel
+  color="error"
+  sx={{
+    fontSize: 40,
+  }}
+/>
+
+<h4>Rejected</h4>
 
                 <h1 className="red">
                   {summary.rejectedCandidates}
@@ -213,7 +330,7 @@ export default function AdminDashboardPage() {
             <div className="pending-section">
 
               <h2>
-                Pending Candidates
+                Recent Candidate Activity
               </h2>
 
               <table className="pending-table">
@@ -223,9 +340,16 @@ export default function AdminDashboardPage() {
                   <tr>
 
                     <th>ID</th>
+
                     <th>Name</th>
+
                     <th>Email</th>
+
                     <th>Status</th>
+
+                    <th>Created</th>
+
+                    <th>Action</th>
 
                   </tr>
 
@@ -233,7 +357,7 @@ export default function AdminDashboardPage() {
 
                 <tbody>
 
-                  {pendingCandidates.map(
+                  {recentCandidates.map(
                     (candidate) => (
 
                       <tr
@@ -254,8 +378,43 @@ export default function AdminDashboardPage() {
                           {candidate.email}
                         </td>
 
+                       <td>
+
+  <Chip
+    label={candidate.status}
+    color={
+      candidate.status === "Approved"
+        ? "success"
+        : candidate.status === "Rejected"
+        ? "error"
+        : "warning"
+    }
+    size="small"
+  />
+
+</td>
+
                         <td>
-                          {candidate.status}
+                          {
+                            new Date(
+                              candidate.createdDate
+                            ).toLocaleDateString()
+                          }
+                        </td>
+
+                        <td>
+
+                          <button
+                            className="view-btn"
+                            onClick={() =>
+                              navigate(
+                                `/admin/candidates/${candidate.candidateId}`
+                              )
+                            }
+                          >
+                            View
+                          </button>
+
                         </td>
 
                       </tr>

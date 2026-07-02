@@ -4,6 +4,16 @@ import {
   getCandidates,
 } from "../services/CandidateManagementService";
 
+import type {
+  Candidate,
+}
+from "../types/CandidateManagement";
+
+import type {
+  Reviewer,
+}
+from "../types/Assignment";
+
 import {
   getReviewers,
   createAssignment,
@@ -20,12 +30,16 @@ export default function AssignCandidateModal({
 }: Props) {
 
   const [candidates,
-    setCandidates] =
-      useState<any[]>([]);
+  setCandidates] =
+useState<
+Candidate[]
+>([]);
 
-  const [reviewers,
-    setReviewers] =
-      useState<any[]>([]);
+const [reviewers,
+  setReviewers] =
+useState<
+Reviewer[]
+>([]);
 
   const [candidateId,
     setCandidateId] =
@@ -45,8 +59,15 @@ export default function AssignCandidateModal({
 
     try {
 
-      const candidateResult =
-        await getCandidates();
+     const candidateResult =
+  await getCandidates();
+
+const pendingCandidates =
+  candidateResult.filter(
+    (candidate: any) =>
+      candidate.status ===
+      "Pending"
+  );
 
       const reviewerResult =
         await getReviewers();
@@ -61,9 +82,9 @@ export default function AssignCandidateModal({
         reviewerResult
       );
 
-      setCandidates(
-        candidateResult
-      );
+     setCandidates(
+  pendingCandidates
+);
 
       setReviewers(
         reviewerResult

@@ -18,9 +18,12 @@ import {
 import AdminLayout from "../../layouts/AdminLayout";
 
 import {
-  getCandidateDetails,
-  deleteCandidate,
-} from "../../services/CandidateService";
+  getCandidateById,
+  deleteCandidate
+}
+from "../../services/CandidateManagementService";
+
+
 
 export default function CandidateDetailsPage() {
   const { id } = useParams();
@@ -30,18 +33,25 @@ export default function CandidateDetailsPage() {
   const [candidate, setCandidate] =
     useState<any>(null);
 
-  useEffect(() => {
-    const loadCandidate = async () => {
-      const result =
-        await getCandidateDetails(
-          Number(id)
-        );
+   
 
-      setCandidate(result);
-    };
 
-    loadCandidate();
-  }, [id]);
+ useEffect(() => {
+
+  const loadCandidate = async () => {
+
+    const result =
+      await getCandidateById(
+        Number(id)
+      );
+
+    setCandidate(result);
+
+  };
+
+  void loadCandidate();
+
+}, [id]);
 
   if (!candidate)
     return (

@@ -21,6 +21,21 @@ getAllDocuments()
 }
 
 export async function
+getDocumentsByCandidateId(
+  candidateId: number,
+)
+{
+  const response =
+    await apiClient.get<
+      Document[]
+    >(
+      `/Documents/candidate/${candidateId}`
+    );
+
+  return response.data;
+}
+
+export async function
 deleteDocument(
   id: number,
 )
@@ -38,11 +53,13 @@ getDocumentUrl(
   return `${apiClient.defaults.baseURL}/Documents/download/${documentId}`;
 }
 
-export function downloadDocument(documentId: number) {
-
-    window.open(
-        getDocumentUrl(documentId),
-        "_blank"
-    );
-
+export function
+downloadDocument(
+  documentId: number,
+)
+{
+  window.open(
+    getDocumentUrl(documentId),
+    "_blank"
+  );
 }

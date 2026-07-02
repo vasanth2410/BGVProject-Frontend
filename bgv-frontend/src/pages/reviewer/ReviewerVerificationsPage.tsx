@@ -24,6 +24,7 @@ import {
   getVerifications,
   approveVerification,
   rejectVerification,
+  reReviewVerification,
 } from "../../services/ReviewerService";
 
 import type {
@@ -151,6 +152,36 @@ export default function ReviewerVerificationsPage() {
 
       }
     };
+
+    const handleReReview =
+  async (id: number) => {
+
+    try {
+
+      await reReviewVerification(id);
+
+      enqueueSnackbar(
+        "Verification moved back to Pending",
+        {
+          variant: "info",
+        }
+      );
+
+      await loadVerifications();
+
+    }
+    catch {
+
+      enqueueSnackbar(
+        "Re-Review Failed",
+        {
+          variant: "error",
+        }
+      );
+
+    }
+
+  };
 
   const getColor =
     (status: string) => {
@@ -308,31 +339,48 @@ export default function ReviewerVerificationsPage() {
 </Button>
 
 
-                    <Button
-                      variant="contained"
-                      color="success"
-                      disabled={
-                        v.status !== "Pending"
-                      }
-                      onClick={() =>
-                        handleApprove(v.id)
-                      }
-                    >
-                      Approve
-                    </Button>
+                    <Stack
+  direction="row"
+  spacing={1}
+>
 
-                    <Button
-                      variant="contained"
-                      color="error"
-                      disabled={
-                        v.status !== "Pending"
-                      }
-                      onClick={() =>
-                        handleReject(v.id)
-                      }
-                    >
-                      Reject
-                    </Button>
+  {v.status === "Pending" && (
+    <>
+      <Button
+        variant="contained"
+        color="success"
+        onClick={() =>
+          handleApprove(v.id)
+        }
+      >
+        Approve
+      </Button>
+
+      <Button
+        variant="contained"
+        color="error"
+        onClick={() =>
+          handleReject(v.id)
+        }
+      >
+        Reject
+      </Button>
+    </>
+  )}
+
+  {v.status === "Rejected" && (
+    <Button
+      variant="contained"
+      color="warning"
+      onClick={() =>
+        handleReReview(v.id)
+      }
+    >
+      Re-Review
+    </Button>
+  )}
+
+</Stack>
 
                   </Stack>
 

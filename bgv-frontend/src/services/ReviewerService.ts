@@ -73,16 +73,6 @@ export const rejectVerification =
 
     return response.data;
   };
-  export const reReviewVerification =
-  async (id: number) => {
-
-    const response =
-      await apiClient.put(
-        `/Verification/rereview/${id}`
-      );
-
-    return response.data;
-  };
   export const getReviewerDashboard =
   async () => {
 
@@ -103,3 +93,13 @@ async (id: number) => {
 
     return response.data;
 };
+export async function reReviewVerification(
+  id: number
+) {
+  const response =
+    await apiClient.put(
+      `/Verification/rereview/${id}`
+    );
+
+  return response.data;
+}

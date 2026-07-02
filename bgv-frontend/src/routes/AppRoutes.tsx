@@ -4,33 +4,18 @@ import {
   Route,
 } from "react-router-dom";
 
-import AdminAuditLogsPage
-from "../pages/admin/AdminAuditLogsPage";
-
-import AdminReportsPage
-from "../pages/admin/AdminReportsPage";
-
-import AdminDocumentsPage
-from "../pages/admin/AdminDocumentsPage";
-
-import AdminVerificationsPage
-from "../pages/admin/AdminVerificationsPage";
-
-import AdminLayout
-from "../layouts/AdminLayout";
-
-
-import AdminDeadLettersPage
-from "../pages/admin/AdminDeadLettersPage";
-
-import AdminNotificationsPage
-from "../pages/admin/AdminNotificationsPage";
-
-import ReviewerLayout
-from "../layouts/ReviewerLayout";
+import ProtectedRoute
+from "../components/ProtectedRoute";
 
 import LoginPage
 from "../pages/auth/LoginPage";
+
+/* ===========================
+   Admin
+=========================== */
+
+import AdminLayout
+from "../layouts/AdminLayout";
 
 import AdminDashboardPage
 from "../pages/admin/AdminDashboardPage";
@@ -47,14 +32,39 @@ from "../pages/admin/CandidateDetailsPage";
 import EditCandidatePage
 from "../pages/admin/EditCandidatePage";
 
+import AdminDocumentsPage
+from "../pages/admin/AdminDocumentsPage";
+
+import AdminVerificationsPage
+from "../pages/admin/AdminVerificationsPage";
+
+import AdminNotificationsPage
+from "../pages/admin/AdminNotificationsPage";
+
+import AdminAuditLogsPage
+from "../pages/admin/AdminAuditLogsPage";
+
+import AdminReportsPage
+from "../pages/admin/AdminReportsPage";
+
+import AdminDeadLettersPage
+from "../pages/admin/AdminDeadLettersPage";
+
+/* ===========================
+   Reviewer
+=========================== */
+
+import ReviewerLayout
+from "../layouts/ReviewerLayout";
+
 import ReviewerDashboardPage
 from "../pages/reviewer/ReviewerDashboardPage";
 
-import ReviewerCandidateReviewPage
-from "../pages/reviewer/ReviewerCandidateReviewPage";
-
 import ReviewerAssignmentsPage
 from "../pages/reviewer/ReviewerAssignmentsPage";
+
+import ReviewerCandidateReviewPage
+from "../pages/reviewer/ReviewerCandidateReviewPage";
 
 import ReviewerVerificationsPage
 from "../pages/reviewer/ReviewerVerificationsPage";
@@ -71,8 +81,27 @@ from "../pages/reviewer/ReviewerProfilePage";
 import ReviewerNotificationsPage
 from "../pages/reviewer/ReviewerNotificationsPage";
 
+/* ===========================
+   Candidate
+=========================== */
+
+import CandidateLayout
+from "../layouts/CandidateLayout";
+
+import CandidateProfilePage
+from "../pages/candidate/CandidateProfilePage";
+
+import CandidateVerificationPage
+from "../pages/candidate/CandidateVerificationPage";
+
+import CandidateUploadPage
+from "../pages/candidate/CandidateUploadPage";
+
 import CandidateDashboardPage
 from "../pages/candidate/CandidateDashboardPage";
+
+import CandidateDocumentsPage
+from "../pages/candidate/CandidateDocumentsPage";
 
 export default function AppRoutes() {
 
@@ -82,60 +111,6 @@ export default function AppRoutes() {
 
       <Routes>
 
-        <Route
-    path="/admin/auditlogs"
-    element={
-        <AdminLayout>
-            <AdminAuditLogsPage />
-        </AdminLayout>
-    }
-/>
-
-        <Route
-    path="/admin/reports"
-    element={
-        <AdminLayout>
-            <AdminReportsPage />
-        </AdminLayout>
-    }
-/>
-
-        <Route
-  path="/admin/documents"
-  element={
-    <AdminLayout>
-      <AdminDocumentsPage />
-    </AdminLayout>
-  }
-/>
-
-        <Route
-  path="/admin/verifications"
-  element={
-    <AdminLayout>
-      <AdminVerificationsPage />
-    </AdminLayout>
-  }
-/>
-
-        <Route
-  path="/admin/notifications"
-  element={
-    <AdminLayout>
-      <AdminNotificationsPage />
-    </AdminLayout>
-  }
-/>
-
-<Route
-  path="/admin/deadletters"
-  element={
-    <AdminLayout>
-      <AdminDeadLettersPage />
-    </AdminLayout>
-  }
-/>
-
         {/* Login */}
 
         <Route
@@ -143,88 +118,215 @@ export default function AppRoutes() {
           element={<LoginPage />}
         />
 
-        {/* Admin */}
+        {/* ===========================
+            ADMIN
+        =========================== */}
 
         <Route
           path="/admin"
-          element={<AdminDashboardPage />}
+          element={
+            <ProtectedRoute allowedRole="Admin">
+              <AdminDashboardPage />
+            </ProtectedRoute>
+          }
         />
 
         <Route
           path="/admin/candidates"
-          element={<CandidatesPage />}
-        />
-
-        <Route
-          path="/admin/assignments"
-          element={<AssignmentsPage />}
+          element={
+            <ProtectedRoute allowedRole="Admin">
+              <CandidatesPage />
+            </ProtectedRoute>
+          }
         />
 
         <Route
           path="/admin/candidates/:id"
-          element={<CandidateDetailsPage />}
+          element={
+            <ProtectedRoute allowedRole="Admin">
+              <CandidateDetailsPage />
+            </ProtectedRoute>
+          }
         />
 
         <Route
           path="/admin/candidates/edit/:id"
-          element={<EditCandidatePage />}
+          element={
+            <ProtectedRoute allowedRole="Admin">
+              <EditCandidatePage />
+            </ProtectedRoute>
+          }
         />
 
-        {/* Reviewer */}
+        <Route
+          path="/admin/assignments"
+          element={
+            <ProtectedRoute allowedRole="Admin">
+              <AssignmentsPage />
+            </ProtectedRoute>
+          }
+        />
 
-       <Route
-  path="/reviewer"
-  element={<ReviewerLayout />}
+        <Route
+          path="/admin/documents"
+          element={
+            <ProtectedRoute allowedRole="Admin">
+              <AdminLayout>
+                <AdminDocumentsPage />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/verifications"
+          element={
+            <ProtectedRoute allowedRole="Admin">
+              <AdminLayout>
+                <AdminVerificationsPage />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/notifications"
+          element={
+            <ProtectedRoute allowedRole="Admin">
+              <AdminLayout>
+                <AdminNotificationsPage />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/auditlogs"
+          element={
+            <ProtectedRoute allowedRole="Admin">
+              <AdminLayout>
+                <AdminAuditLogsPage />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/reports"
+          element={
+            <ProtectedRoute allowedRole="Admin">
+              <AdminLayout>
+                <AdminReportsPage />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/deadletters"
+          element={
+            <ProtectedRoute allowedRole="Admin">
+              <AdminLayout>
+                <AdminDeadLettersPage />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ===========================
+            REVIEWER
+        =========================== */}
+
+        <Route
+          path="/reviewer"
+          element={
+            <ProtectedRoute allowedRole="Reviewer">
+              <ReviewerLayout />
+            </ProtectedRoute>
+          }
+        >
+
+          <Route
+            index
+            element={<ReviewerDashboardPage />}
+          />
+
+          <Route
+            path="assignments"
+            element={<ReviewerAssignmentsPage />}
+          />
+
+          <Route
+            path="review/:id"
+            element={<ReviewerCandidateReviewPage />}
+          />
+
+          <Route
+            path="verifications"
+            element={<ReviewerVerificationsPage />}
+          />
+
+          <Route
+            path="verifications/:id"
+            element={<VerificationDetailsPage />}
+          />
+
+          <Route
+            path="documents"
+            element={<ReviewerDocumentsPage />}
+          />
+
+          <Route
+            path="profile"
+            element={<ReviewerProfilePage />}
+          />
+
+          <Route
+            path="notifications"
+            element={<ReviewerNotificationsPage />}
+          />
+
+        </Route>
+
+        {/* ===========================
+            CANDIDATE
+        =========================== */}
+
+        <Route
+  path="/candidate"
+  element={
+    <ProtectedRoute allowedRole="Candidate">
+      <CandidateLayout />
+    </ProtectedRoute>
+  }
 >
 
   <Route
     index
-    element={<ReviewerDashboardPage />}
-  />
-
-  <Route
-    path="assignments"
-    element={<ReviewerAssignmentsPage />}
-  />
-
-  <Route
-    path="review/:id"
-    element={<ReviewerCandidateReviewPage />}
-  />
-
-  <Route
-    path="verifications"
-    element={<ReviewerVerificationsPage />}
-  />
-  
-  <Route
-  path="verifications/:id"
-  element={<VerificationDetailsPage />}
-/>
-
-  <Route
-    path="documents"
-    element={<ReviewerDocumentsPage />}
+    element={<CandidateDashboardPage />}
   />
 
   <Route
     path="profile"
-    element={<ReviewerProfilePage />}
+    element={<CandidateProfilePage />}
   />
 
   <Route
-    path="notifications"
-    element={<ReviewerNotificationsPage />}
+  path="documents"
+  element={<CandidateDocumentsPage />}
+/>
+
+  <Route
+    path="upload"
+    element={<CandidateUploadPage />}
+  />
+
+  <Route
+    path="verifications"
+    element={<CandidateVerificationPage />}
   />
 
 </Route>
-
-        {/* Candidate */}
-
-        <Route
-          path="/candidate"
-          element={<CandidateDashboardPage />}
-        />
 
       </Routes>
 

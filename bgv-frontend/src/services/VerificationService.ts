@@ -1,33 +1,51 @@
 import apiClient
 from "../api/apiClient";
 
-import type {
+import type
+{
   Verification,
 }
 from "../types/Verification";
 
 export async function
-getAllVerifications() {
-
+getAllVerifications()
+{
   const response =
     await apiClient.get<
       Verification[]
-    >("/Verification");
+    >(
+      "/Verification"
+    );
 
   return response.data;
-
 }
 
 export async function
 getVerificationById(
   id: number,
-) {
-
+)
+{
   const response =
     await apiClient.get<
       Verification
-    >(`/Verification/${id}`);
+    >(
+      `/Verification/${id}`
+    );
 
   return response.data;
+}
 
+export async function
+getVerificationsByCandidateId(
+  candidateId: number,
+)
+{
+  const response =
+    await apiClient.get<
+      Verification[]
+    >(
+      `/Verification/candidate/${candidateId}`
+    );
+
+  return response.data;
 }

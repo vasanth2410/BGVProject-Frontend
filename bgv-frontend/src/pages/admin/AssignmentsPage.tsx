@@ -1,10 +1,8 @@
-import { useEffect, useState }
-from "react";
+import { useEffect, useState } from "react";
 
 import type {
-  Assignment
-}
-from "../../types/Assignment";
+  Assignment,
+} from "../../types/Assignment";
 
 import AdminLayout
 from "../../layouts/AdminLayout";
@@ -19,23 +17,56 @@ from "../../components/AssignCandidateModal";
 
 export default function AssignmentsPage() {
 
-const [assignments,
-  setAssignments] =
+  const [
+    assignments,
+    setAssignments,
+  ] =
     useState<Assignment[]>([]);
 
-  const [showModal,
-    setShowModal] =
-      useState(false);
+  const [
+    loading,
+    setLoading,
+  ] =
+    useState(true);
+
+  const [
+    search,
+    setSearch,
+  ] =
+    useState("");
+
+  const [
+    showModal,
+    setShowModal,
+  ] =
+    useState(false);
 
   const loadAssignments =
     async () => {
 
-      const result =
-        await getAssignments();
+      try {
 
-      setAssignments(
-        result
-      );
+        setLoading(true);
+
+        const result =
+          await getAssignments();
+
+        setAssignments(result);
+
+      }
+
+      catch (error) {
+
+        console.error(error);
+
+      }
+
+      finally {
+
+        setLoading(false);
+
+      }
+
     };
 
   useEffect(() => {
@@ -43,6 +74,45 @@ const [assignments,
     loadAssignments();
 
   }, []);
+
+  const filteredAssignments =
+    assignments.filter(
+      (assignment) => {
+
+        const keyword =
+          search.toLowerCase();
+
+        return (
+
+          assignment.id
+            .toString()
+            .includes(keyword)
+
+          ||
+
+          assignment.candidateName
+            .toLowerCase()
+            .includes(keyword)
+
+          ||
+
+          assignment.reviewerName
+            .toLowerCase()
+            .includes(keyword)
+
+          ||
+
+          new Date(
+            assignment.assignedDate
+          )
+            .toLocaleDateString()
+            .toLowerCase()
+            .includes(keyword)
+
+        );
+
+      }
+    );
 
   return (
 
@@ -59,6 +129,8 @@ const [assignments,
             display: "flex",
             justifyContent:
               "space-between",
+            alignItems:
+              "center",
             marginBottom:
               "20px",
           }}
@@ -68,73 +140,138 @@ const [assignments,
             Assignments
           </h1>
 
-          <button
-            onClick={() =>
-              setShowModal(
-                true
-              )
-            }
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+            }}
           >
-            + Assign Candidate
-          </button>
+
+            <input
+              type="text"
+              placeholder="Search Assignments..."
+              value={search}
+              onChange={(e) =>
+                setSearch(
+                  e.target.value
+                )
+              }
+              style={{
+                width: "250px",
+                padding: "10px",
+                borderRadius: "8px",
+                border:
+                  "1px solid #ddd",
+              }}
+            />
+
+            <button
+              onClick={() =>
+                setShowModal(
+                  true
+                )
+              }
+            >
+              + Assign Candidate
+            </button>
+
+          </div>
 
         </div>
 
-        <table
-          className="candidate-table"
-        >
+        {loading ? (
 
-          <thead>
+          <h3>
+            Loading...
+          </h3>
 
-            <tr>
+        ) : (
 
-              <th>ID</th>
+          <table
+            className="candidate-table"
+          >
 
-              <th>Candidate</th>
+            <thead>
 
-              <th>Reviewer</th>
+              <tr>
 
-              <th>Assigned Date</th>
+                <th>ID</th>
 
-            </tr>
+                <th>Candidate</th>
 
-          </thead>
+                <th>Reviewer</th>
 
-          <tbody>
+                <th>Assigned Date</th>
 
-            {assignments.map(
-              (assignment) => (
+              </tr>
 
-                <tr
-                  key={assignment.id}
-                >
+            </thead>
 
-                  <td>
-                    {assignment.id}
+            <tbody>
+
+              {filteredAssignments.length === 0 ? (
+
+                <tr>
+
+                  <td
+                    colSpan={4}
+                    style={{
+                      textAlign:
+                        "center",
+                      padding:
+                        "30px",
+                    }}
+                  >
+
+                    No assignments found.
+
                   </td>
-
-                  <td>
-                    {assignment.candidateName}
-                  </td>
-
-                  <td>
-                    {assignment.reviewerName}
-                  </td>
-
-                 <td>
-  {new Date(
-    assignment.assignedDate
-  ).toLocaleString()}
-</td>
 
                 </tr>
 
-              )
-            )}
+              ) : (
 
-          </tbody>
+                filteredAssignments.map(
+                  (assignment) => (
 
-        </table>
+                    <tr
+                      key={
+                        assignment.id
+                      }
+                    >
+
+                      <td>
+                        {assignment.id}
+                      </td>
+
+                      <td>
+                        {assignment.candidateName}
+                      </td>
+
+                      <td>
+                        {assignment.reviewerName}
+                      </td>
+
+                      <td>
+
+                        {new Date(
+                          assignment.assignedDate
+                        ).toLocaleString()}
+
+                      </td>
+
+                    </tr>
+
+                  )
+                )
+
+              )}
+
+            </tbody>
+
+          </table>
+
+        )}
 
         {showModal && (
 
@@ -144,9 +281,15 @@ const [assignments,
                 false
               )
             }
-            onSuccess={
-              loadAssignments
-            }
+            onSuccess={() => {
+
+              setShowModal(
+                false
+              );
+
+              loadAssignments();
+
+            }}
           />
 
         )}
@@ -156,4 +299,5 @@ const [assignments,
     </AdminLayout>
 
   );
+
 }
