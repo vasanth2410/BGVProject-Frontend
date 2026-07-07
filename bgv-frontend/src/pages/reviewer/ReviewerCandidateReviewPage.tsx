@@ -36,9 +36,9 @@ import BadgeIcon from "@mui/icons-material/Badge";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import {
-  getCandidateById,
-  getCandidateDocuments,
-  getVerifications,
+  getReviewerCandidate,
+  getReviewerCandidateDocuments,
+  getReviewerCandidateVerifications,
   approveVerification,
   rejectVerification,
   reReviewVerification,
@@ -91,8 +91,8 @@ export default function ReviewerCandidateReviewPage() {
   const [verifications, setVerifications] =
     useState<Verification[]>([]);
 
-  const [remarks, setRemarks] =
-    useState("");
+ const [remarks, setRemarks] =
+  useState<Record<number, string>>({});
 
   const [openSnackbar, setOpenSnackbar] =
     useState(false);
@@ -111,49 +111,51 @@ const [dialogAction, setDialogAction] =
 
   const loadData = async () => {
 
-    if (!id) return;
+  if (!id) return;
 
-    try {
+  try {
 
-      const candidateResult =
-        await getCandidateById(
-          Number(id)
-        );
-
-      setCandidate(candidateResult);
-
-      const documentResult =
-        await getCandidateDocuments(
-          Number(id)
-        );
-
-      setDocuments(documentResult);
-
-      const verificationResult =
-        await getVerifications();
-
-      setVerifications(
-
-        verificationResult.filter(
-
-          (x: Verification) =>
-
-            x.candidateId ===
-            Number(id)
-
-        )
-
+    const candidateResult =
+      await getReviewerCandidate(
+        Number(id)
       );
 
-    }
+    setCandidate(
+      candidateResult
+    );
 
-    catch (error) {
+    const documentResult =
+      await getReviewerCandidateDocuments(
+        Number(id)
+      );
 
-      console.error(error);
+    setDocuments(
+      documentResult
+    );
 
-    }
+    const verificationResult =
+      await getReviewerCandidateVerifications(
+        Number(id)
+      );
 
-  };
+    setVerifications(
+      verificationResult
+    );
+
+  }
+  catch (error) {
+
+    console.error(error);
+
+  }
+
+};
+
+useEffect(() => {
+
+  void loadData();
+
+}, [id]);
 
   
 
@@ -176,20 +178,28 @@ const [dialogAction, setDialogAction] =
   };
 
   const openConfirmation = (
+
   verificationId: number,
+
   action: "approve" | "reject" | "rereview"
+
 ) => {
 
-  if (
-    action !== "rereview" &&
-    !remarks.trim()
-  ) {
+  if (action !== "rereview") {
 
-    showMessage(
-      "Please enter reviewer remarks."
-    );
+    const remark =
+      remarks[verificationId] ?? "";
 
-    return;
+    if (!remark.trim()) {
+
+      showMessage(
+        "Please enter reviewer remarks."
+      );
+
+      return;
+
+    }
+
   }
 
   setSelectedVerificationId(
@@ -199,6 +209,7 @@ const [dialogAction, setDialogAction] =
   setDialogAction(action);
 
   setDialogOpen(true);
+
 };
 
   const handleApprove = async (
@@ -207,27 +218,32 @@ const [dialogAction, setDialogAction] =
 
   ) => {
 
-    if (!remarks.trim()) {
+    const remark =
+  remarks[verificationId] ?? "";
 
-      showMessage(
-        "Please enter remarks."
-      );
+if (!remark.trim()) {
 
-      return;
+  showMessage(
+    "Please enter remarks."
+  );
 
-    }
+  return;
+}
 
     try {
 
       await approveVerification(
+    verificationId,
+    remark
+);
 
-        verificationId,
+      setRemarks((previous) => ({
 
-        remarks
+    ...previous,
 
-      );
+    [verificationId]: ""
 
-      setRemarks("");
+}));
 
       showMessage(
         "Verification Approved Successfully"
@@ -247,51 +263,60 @@ const [dialogAction, setDialogAction] =
 
   };
 
-  const handleReject = async (
+ const handleReject = async (
 
-    verificationId: number
+  verificationId: number
 
-  ) => {
+) => {
 
-    if (!remarks.trim()) {
+  const remark =
+    remarks[verificationId] ?? "";
 
-      showMessage(
-        "Please enter remarks."
-      );
+  if (!remark.trim()) {
 
-      return;
+    showMessage(
+      "Please enter remarks."
+    );
 
-    }
+    return;
 
-    try {
+  }
 
-      await rejectVerification(
+  try {
 
-        verificationId,
+    await rejectVerification(
 
-        remarks
+      verificationId,
 
-      );
+      remark
 
-      setRemarks("");
+    );
 
-      showMessage(
-        "Verification Rejected Successfully"
-      );
+    setRemarks((previous) => ({
 
-      await loadData();
+      ...previous,
 
-    }
+      [verificationId]: ""
 
-    catch {
+    }));
 
-      showMessage(
-        "Rejection Failed"
-      );
+    showMessage(
+      "Verification Rejected Successfully"
+    );
 
-    }
+    await loadData();
 
-  };
+  }
+
+  catch {
+
+    showMessage(
+      "Rejection Failed"
+    );
+
+  }
+
+};
 
   const handleReReview =
   async (
@@ -685,22 +710,7 @@ const [dialogAction, setDialogAction] =
       Verifications
     </Typography>
 
-    <TextField
-      fullWidth
-      multiline
-      rows={4}
-      label="Reviewer Remarks"
-      placeholder="Enter your review remarks..."
-      value={remarks}
-      onChange={(e) =>
-        setRemarks(
-          e.target.value
-        )
-      }
-      sx={{
-        mb: 4,
-      }}
-    />
+  
 
     {verifications.map(
       (verification) => (
@@ -769,6 +779,30 @@ const [dialogAction, setDialogAction] =
                 "No Remarks"
               }
             </Typography>
+
+            <TextField
+  fullWidth
+  multiline
+  rows={3}
+  label="New Remarks"
+  placeholder="Enter reviewer remarks..."
+  value={
+    remarks[verification.id] ?? ""
+  }
+  onChange={(e) =>
+    setRemarks((previous) => ({
+
+      ...previous,
+
+      [verification.id]:
+        e.target.value
+
+    }))
+  }
+  sx={{
+    mb: 3,
+  }}
+/>
 
             <Stack
               direction="row"

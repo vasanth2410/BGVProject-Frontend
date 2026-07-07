@@ -1,6 +1,6 @@
 export interface ReviewerAssignment {
 
-  id: number;
+  assignmentId: number;
 
   candidateId: number;
 
@@ -11,4 +11,7 @@ export interface ReviewerAssignment {
   reviewerName: string;
 
   assignedDate: string;
+
+  status: string;
+
 }

@@ -14,7 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import {
-  getMyAssignments,
+  getAssignedCandidates,
 } from "../../services/ReviewerService";
 
 import type {
@@ -37,12 +37,15 @@ export default function ReviewerAssignmentsPage() {
 
       try {
 
-        const result =
-          await getMyAssignments(4);
+      const result =
+  await getAssignedCandidates();
 
-        setAssignments(
-          result
-        );
+console.log("API RESULT");
+console.log(result);
+
+setAssignments(result);
+
+       
 
       }
       catch (error) {
@@ -106,50 +109,46 @@ export default function ReviewerAssignmentsPage() {
 
         </TableHead>
 
-        <TableBody>
+       <TableBody>
 
-          {assignments.map(
-            (assignment) => (
+  {assignments.map(
+    (assignment) => (
 
-              <TableRow
-                key={
-                  assignment.id
-                }
-              >
+      <TableRow
+        key={assignment.assignmentId}
+      >
 
-                <TableCell>
-                  {
-                    assignment.candidateName
-                  }
-                </TableCell>
+        <TableCell>
+          {assignment.candidateName}
+        </TableCell>
 
-                <TableCell>
-                  {new Date(
-                    assignment.assignedDate
-                  ).toLocaleDateString()}
-                </TableCell>
+        <TableCell>
+          {new Date(
+            assignment.assignedDate
+          ).toLocaleDateString("en-IN")}
+        </TableCell>
 
-                <TableCell>
+        <TableCell>
 
-                  <Button
-                    variant="contained"
-                    onClick={() =>
-                      navigate(
-                        `/reviewer/review/${assignment.candidateId}`
-                      )
-                    }
-                  >
-                    Review
-                  </Button>
+          <Button
+            variant="contained"
+            onClick={() =>
+              navigate(
+                `/reviewer/review/${assignment.candidateId}`
+              )
+            }
+          >
+            Review
+          </Button>
 
-                </TableCell>
+        </TableCell>
 
-              </TableRow>
+      </TableRow>
 
-            )
-          )}
+    )
+  )}
 
-        </TableBody>
+</TableBody>
 
       </Table>
 

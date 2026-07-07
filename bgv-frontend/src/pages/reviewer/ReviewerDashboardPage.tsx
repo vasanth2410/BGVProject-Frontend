@@ -18,7 +18,7 @@ import CandidateRow from "../../components/reviewer/CandidateRow";
 import ProgressCard from "../../components/reviewer/ProgressCard";
 
 import {
-  getMyAssignments,
+  getAssignedCandidates,
   getReviewerDashboard,
 } from "../../services/ReviewerService";
 
@@ -59,7 +59,7 @@ export default function ReviewerDashboardPage() {
 
           getReviewerDashboard(),
 
-          getMyAssignments(4),
+          getAssignedCandidates(),
 
         ]);
 
@@ -298,19 +298,13 @@ export default function ReviewerDashboardPage() {
               assignments.map(
                 (assignment) => (
 
-                  <CandidateRow
-                    key={assignment.id}
-                    candidateId={assignment.candidateId}
-                    name={assignment.candidateName}
-                    email={
-                      (assignment as any).candidateEmail ??
-                      "Email unavailable"
-                    }
-                    status={
-                      (assignment as any).status ??
-                      "Pending"
-                    }
-                  />
+               <CandidateRow
+  key={assignment.assignmentId}
+  candidateId={assignment.candidateId}
+  name={assignment.candidateName}
+  email="Email unavailable"
+  status={assignment.status}
+/>
 
                 )
               )}
@@ -369,7 +363,7 @@ export default function ReviewerDashboardPage() {
                 (assignment) => (
 
                   <ProgressCard
-                    key={assignment.id}
+                    key={assignment.assignmentId}
                     name={assignment.candidateName}
                     completed={dashboard.approved}
                     total={dashboard.assigned}

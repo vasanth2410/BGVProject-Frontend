@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 
 import {
-  getCandidateDocuments,
+  getReviewerDocuments,
 } from "../../services/ReviewerService";
 
 import type {
@@ -31,30 +31,35 @@ export default function ReviewerDocumentsPage() {
     ReviewerDocument[]
   >([]);
 
-  useEffect(() => {
+  console.log("Documents State:", documents);
 
-    const loadData =
-      async () => {
+ useEffect(() => {
+
+    const loadData = async () => {
 
         try {
 
-          const result =
-            await getCandidateDocuments(1);
+            const result = await getReviewerDocuments();
 
-          setDocuments(result);
+            console.log("API Result:", result);
+            console.log("Type:", typeof result);
+            console.log("Is Array:", Array.isArray(result));
+            console.log("Length:", result.length);
+
+            setDocuments(result);
 
         }
         catch (error) {
 
-          console.error(error);
+            console.error("API Error:", error);
 
         }
 
-      };
+    };
 
     void loadData();
 
-  }, []);
+}, []);
 
   const getStatusColor =
     (status: string) => {

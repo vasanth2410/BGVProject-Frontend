@@ -94,8 +94,6 @@ from "../pages/candidate/CandidateProfilePage";
 import CandidateVerificationPage
 from "../pages/candidate/CandidateVerificationPage";
 
-import CandidateUploadPage
-from "../pages/candidate/CandidateUploadPage";
 
 import CandidateDashboardPage
 from "../pages/candidate/CandidateDashboardPage";
@@ -315,11 +313,6 @@ export default function AppRoutes() {
   path="documents"
   element={<CandidateDocumentsPage />}
 />
-
-  <Route
-    path="upload"
-    element={<CandidateUploadPage />}
-  />
 
   <Route
     path="verifications"

@@ -36,15 +36,15 @@ export const getCandidateDocuments =
   };
 
 export const getVerifications =
-  async () => {
+async () => {
 
     const response =
-      await apiClient.get(
-        "/Verification"
-      );
+        await apiClient.get(
+            "/Reviewer/verifications"
+        );
 
     return response.data;
-  };
+};
 
 export const approveVerification =
   async (
@@ -103,3 +103,164 @@ export async function reReviewVerification(
 
   return response.data;
 }
+// ===============================
+// New Reviewer APIs
+// ===============================
+
+export const getAssignedCandidates =
+async () => {
+
+    const response =
+        await apiClient.get(
+            "/Reviewer/assigned-candidates"
+        );
+
+    return response.data;
+
+};
+
+export const getReviewerCandidate =
+async (
+    candidateId: number
+) => {
+
+    const response =
+        await apiClient.get(
+            `/Reviewer/candidate/${candidateId}`
+        );
+
+    return response.data;
+
+};
+
+export const getReviewerCandidateDocuments =
+async (
+    candidateId: number
+) => {
+
+    const response =
+        await apiClient.get(
+            `/Reviewer/candidate/${candidateId}/documents`
+        );
+
+    return response.data;
+
+};
+
+export const getReviewerCandidateVerifications =
+async (
+    candidateId: number
+) => {
+
+    const response =
+        await apiClient.get(
+            `/Reviewer/candidate/${candidateId}/verifications`
+        );
+
+    return response.data;
+
+};
+
+export const getReviewerDocument =
+async (
+    documentId: number
+) => {
+
+    const response =
+        await apiClient.get(
+            `/Reviewer/document/${documentId}`
+        );
+
+    return response.data;
+
+};
+
+export const downloadReviewerDocument =
+async (
+    documentId: number
+) => {
+
+    const response =
+        await apiClient.get(
+            `/Reviewer/document/download/${documentId}`,
+            {
+                responseType: "blob",
+            }
+        );
+
+    const url =
+        window.URL.createObjectURL(
+            response.data
+        );
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+
+    const disposition =
+        response.headers[
+            "content-disposition"
+        ];
+
+    let fileName =
+        "document";
+
+    if (disposition) {
+
+        const match =
+            disposition.match(
+                /filename="?(.+?)"?$/
+            );
+
+        if (match) {
+
+            fileName =
+                match[1];
+
+        }
+
+    }
+
+    link.download =
+        fileName;
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    window.URL.revokeObjectURL(url);
+
+};
+
+export const reviewDocument =
+async (
+    documentId: number,
+    status: string,
+    remarks: string
+) => {
+
+    const response =
+        await apiClient.put(
+            `/Reviewer/document/${documentId}/review`,
+            {
+                status,
+                remarks,
+            }
+        );
+
+    return response.data;
+
+};
+export const getReviewerDocuments =
+async () => {
+
+    const response =
+        await apiClient.get(
+            "/Reviewer/documents"
+        );
+
+    return response.data;
+};
