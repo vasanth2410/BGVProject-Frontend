@@ -35,9 +35,9 @@ export default function StatusBreakdownChart({
   ];
 
   const COLORS = [
-    "#f59e0b",
-    "#10b981",
-    "#ef4444",
+    "#F59E0B",
+    "#16A34A",
+    "#EF4444",
   ];
 
   const total = pending + approved + rejected;

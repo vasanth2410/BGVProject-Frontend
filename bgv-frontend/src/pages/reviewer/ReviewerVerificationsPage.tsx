@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import {
   Paper,
@@ -34,6 +34,7 @@ import type {
 export default function ReviewerVerificationsPage() {
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const {
   enqueueSnackbar,
@@ -41,6 +42,8 @@ export default function ReviewerVerificationsPage() {
 
   const [verifications, setVerifications] =
     useState<Verification[]>([]);
+
+  const [search, setSearch] = useState(location.state?.filter || "");
 
   const [remarks, setRemarks] =
     useState<Record<number, string>>({});
@@ -199,6 +202,16 @@ export default function ReviewerVerificationsPage() {
       }
     };
 
+  const filteredVerifications = verifications.filter((v) => {
+    const keyword = search.toLowerCase();
+    return (
+      v.id.toString().includes(keyword) ||
+      v.candidateId.toString().includes(keyword) ||
+      v.verificationType.toLowerCase().includes(keyword) ||
+      v.status.toLowerCase().includes(keyword)
+    );
+  });
+
   return (
 
     <Paper sx={{ p: 4 }}>
@@ -209,6 +222,14 @@ export default function ReviewerVerificationsPage() {
       >
         Verifications
       </Typography>
+
+      <TextField
+        size="small"
+        placeholder="Search verifications..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        sx={{ mb: 3, width: 300, display: "block" }}
+      />
 
       <TableContainer
   sx={{
@@ -259,7 +280,7 @@ export default function ReviewerVerificationsPage() {
 
           <TableBody>
 
-            {verifications.map((v) => (
+            {filteredVerifications.map((v) => (
 
               <TableRow key={v.id}>
 

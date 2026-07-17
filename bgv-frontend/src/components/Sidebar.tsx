@@ -71,6 +71,12 @@ export default function Sidebar() {
 
   };
 
+  const getProfilePath = () => {
+    if (role.toLowerCase() === "admin") return "/admin/profile";
+    if (role.toLowerCase() === "reviewer") return "/reviewer/profile";
+    return "/candidate/profile";
+  };
+
   return (
 
     <aside className="sidebar">
@@ -143,7 +149,11 @@ export default function Sidebar() {
 
       <div className="sidebar-footer">
 
-        <div className="user-info">
+        <div
+          className="user-info"
+          onClick={() => navigate(getProfilePath())}
+          style={{ cursor: "pointer" }}
+        >
 
           <div className="avatar">
 

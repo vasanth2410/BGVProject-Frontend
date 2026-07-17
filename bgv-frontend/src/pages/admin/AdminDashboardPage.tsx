@@ -144,7 +144,7 @@ export default function AdminDashboardPage() {
             </h1>
 
             <p className="dashboard-subtitle">
-              Here's what's happening with your recruitment today.
+              Here's what's happening with your background verification system today.
             </p>
 
             <div className="dashboard-date-badge">
@@ -217,7 +217,7 @@ export default function AdminDashboardPage() {
               <div className="dashboard-card" onClick={() => navigate('/admin/candidates', { state: { filter: '' } })}>
 
                 <div className="card-icon-wrapper icon-blue">
-                  <People sx={{ fontSize: 28, color: "#3b82f6" }} />
+                  <People sx={{ fontSize: 28, color: "#2563EB" }} />
                 </div>
 
                 <h4>Total Candidates</h4>
@@ -226,12 +226,16 @@ export default function AdminDashboardPage() {
                   {summary.totalCandidates}
                 </h1>
 
+                <div className="card-trend green-trend">
+                  <span>↑ 12% from last week</span>
+                </div>
+
               </div>
 
               <div className="dashboard-card" onClick={() => navigate('/admin/candidates', { state: { filter: 'Pending' } })}>
 
                 <div className="card-icon-wrapper icon-orange">
-                  <HourglassTop sx={{ fontSize: 28, color: "#f59e0b" }} />
+                  <HourglassTop sx={{ fontSize: 28, color: "#F59E0B" }} />
                 </div>
 
                 <h4>Pending</h4>
@@ -240,12 +244,16 @@ export default function AdminDashboardPage() {
                   {summary.pendingCandidates}
                 </h1>
 
+                <div className="card-trend green-trend">
+                  <span>↑ 8% from last week</span>
+                </div>
+
               </div>
 
               <div className="dashboard-card" onClick={() => navigate('/admin/candidates', { state: { filter: 'Approved' } })}>
 
                 <div className="card-icon-wrapper icon-green">
-                  <CheckCircle sx={{ fontSize: 28, color: "#10b981" }} />
+                  <CheckCircle sx={{ fontSize: 28, color: "#16A34A" }} />
                 </div>
 
                 <h4>Approved</h4>
@@ -254,12 +262,16 @@ export default function AdminDashboardPage() {
                   {summary.completedCandidates}
                 </h1>
 
+                <div className="card-trend green-trend">
+                  <span>↑ 5% from last week</span>
+                </div>
+
               </div>
 
               <div className="dashboard-card" onClick={() => navigate('/admin/candidates', { state: { filter: 'Rejected' } })}>
 
                 <div className="card-icon-wrapper icon-red">
-                  <Cancel sx={{ fontSize: 28, color: "#ef4444" }} />
+                  <Cancel sx={{ fontSize: 28, color: "#EF4444" }} />
                 </div>
 
                 <h4>Rejected</h4>
@@ -267,6 +279,10 @@ export default function AdminDashboardPage() {
                 <h1 className="red">
                   {summary.rejectedCandidates}
                 </h1>
+
+                <div className="card-trend green-trend">
+                  <span>↑ 2% from last week</span>
+                </div>
 
               </div>
 

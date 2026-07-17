@@ -13,6 +13,7 @@ interface Props {
   note: string;
   icon: ReactNode;
   color: string;
+  onClick?: () => void;
 }
 
 export default function StatCard({
@@ -21,12 +22,14 @@ export default function StatCard({
   note,
   icon,
   color,
+  onClick,
 }: Props) {
 
   return (
 
     <Card
       elevation={0}
+      onClick={onClick}
       sx={{
 
         borderRadius: 4,
@@ -41,12 +44,14 @@ export default function StatCard({
 
         bgcolor: "background.paper",
 
+        cursor: onClick ? "pointer" : "default",
+
         "&:hover": {
 
-          transform: "translateY(-6px)",
+          transform: onClick ? "translateY(-6px)" : "none",
 
           boxShadow:
-            "0 12px 35px rgba(0,0,0,.12)",
+            onClick ? "0 12px 35px rgba(0,0,0,.12)" : "none",
 
         },
 

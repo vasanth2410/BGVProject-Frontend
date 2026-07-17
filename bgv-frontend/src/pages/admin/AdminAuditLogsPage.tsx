@@ -16,10 +16,9 @@ from "../../types/Audit";
 
 export default function AdminAuditLogsPage()
 {
-    const
-        [logs, setLogs]
-        =
-        useState<Audit[]>([]);
+    const [logs, setLogs] = useState<Audit[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [errorMsg, setErrorMsg] = useState<string>("");
 
     useEffect(() =>
     {
@@ -27,14 +26,19 @@ export default function AdminAuditLogsPage()
         {
             try
             {
-                const result =
-                    await getAuditLogs();
-
+                setLoading(true);
+                setErrorMsg("");
+                const result = await getAuditLogs();
                 setLogs(result);
             }
-            catch (error)
+            catch (error: any)
             {
                 console.error(error);
+                setErrorMsg(error.response?.data || error.message || "Failed to load audit logs");
+            }
+            finally
+            {
+                setLoading(false);
             }
         };
 
@@ -65,7 +69,25 @@ export default function AdminAuditLogsPage()
                         </thead>
 
                         <tbody>
-                            {
+                            {loading ? (
+                                <tr>
+                                    <td colSpan={5} style={{ textAlign: "center", padding: "30px", color: "#64748b" }}>
+                                        Loading audit logs...
+                                    </td>
+                                </tr>
+                            ) : errorMsg ? (
+                                <tr>
+                                    <td colSpan={5} style={{ textAlign: "center", padding: "30px", color: "#ef4444", fontWeight: "600" }}>
+                                        Error: {errorMsg}
+                                    </td>
+                                </tr>
+                            ) : logs.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} style={{ textAlign: "center", padding: "30px", color: "#64748b" }}>
+                                        No audit logs found.
+                                    </td>
+                                </tr>
+                            ) : (
                                 logs.map(log => (
                                     <tr key={log.id}>
                                         <td>
@@ -89,7 +111,7 @@ export default function AdminAuditLogsPage()
                                         </td>
                                     </tr>
                                 ))
-                            }
+                            )}
                         </tbody>
                     </table>
                 </div>

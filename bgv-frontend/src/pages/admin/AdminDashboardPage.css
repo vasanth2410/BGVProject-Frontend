@@ -27,12 +27,12 @@
 .dashboard-title {
   font-size: 28px;
   font-weight: 800;
-  color: #111827;
+  color: #0F172A;
   margin-bottom: 8px;
 }
 
 .dashboard-subtitle {
-  color: #6b7280;
+  color: #475569;
   margin-bottom: 15px;
   font-size: 15px;
 }
@@ -44,7 +44,7 @@
   background: white;
   padding: 8px 16px;
   border-radius: 8px;
-  color: #6b7280;
+  color: #475569;
   font-size: 13px;
   font-weight: 600;
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
@@ -91,14 +91,14 @@ body.dark-mode .dashboard-date-badge {
 }
 
 .add-btn {
-  border: none;
+  border: 1px solid #E2E8F0;
   background: white;
   padding: 12px 24px;
   border-radius: 12px;
   cursor: pointer;
   font-size: 15px;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
@@ -108,18 +108,20 @@ body.dark-mode .dashboard-date-badge {
 }
 
 .add-btn:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px);
+  border-color: #cbd5e1;
 }
 
 .add-btn.primary {
-  background: #3b82f6;
+  background: #2563EB;
   color: white;
+  border: none;
 }
 
 .add-btn.primary:hover {
-  background: #2563eb;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+  background: #3B82F6;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
 }
 
 body.dark-mode .add-btn {
@@ -188,10 +190,43 @@ body.dark-mode .dashboard-title {
   box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
 }
 
-.icon-blue { background: #eff6ff; }
-.icon-orange { background: #fffbeb; }
-.icon-green { background: #f0fdf4; }
-.icon-red { background: #fef2f2; }
+.icon-blue { background: #DBEAFE; }
+.icon-orange { background: #FEF3C7; }
+.icon-green { background: #DCFCE7; }
+.icon-red { background: #FEE2E2; }
+
+/* Dark mode overrides for card icons */
+body.dark-mode .card-icon-wrapper.icon-blue {
+  background: rgba(59, 130, 246, 0.15);
+  box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.25);
+}
+body.dark-mode .card-icon-wrapper.icon-blue svg {
+  color: #60a5fa !important;
+}
+
+body.dark-mode .card-icon-wrapper.icon-orange {
+  background: rgba(245, 158, 11, 0.15);
+  box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.25);
+}
+body.dark-mode .card-icon-wrapper.icon-orange svg {
+  color: #fbbf24 !important;
+}
+
+body.dark-mode .card-icon-wrapper.icon-green {
+  background: rgba(16, 185, 129, 0.15);
+  box-shadow: inset 0 0 0 1px rgba(16, 185, 129, 0.25);
+}
+body.dark-mode .card-icon-wrapper.icon-green svg {
+  color: #34d399 !important;
+}
+
+body.dark-mode .card-icon-wrapper.icon-red {
+  background: rgba(239, 68, 68, 0.15);
+  box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.25);
+}
+body.dark-mode .card-icon-wrapper.icon-red svg {
+  color: #f87171 !important;
+}
 
 .dashboard-card h4 {
   margin: 0;
@@ -208,19 +243,33 @@ body.dark-mode .dashboard-title {
 }
 
 .blue {
-  color: #2563eb;
+  color: #2563EB;
 }
 
 .orange {
-  color: #f59e0b;
+  color: #F59E0B;
 }
 
 .green {
-  color: #10b981;
+  color: #16A34A;
 }
 
 .red {
-  color: #ef4444;
+  color: #EF4444;
+}
+
+/* Dark mode overrides for card numbers */
+body.dark-mode .dashboard-card h1.blue {
+  color: #60a5fa;
+}
+body.dark-mode .dashboard-card h1.orange {
+  color: #fbbf24;
+}
+body.dark-mode .dashboard-card h1.green {
+  color: #34d399;
+}
+body.dark-mode .dashboard-card h1.red {
+  color: #f87171;
 }
 
 .pending-section {
@@ -345,4 +394,20 @@ body.dark-mode .chart-card {
 
 body.dark-mode .chart-title {
   color: #f8fafc;
+}
+
+.card-trend {
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.green-trend {
+  color: #16A34A;
+}
+
+body.dark-mode .green-trend {
+  color: #34D399;
 }

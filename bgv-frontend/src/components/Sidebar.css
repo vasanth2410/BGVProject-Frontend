@@ -14,7 +14,7 @@
 
   height: 100vh;
 
-  background: #0b5d4b;
+  background: #1E3A8A;
 
   color: #fff;
 
@@ -134,7 +134,7 @@
 
 .menu-link:hover {
 
-  background: rgba(255,255,255,.12);
+  background: #3B82F6;
 
   transform: translateX(3px);
 
@@ -170,7 +170,7 @@
 
   border-top: 1px solid rgba(255,255,255,.12);
 
-  background: #0b5d4b;
+  background: #1E3A8A;
 
 }
 
@@ -232,11 +232,11 @@
 
   border: none;
 
-  border-radius: 10px;
+  border-radius: 12px;
 
-  padding: 14px;
+  padding: 14px 18px;
 
-  background: #dc2626;
+  background: transparent;
 
   color: white;
 
@@ -244,23 +244,25 @@
 
   font-size: 15px;
 
-  font-weight: 600;
+  font-weight: 500;
 
   display: flex;
 
   align-items: center;
 
-  justify-content: center;
+  justify-content: flex-start;
 
-  gap: 8px;
+  gap: 14px;
 
-  transition: .25s;
+  transition: all .25s ease;
 
 }
 
 .logout-btn:hover {
 
-  background: #b91c1c;
+  background: rgba(255, 255, 255, 0.12);
+
+  transform: translateX(3px);
 
 }
 

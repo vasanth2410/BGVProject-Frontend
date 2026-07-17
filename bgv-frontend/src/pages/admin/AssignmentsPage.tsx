@@ -119,25 +119,11 @@ export default function AssignmentsPage() {
 
     <AdminLayout>
 
-      <div
-        style={{
-          padding: "30px",
-        }}
-      >
+      <div className="page-container">
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent:
-              "space-between",
-            alignItems:
-              "center",
-            marginBottom:
-              "20px",
-          }}
-        >
+        <div className="page-header">
 
-          <h1>
+          <h1 className="page-title">
             Assignments
           </h1>
 
@@ -157,13 +143,7 @@ export default function AssignmentsPage() {
                   e.target.value
                 )
               }
-              style={{
-                width: "250px",
-                padding: "10px",
-                borderRadius: "8px",
-                border:
-                  "1px solid #ddd",
-              }}
+              className="search-input"
             />
 
             <button
@@ -172,6 +152,7 @@ export default function AssignmentsPage() {
                   true
                 )
               }
+              className="add-button"
             >
               + Assign Candidate
             </button>
@@ -188,89 +169,93 @@ export default function AssignmentsPage() {
 
         ) : (
 
-          <table
-            className="candidate-table"
-          >
+          <div className="table-container">
 
-            <thead>
+            <table
+              className="candidate-table"
+            >
 
-              <tr>
-
-                <th>ID</th>
-
-                <th>Candidate</th>
-
-                <th>Reviewer</th>
-
-                <th>Assigned Date</th>
-
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-              {filteredAssignments.length === 0 ? (
+              <thead>
 
                 <tr>
 
-                  <td
-                    colSpan={4}
-                    style={{
-                      textAlign:
-                        "center",
-                      padding:
-                        "30px",
-                    }}
-                  >
+                  <th>ID</th>
 
-                    No assignments found.
+                  <th>Candidate</th>
 
-                  </td>
+                  <th>Reviewer</th>
+
+                  <th>Assigned Date</th>
 
                 </tr>
 
-              ) : (
+              </thead>
 
-                filteredAssignments.map(
-                  (assignment) => (
+              <tbody>
 
-                    <tr
-                      key={
-                        assignment.id
-                      }
+                {filteredAssignments.length === 0 ? (
+
+                  <tr>
+
+                    <td
+                      colSpan={4}
+                      style={{
+                        textAlign:
+                          "center",
+                        padding:
+                          "30px",
+                      }}
                     >
 
-                      <td>
-                        {assignment.id}
-                      </td>
+                      No assignments found.
 
-                      <td>
-                        {assignment.candidateName}
-                      </td>
+                    </td>
 
-                      <td>
-                        {assignment.reviewerName}
-                      </td>
+                  </tr>
 
-                      <td>
+                ) : (
 
-                        {new Date(
-                          assignment.assignedDate
-                        ).toLocaleString()}
+                  filteredAssignments.map(
+                    (assignment) => (
 
-                      </td>
+                      <tr
+                        key={
+                          assignment.id
+                        }
+                      >
 
-                    </tr>
+                        <td>
+                          {assignment.id}
+                        </td>
 
+                        <td>
+                          {assignment.candidateName}
+                        </td>
+
+                        <td>
+                          {assignment.reviewerName}
+                        </td>
+
+                        <td>
+
+                          {new Date(
+                            assignment.assignedDate
+                          ).toLocaleString()}
+
+                        </td>
+
+                      </tr>
+
+                    )
                   )
-                )
 
-              )}
+                )}
 
-            </tbody>
+              </tbody>
 
-          </table>
+            </table>
+
+          </div>
 
         )}
 

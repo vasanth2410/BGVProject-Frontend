@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   Box,
@@ -12,10 +13,13 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 import StatCard from "../../components/reviewer/StatCard";
 import CandidateRow from "../../components/reviewer/CandidateRow";
 import ProgressCard from "../../components/reviewer/ProgressCard";
+
+import "../admin/AdminDashboardPage.css";
 
 import {
   getAssignedCandidates,
@@ -31,6 +35,7 @@ import type {
 } from "../../types/ReviewerDashboard";
 
 export default function ReviewerDashboardPage() {
+  const navigate = useNavigate();
 
   const [assignments, setAssignments] =
     useState<ReviewerAssignment[]>([]);
@@ -108,51 +113,26 @@ export default function ReviewerDashboardPage() {
 
   return (
 
-    <Box
-      sx={{
-        p: 4,
-      }}
-    >
+    <div className="dashboard-container">
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 4,
-          flexWrap: "wrap",
-        }}
-      >
-
-        <Box>
-
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: 700,
-            }}
-          >
-            Reviewer Dashboard
-          </Typography>
-
-          <Typography
-            color="text.secondary"
-          >
+      <div className="dashboard-header">
+        <div className="header-left-col">
+          <h1 className="dashboard-title">
+            Welcome back, Reviewer! 👋
+          </h1>
+          <p className="dashboard-subtitle">
             Welcome back. Here's your verification summary.
-          </Typography>
+          </p>
+          <div className="dashboard-date-badge">
+            <CalendarTodayIcon fontSize="small" />
+            <span>{today}</span>
+          </div>
+        </div>
 
-        </Box>
-
-        <Typography
-          color="text.secondary"
-          sx={{
-            fontWeight: 600,
-          }}
-        >
-          {today}
-        </Typography>
-
-      </Box>
+        <div className="header-center-img">
+          <img src="https://cdni.iconscout.com/illustration/premium/thumb/female-developer-working-on-laptop-4487955-3738435.png" alt="Dashboard Illustration" />
+        </div>
+      </div>
 
       <Grid
         container
@@ -178,6 +158,7 @@ export default function ReviewerDashboardPage() {
               <AssignmentIcon color="primary" />
             }
             color="#1976d2"
+            onClick={() => navigate("/reviewer/verifications")}
           />
 
         </Grid>
@@ -198,6 +179,7 @@ export default function ReviewerDashboardPage() {
               <PendingActionsIcon color="warning" />
             }
             color="#f59e0b"
+            onClick={() => navigate("/reviewer/verifications", { state: { filter: "Pending" } })}
           />
 
         </Grid>
@@ -218,6 +200,7 @@ export default function ReviewerDashboardPage() {
               <CheckCircleIcon color="success" />
             }
             color="#16a34a"
+            onClick={() => navigate("/reviewer/verifications", { state: { filter: "Approved" } })}
           />
 
         </Grid>
@@ -238,6 +221,7 @@ export default function ReviewerDashboardPage() {
               <CancelIcon color="error" />
             }
             color="#dc2626"
+            onClick={() => navigate("/reviewer/verifications", { state: { filter: "Rejected" } })}
           />
 
         </Grid>
@@ -378,7 +362,7 @@ export default function ReviewerDashboardPage() {
 
       </Grid>
 
-    </Box>
+    </div>
 
   );
 

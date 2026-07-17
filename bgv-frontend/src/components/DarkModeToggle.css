@@ -110,6 +110,14 @@ body.dark-mode .header-name {
   color: #f8fafc;
 }
 
+body.dark-mode .header-email {
+  color: #f8fafc;
+}
+
+body.dark-mode .header-role {
+  color: #94a3b8;
+}
+
 body.dark-mode .header-icon {
   color: #94a3b8;
   background: #23283b;

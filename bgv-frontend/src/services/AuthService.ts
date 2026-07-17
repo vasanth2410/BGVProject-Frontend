@@ -14,3 +14,14 @@ export const login = async (
 
   return response.data;
 };
+
+export const resetPassword = async (
+  email: string,
+  newPassword: string
+): Promise<string> => {
+  const response = await apiClient.post(
+    `/Auth/reset-password?email=${encodeURIComponent(email)}&newPassword=${encodeURIComponent(newPassword)}`
+  );
+
+  return response.data;
+};

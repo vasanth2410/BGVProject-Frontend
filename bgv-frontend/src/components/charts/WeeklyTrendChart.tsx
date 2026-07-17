@@ -30,7 +30,7 @@ export default function WeeklyTrendChart() {
 
         <Bar
           dataKey="candidates"
-          fill="#3b82f6"
+          fill="#2563EB"
           radius={[6, 6, 0, 0]}
         />
       </BarChart>

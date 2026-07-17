@@ -40,7 +40,7 @@ export default function AdminProfilePage() {
 
   return (
     <AdminLayout>
-      <Box sx={{ p: 4, maxWidth: "800px", margin: "0 auto" }}>
+      <Box sx={{ p: 4, maxWidth: "600px", margin: "0 auto" }}>
         <Paper sx={{ p: 4, borderRadius: 3, boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }}>
           <Box
             sx={{
@@ -92,10 +92,8 @@ export default function AdminProfilePage() {
               <h4 style={{ fontSize: "13px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Access Level</h4>
               <h1 style={{ fontSize: "18px", marginTop: "8px", marginBottom: "0" }}>Full System Access</h1>
             </div>
-          </div>
 
-          <div className="dashboard-cards" style={{ marginTop: "20px", display: "flex" }}>
-            <div className="dashboard-card" style={{ cursor: "default", padding: "20px", flex: "0 1 calc(33.333% - 14px)", minWidth: "220px" }}>
+            <div className="dashboard-card" style={{ cursor: "default", padding: "20px" }}>
               <h4 style={{ fontSize: "13px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Last Login</h4>
               <h1 style={{ fontSize: "18px", marginTop: "8px", marginBottom: "0" }}>{new Date().toLocaleString()}</h1>
             </div>

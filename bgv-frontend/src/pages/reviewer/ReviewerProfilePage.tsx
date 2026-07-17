@@ -43,6 +43,10 @@ export default function ReviewerProfilePage() {
       sx={{
         p: 4,
         borderRadius: 3,
+        maxWidth: 600,
+        mx: "auto",
+        mt: 2,
+        boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025)"
       }}
     >
 
