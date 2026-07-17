@@ -2,21 +2,9 @@ import {
   useEffect,
   useState,
 } from "react";
+import "./CandidatesPage.css";
 
-import {
-  Paper,
-  Typography,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Chip,
-  TableContainer,
-  TextField,
-  Button,
-  Box,
-} from "@mui/material";
+
 
 import VerificationDetailsDialog
 from "../../components/admin/VerificationDetailsDialog";
@@ -139,158 +127,125 @@ useState<Verification | null>(
 
     <>
 
-      <Paper
-        sx={{
-          p: 4,
-          borderRadius: 3,
-        }}
-      >
+      <div style={{ padding: "30px" }}>
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent:
-              "space-between",
-            mb: 3,
-          }}
-        >
+        <div className="page-header">
+          <h1 className="page-title">
+            Verifications
+          </h1>
 
-          <Typography
-  variant="h4"
-  sx={{
-    fontWeight: 700,
-  }}
->
-  Verifications
-</Typography>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) =>
+                setSearch(
+                  e.target.value,
+                )
+              }
+            />
+          </div>
+        </div>
 
-          <TextField
-            label="Search"
-            size="small"
-            value={search}
-            onChange={(e) =>
-              setSearch(
-                e.target.value,
-              )
-            }
-          />
+        <div className="table-container">
 
-        </Box>
+          <table className="candidate-table">
 
-        <TableContainer>
+            <thead>
+              <tr>
 
-          <Table>
-
-            <TableHead>
-
-              <TableRow>
-
-                <TableCell>
+                <th>
                   ID
-                </TableCell>
+                </th>
 
-                <TableCell>
+                <th>
                   Candidate
-                </TableCell>
+                </th>
 
-                <TableCell>
+                <th>
                   Verification
-                </TableCell>
+                </th>
 
-                <TableCell>
+                <th>
                   Status
-                </TableCell>
+                </th>
 
-                <TableCell>
+                <th>
                   Remarks
-                </TableCell>
+                </th>
 
-                <TableCell>
+                <th>
                   Action
-                </TableCell>
+                </th>
 
-              </TableRow>
+              </tr>
 
-            </TableHead>
+            </thead>
 
-            <TableBody>
+            <tbody>
 
               {filtered.map(
                 (v) => (
 
-                  <TableRow
+                  <tr
                     key={v.id}
                   >
 
-                    <TableCell>
+                    <td>
                       {v.id}
-                    </TableCell>
+                    </td>
 
-                    <TableCell>
+                    <td>
                       {v.candidateId}
-                    </TableCell>
+                    </td>
 
-                    <TableCell>
+                    <td>
                       {v.verificationType}
-                    </TableCell>
+                    </td>
 
-                    <TableCell>
+                    <td>
 
-                      <Chip
-                        label={v.status}
-                        color={
-                          v.status ===
-                          "Approved"
+                      <span className={`status-${v.status.toLowerCase()}`}>
+                        {v.status}
+                      </span>
 
-                            ? "success"
+                    </td>
 
-                            : v.status ===
-                              "Rejected"
-
-                            ? "error"
-
-                            : "warning"
-                        }
-                      />
-
-                    </TableCell>
-
-                    <TableCell>
+                    <td>
 
                       {v.reviewerRemarks}
 
-                    </TableCell>
+                    </td>
 
-                    <TableCell>
+                    <td>
 
-                      <Button
-                        variant="outlined"
-                        size="small"
+                      <button
+                        className="btn-view"
                         onClick={() =>
                           void handleView(
                             v.id,
                           )
                         }
                       >
+                        VIEW
+                      </button>
 
-                        View
+                    </td>
 
-                      </Button>
-
-                    </TableCell>
-
-                  </TableRow>
+                  </tr>
 
                 ),
               )}
 
-            </TableBody>
+            </tbody>
 
-          </Table>
+          </table>
 
-        </TableContainer>
+        </div>
 
-      </Paper>
+      </div>
 
       <VerificationDetailsDialog
 

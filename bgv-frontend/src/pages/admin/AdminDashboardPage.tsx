@@ -5,9 +5,10 @@ import {
   HourglassTop,
   CheckCircle,
   Cancel,
-  PersonAdd,
+  Add,
   Assignment,
   Assessment,
+  CalendarToday,
 } from "@mui/icons-material";
 
 import {
@@ -15,59 +16,59 @@ import {
 } from "@mui/material";
 
 import StatusBreakdownChart
-from "../../components/charts/StatusBreakdownChart";
+  from "../../components/charts/StatusBreakdownChart";
 
 import WeeklyTrendChart
-from "../../components/charts/WeeklyTrendChart";
+  from "../../components/charts/WeeklyTrendChart";
 
 import AddCandidateModal
-from "../../components/AddCandidateModal";
+  from "../../components/AddCandidateModal";
 
 import "./AdminDashboardPage.css";
 
 import AdminLayout
-from "../../layouts/AdminLayout";
+  from "../../layouts/AdminLayout";
 
 import {
   getDashboardSummary,
 }
-from "../../services/DashboardService";
+  from "../../services/DashboardService";
 
 import {
   getRecentCandidates,
 }
-from "../../services/AdminDashboardService";
+  from "../../services/AdminDashboardService";
 
 import type {
   DashboardSummary,
 }
-from "../../types/Dashboard";
+  from "../../types/Dashboard";
 
 import type {
   RecentCandidate,
 }
-from "../../types/AdminDashboard";
+  from "../../types/AdminDashboard";
 
 import {
   useNavigate,
 }
-from "react-router-dom";
+  from "react-router-dom";
 
 export default function AdminDashboardPage() {
 
   const navigate =
     useNavigate();
 
-    const today =
-  new Date().toLocaleDateString(
-    "en-IN",
-    {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }
-  );
+  const today =
+    new Date().toLocaleDateString(
+      "en-IN",
+      {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }
+    );
 
   const [summary, setSummary] =
     useState<DashboardSummary | null>(null);
@@ -136,82 +137,72 @@ export default function AdminDashboardPage() {
 
         <div className="dashboard-header">
 
-  <div>
+          <div className="header-left-col">
 
-    <h1 className="dashboard-title">
-      Dashboard
-    </h1>
+            <h1 className="dashboard-title">
+              Welcome back, Admin! 👋
+            </h1>
 
-    <p className="dashboard-subtitle">
-      Welcome back, Admin
-    </p>
+            <p className="dashboard-subtitle">
+              Here's what's happening with your recruitment today.
+            </p>
 
-    <small
-      style={{
-        color: "#777",
-      }}
-    >
-      {today}
-    </small>
+            <div className="dashboard-date-badge">
+              <CalendarToday fontSize="small" />
+              <span>{today}</span>
+            </div>
 
-  </div>
+          </div>
 
-  <div
-    style={{
-      display: "flex",
-      gap: "10px",
-    }}
-  >
+          <div className="header-center-img">
+            <img src="https://cdni.iconscout.com/illustration/premium/thumb/female-developer-working-on-laptop-4487955-3738435.png" alt="Dashboard Illustration" />
+          </div>
 
-    <button
-      className="add-btn"
-      onClick={() =>
-        setShowModal(true)
-      }
-    >
-      <PersonAdd
-        fontSize="small"
-      />
+          <div className="header-right-col">
 
-      Add Candidate
+            <button
+              className="add-btn primary"
+              onClick={() =>
+                setShowModal(true)
+              }
+            >
+              <Add
+                fontSize="small"
+              />
+              Add Candidate
+            </button>
 
-    </button>
+            <button
+              className="add-btn"
+              onClick={() =>
+                navigate(
+                  "/admin/assignments"
+                )
+              }
+            >
+              <Assignment
+                fontSize="small"
+              />
+              Assignments
+            </button>
 
-    <button
-      className="add-btn"
-      onClick={() =>
-        navigate(
-          "/admin/assignments"
-        )
-      }
-    >
-      <Assignment
-        fontSize="small"
-      />
+            <button
+              className="add-btn"
+              onClick={() =>
+                navigate(
+                  "/admin/reports"
+                )
+              }
+            >
+              <Assessment
+                fontSize="small"
+              />
+              Reports
+            </button>
 
-      Assignments
+          </div>
 
-    </button>
-
-    <button
-      className="add-btn"
-      onClick={() =>
-        navigate(
-          "/admin/reports"
-        )
-      }
-    >
-      <Assessment
-        fontSize="small"
-      />
-
-      Reports
-
-    </button>
-
-  </div>
-
-</div>
+        </div>
 
         {loading &&
           <h3>Loading...</h3>
@@ -223,33 +214,27 @@ export default function AdminDashboardPage() {
 
             <div className="dashboard-cards">
 
-              <div className="dashboard-card">
+              <div className="dashboard-card" onClick={() => navigate('/admin/candidates', { state: { filter: '' } })}>
 
-               <People
-  color="primary"
-  sx={{
-    fontSize: 40,
-  }}
-/>
+                <div className="card-icon-wrapper icon-blue">
+                  <People sx={{ fontSize: 28, color: "#3b82f6" }} />
+                </div>
 
-<h4>Total Candidates</h4>
+                <h4>Total Candidates</h4>
 
-<h1 className="blue">
-  {summary.totalCandidates}
-</h1>
+                <h1 className="blue">
+                  {summary.totalCandidates}
+                </h1>
 
               </div>
 
-              <div className="dashboard-card">
+              <div className="dashboard-card" onClick={() => navigate('/admin/candidates', { state: { filter: 'Pending' } })}>
 
-                <HourglassTop
-  color="warning"
-  sx={{
-    fontSize: 40,
-  }}
-/>
+                <div className="card-icon-wrapper icon-orange">
+                  <HourglassTop sx={{ fontSize: 28, color: "#f59e0b" }} />
+                </div>
 
-<h4>Pending</h4>
+                <h4>Pending</h4>
 
                 <h1 className="orange">
                   {summary.pendingCandidates}
@@ -257,16 +242,13 @@ export default function AdminDashboardPage() {
 
               </div>
 
-              <div className="dashboard-card">
+              <div className="dashboard-card" onClick={() => navigate('/admin/candidates', { state: { filter: 'Approved' } })}>
 
-               <CheckCircle
-  color="success"
-  sx={{
-    fontSize: 40,
-  }}
-/>
+                <div className="card-icon-wrapper icon-green">
+                  <CheckCircle sx={{ fontSize: 28, color: "#10b981" }} />
+                </div>
 
-<h4>Approved</h4>
+                <h4>Approved</h4>
 
                 <h1 className="green">
                   {summary.completedCandidates}
@@ -274,16 +256,13 @@ export default function AdminDashboardPage() {
 
               </div>
 
-              <div className="dashboard-card">
+              <div className="dashboard-card" onClick={() => navigate('/admin/candidates', { state: { filter: 'Rejected' } })}>
 
-               <Cancel
-  color="error"
-  sx={{
-    fontSize: 40,
-  }}
-/>
+                <div className="card-icon-wrapper icon-red">
+                  <Cancel sx={{ fontSize: 28, color: "#ef4444" }} />
+                </div>
 
-<h4>Rejected</h4>
+                <h4>Rejected</h4>
 
                 <h1 className="red">
                   {summary.rejectedCandidates}
@@ -307,8 +286,9 @@ export default function AdminDashboardPage() {
 
               <div className="chart-card">
 
-                <div className="chart-title">
-                  Status Breakdown
+                <div className="chart-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span>Status Breakdown</span>
+                  <span style={{ fontSize: "14px", fontWeight: "normal", color: "#6b7280" }}>Total: {summary.totalCandidates}</span>
                 </div>
 
                 <StatusBreakdownChart
@@ -378,21 +358,21 @@ export default function AdminDashboardPage() {
                           {candidate.email}
                         </td>
 
-                       <td>
+                        <td>
 
-  <Chip
-    label={candidate.status}
-    color={
-      candidate.status === "Approved"
-        ? "success"
-        : candidate.status === "Rejected"
-        ? "error"
-        : "warning"
-    }
-    size="small"
-  />
+                          <Chip
+                            label={candidate.status}
+                            color={
+                              candidate.status === "Approved"
+                                ? "success"
+                                : candidate.status === "Rejected"
+                                  ? "error"
+                                  : "warning"
+                            }
+                            size="small"
+                          />
 
-</td>
+                        </td>
 
                         <td>
                           {

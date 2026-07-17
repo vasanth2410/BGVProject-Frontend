@@ -42,6 +42,7 @@ import {
   approveVerification,
   rejectVerification,
   reReviewVerification,
+  createVerification,
 } from "../../services/ReviewerService";
 
 import {
@@ -111,53 +112,69 @@ const [dialogAction, setDialogAction] =
 
   const loadData = async () => {
 
-  if (!id) return;
+    if (!id) return;
 
-  try {
+    try {
 
-    const candidateResult =
-      await getReviewerCandidate(
-        Number(id)
+      const candidateResult =
+        await getReviewerCandidate(
+          Number(id)
+        );
+
+      setCandidate(
+        candidateResult
       );
 
-    setCandidate(
-      candidateResult
-    );
+      const documentResult =
+        await getReviewerCandidateDocuments(
+          Number(id)
+        );
 
-    const documentResult =
-      await getReviewerCandidateDocuments(
-        Number(id)
+      setDocuments(
+        documentResult
       );
 
-    setDocuments(
-      documentResult
-    );
+      const verificationResult =
+        await getReviewerCandidateVerifications(
+          Number(id)
+        );
 
-    const verificationResult =
-      await getReviewerCandidateVerifications(
-        Number(id)
-      );
+      const filterUnique = (list: any[]) => {
+        const seen = new Set();
+        return list.filter((item) => {
+          const duplicate = seen.has(item.verificationType);
+          seen.add(item.verificationType);
+          return !duplicate;
+        });
+      };
 
-    setVerifications(
-      verificationResult
-    );
+      if (verificationResult.length === 0 && documentResult.length > 0) {
+        // Automatically create a verification task for each uploaded document
+        for (const doc of documentResult) {
+          try {
+            await createVerification(Number(id), doc.fileName);
+          } catch (e) {
+            console.error("Error auto-creating verification:", e);
+          }
+        }
+        
+        // Re-fetch verifications
+        const freshVerifications = await getReviewerCandidateVerifications(Number(id));
+        setVerifications(filterUnique(freshVerifications));
+      } else {
+        setVerifications(
+          filterUnique(verificationResult)
+        );
+      }
 
-  }
-  catch (error) {
+    }
+    catch (error) {
 
-    console.error(error);
+      console.error(error);
 
-  }
+    }
 
-};
-
-useEffect(() => {
-
-  void loadData();
-
-}, [id]);
-
-  
+  };
 
   useEffect(() => {
 

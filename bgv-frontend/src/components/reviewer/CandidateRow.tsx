@@ -4,6 +4,7 @@ import {
   Button,
   Chip,
   Typography,
+  Paper,
 } from "@mui/material";
 
 import type {
@@ -69,7 +70,9 @@ export default function CandidateRow({
 
   return (
 
-    <Box
+    <Paper
+
+      elevation={0}
 
       sx={{
 
@@ -85,11 +88,13 @@ export default function CandidateRow({
 
         borderRadius: 3,
 
-        border: "1px solid #ececec",
+        border: "1px solid",
+
+        borderColor: "rgba(128, 128, 128, 0.2)",
 
         transition: ".25s",
 
-        bgcolor: "#fff",
+        bgcolor: "background.paper",
 
         "&:hover": {
 
@@ -241,7 +246,7 @@ export default function CandidateRow({
 
       </Box>
 
-    </Box>
+    </Paper>
 
   );
 

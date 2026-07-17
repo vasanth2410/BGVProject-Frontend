@@ -1,19 +1,5 @@
 import { useEffect, useState } from "react";
-
-import {
-  Box,
-  Button,
-  Chip,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from "@mui/material";
+import "./CandidatesPage.css";
 
 import DeleteDocumentDialog from "../../components/admin/DeleteDocumentDialog";
 
@@ -107,116 +93,81 @@ export default function AdminDocumentsPage() {
 
   return (
     <>
-      <Paper
-        sx={{
-          p: 4,
-          borderRadius: 3,
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            mb: 3,
-          }}
-        >
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: 700 }}
-          >
+      <div style={{ padding: "30px" }}>
+        <div className="page-header">
+          <h1 className="page-title">
             Documents
-          </Typography>
+          </h1>
 
-          <TextField
-            label="Search"
-            size="small"
-            value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
-            }
-          />
-        </Box>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+            />
+          </div>
+        </div>
 
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
+        <div className="table-container">
+          <table className="candidate-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Candidate</th>
+                <th>File Name</th>
+                <th>Type</th>
+                <th>Size</th>
+                <th>Status</th>
+                <th style={{ textAlign: 'center' }}>Actions</th>
+              </tr>
+            </thead>
 
-                <TableCell>Candidate</TableCell>
-
-                <TableCell>File Name</TableCell>
-
-                <TableCell>Type</TableCell>
-
-                <TableCell>Size</TableCell>
-
-                <TableCell>Status</TableCell>
-
-                <TableCell align="center">
-                  Actions
-                </TableCell>
-              </TableRow>
-            </TableHead>
-
-            <TableBody>
+            <tbody>
               {filteredDocuments.map((doc) => (
-                <TableRow
-                  key={doc.id}
-                  hover
-                >
-                  <TableCell>
+                <tr key={doc.id}>
+                  <td>
                     {doc.id}
-                  </TableCell>
+                  </td>
 
-                  <TableCell>
+                  <td>
                     {doc.candidateId}
-                  </TableCell>
+                  </td>
 
-                  <TableCell>
+                  <td>
                     {doc.fileName}
-                  </TableCell>
+                  </td>
 
-                  <TableCell>
-                    <Chip
-                      label={doc.fileType}
-                      color="primary"
-                      size="small"
-                    />
-                  </TableCell>
+                  <td>
+                    {doc.fileType}
+                  </td>
 
-                  <TableCell>
+                  <td>
                     {(doc.fileSize / 1024).toFixed(1)} KB
-                  </TableCell>
+                  </td>
 
-                  <TableCell>
-                    <Chip
-                      label={doc.status}
-                      color={
-                        doc.status === "Uploaded"
-                          ? "success"
-                          : "warning"
-                      }
-                      size="small"
-                    />
-                  </TableCell>
+                  <td>
+                    <span className={`status-${doc.status === "Uploaded" ? "approved" : "pending"}`}>
+                      {doc.status}
+                    </span>
+                  </td>
 
-                  <TableCell align="center">
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      sx={{ mr: 1 }}
+                  <td style={{ textAlign: 'center' }}>
+                    <button
+                      className="btn-view"
+                      style={{ marginRight: '8px' }}
                       onClick={() =>
                         downloadDocument(doc.id)
                       }
                     >
-                      DOWNLOAD
-                    </Button>
+                      Download
+                    </button>
 
-                    <Button
-                      variant="contained"
-                      color="error"
-                      size="small"
+                    <button
+                      className="btn-delete"
                       onClick={() =>
                         openDeleteDialog(
                           doc.id,
@@ -224,15 +175,15 @@ export default function AdminDocumentsPage() {
                         )
                       }
                     >
-                      DELETE
-                    </Button>
-                  </TableCell>
-                </TableRow>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
               ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <DeleteDocumentDialog
         open={deleteOpen}

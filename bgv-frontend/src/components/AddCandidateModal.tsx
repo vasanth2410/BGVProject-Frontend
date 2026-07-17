@@ -1,10 +1,18 @@
 import { useState } from "react";
 
-import "./AddCandidateModal.css";
-
 import {
   createCandidate,
 } from "../services/CandidateManagementService";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Button,
+  Grid,
+  Typography,
+} from "@mui/material";
 
 interface Props {
   onClose: () => void;
@@ -30,9 +38,13 @@ export default function AddCandidateModal({
       dateOfJoining: "",
     });
 
+  const isDark = document.body.classList.contains("dark-mode");
+  const inputColor = isDark ? "#f8fafc" : "inherit";
+  const inputStyle: any = { color: inputColor, WebkitTextFillColor: inputColor };
+
   const handleChange = (
     e: React.ChangeEvent<
-      HTMLInputElement
+      HTMLInputElement | HTMLTextAreaElement
     >
   ) => {
 
@@ -78,96 +90,155 @@ export default function AddCandidateModal({
     };
 
   return (
-
-    <div className="modal-overlay">
-
-      <div className="modal-box">
-
-        <h2>
-          Add Candidate
-        </h2>
-
-        <input
-          name="fullName"
-          placeholder="Full Name"
-          onChange={handleChange}
-        />
-
-        <input
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-        />
-
-        <input
-          name="phoneNumber"
-          placeholder="Phone Number"
-          onChange={handleChange}
-        />
-
-        <input
-          name="address"
-          placeholder="Address"
-          onChange={handleChange}
-        />
-
-        <input
-          type="date"
-          name="dateOfBirth"
-          onChange={handleChange}
-        />
-
-        <input
-          name="gender"
-          placeholder="Gender"
-          onChange={handleChange}
-        />
-
-        <input
-          name="panNumber"
-          placeholder="PAN Number"
-          onChange={handleChange}
-        />
-
-        <input
-          name="aadhaarNumber"
-          placeholder="Aadhaar Number"
-          onChange={handleChange}
-        />
-
-        <input
-          name="appliedRole"
-          placeholder="Applied Role"
-          onChange={handleChange}
-        />
-
-        <input
-          type="date"
-          name="dateOfJoining"
-          onChange={handleChange}
-        />
-
-        <div
-          className="modal-actions"
-        >
-
-          <button
-            onClick={handleSubmit}
-          >
-            Save
-          </button>
-
-          <button
-            onClick={onClose}
-          >
-            Cancel
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-
+    <Dialog open={true} onClose={onClose} maxWidth="sm" fullWidth>
+      <DialogTitle sx={{ fontWeight: 700, fontSize: "24px" }}>
+        Add Candidate
+      </DialogTitle>
+      <DialogContent dividers>
+        <Grid container spacing={2} sx={{ mt: 1 }}>
+          <Grid item xs={12}>
+            <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
+              Full Name
+            </Typography>
+            <TextField
+              fullWidth
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
+              variant="outlined"
+              inputProps={{ style: inputStyle }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
+              Email
+            </Typography>
+            <TextField
+              fullWidth
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              variant="outlined"
+              inputProps={{ style: inputStyle }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
+              Phone Number
+            </Typography>
+            <TextField
+              fullWidth
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              variant="outlined"
+              inputProps={{ style: inputStyle }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
+              Address
+            </Typography>
+            <TextField
+              fullWidth
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              variant="outlined"
+              inputProps={{ style: inputStyle }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
+              Date of Birth
+            </Typography>
+            <TextField
+              fullWidth
+              name="dateOfBirth"
+              type="date"
+              value={formData.dateOfBirth}
+              onChange={handleChange}
+              variant="outlined"
+              inputProps={{ style: inputStyle }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
+              Gender
+            </Typography>
+            <TextField
+              fullWidth
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              variant="outlined"
+              inputProps={{ style: inputStyle }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
+              PAN Number
+            </Typography>
+            <TextField
+              fullWidth
+              name="panNumber"
+              value={formData.panNumber}
+              onChange={handleChange}
+              variant="outlined"
+              inputProps={{ style: inputStyle }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
+              Aadhaar Number
+            </Typography>
+            <TextField
+              fullWidth
+              name="aadhaarNumber"
+              value={formData.aadhaarNumber}
+              onChange={handleChange}
+              variant="outlined"
+              inputProps={{ style: inputStyle }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
+              Applied Role
+            </Typography>
+            <TextField
+              fullWidth
+              name="appliedRole"
+              value={formData.appliedRole}
+              onChange={handleChange}
+              variant="outlined"
+              inputProps={{ style: inputStyle }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
+              Date of Joining
+            </Typography>
+            <TextField
+              fullWidth
+              name="dateOfJoining"
+              type="date"
+              value={formData.dateOfJoining}
+              onChange={handleChange}
+              variant="outlined"
+              inputProps={{ style: inputStyle }}
+            />
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions sx={{ p: 3 }}>
+        <Button onClick={onClose} color="inherit" sx={{ fontWeight: 600 }}>
+          Cancel
+        </Button>
+        <Button onClick={handleSubmit} variant="contained" color="primary" sx={{ fontWeight: 600, px: 4 }}>
+          Save
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }

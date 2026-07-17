@@ -33,25 +33,38 @@ export default function CandidateDetailsPage() {
   const [candidate, setCandidate] =
     useState<any>(null);
 
-   
-
+  const [error, setError] = useState<string | null>(null);
 
  useEffect(() => {
 
   const loadCandidate = async () => {
 
-    const result =
-      await getCandidateById(
-        Number(id)
-      );
+    try {
+      const result =
+        await getCandidateById(
+          Number(id)
+        );
 
-    setCandidate(result);
+      setCandidate(result);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to load candidate details. Please try again.");
+    }
 
   };
 
   void loadCandidate();
 
 }, [id]);
+
+  if (error)
+    return (
+      <AdminLayout>
+        <Typography sx={{ p: 4, color: 'error.main' }}>
+          {error}
+        </Typography>
+      </AdminLayout>
+    );
 
   if (!candidate)
     return (

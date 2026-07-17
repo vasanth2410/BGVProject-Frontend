@@ -20,6 +20,9 @@ from "../layouts/AdminLayout";
 import AdminDashboardPage
 from "../pages/admin/AdminDashboardPage";
 
+import AdminProfilePage
+from "../pages/admin/AdminProfilePage";
+
 import CandidatesPage
 from "../pages/admin/CandidatesPage";
 
@@ -125,6 +128,15 @@ export default function AppRoutes() {
           element={
             <ProtectedRoute allowedRole="Admin">
               <AdminDashboardPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/profile"
+          element={
+            <ProtectedRoute allowedRole="Admin">
+              <AdminProfilePage />
             </ProtectedRoute>
           }
         />

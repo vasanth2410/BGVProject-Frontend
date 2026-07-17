@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import AssignCandidateModal
 from "../../components/AssignCandidateModal";
 
-import { useNavigate }
+import { useNavigate, useLocation }
   from "react-router-dom";
 
 import AddCandidateModal
@@ -24,10 +24,15 @@ import type {
 }
 from "../../types/CandidateManagement";
 
+import "./CandidatesPage.css";
+
 export default function CandidatesPage() {
 
   const navigate =
     useNavigate();
+
+  const location =
+    useLocation();
 
   const [candidates,
     setCandidates]
@@ -39,7 +44,7 @@ export default function CandidatesPage() {
 
       const [search,
   setSearch]
-    = useState("");
+    = useState(location.state?.filter || "");
 
   const [showModal,
     setShowModal]
@@ -197,6 +202,7 @@ console.log(filteredCandidates);
 
     <input
       type="text"
+      className="search-input"
       placeholder="Search by Name or Email"
       value={search}
       onChange={(e) =>
@@ -204,12 +210,6 @@ console.log(filteredCandidates);
           e.target.value
         )
       }
-      style={{
-        padding: "10px",
-        width: "250px",
-        borderRadius: "8px",
-        border: "1px solid #ddd",
-      }}
     />
 
     <button
@@ -231,9 +231,10 @@ console.log(filteredCandidates);
 
 ) : (
 
-  <table className="candidate-table">
+  <div className="table-container">
+    <table className="candidate-table">
 
-    <thead>
+      <thead>
 
       <tr>
 
@@ -299,8 +300,8 @@ console.log(filteredCandidates);
                 className={
                   candidate.status === "Pending"
                     ? "status-pending"
-                    : candidate.status === "Completed"
-                    ? "status-completed"
+                    : candidate.status === "Approved"
+                    ? "status-approved"
                     : "status-rejected"
                 }
               >
@@ -311,41 +312,47 @@ console.log(filteredCandidates);
 
             <td>
 
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/admin/candidates/${candidate.id}`);
-                }}
-              >
-                View
-              </button>
+              <div className="action-buttons">
+                <button
+                  className="btn-view"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/admin/candidates/${candidate.id}`);
+                  }}
+                >
+                  View
+                </button>
 
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/admin/candidates/edit/${candidate.id}`);
-                }}
-              >
-                Edit
-              </button>
+                <button
+                  className="btn-edit"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/admin/candidates/edit/${candidate.id}`);
+                  }}
+                >
+                  Edit
+                </button>
 
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDelete(candidate.id);
-                }}
-              >
-                Delete
-              </button>
+                <button
+                  className="btn-delete"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(candidate.id);
+                  }}
+                >
+                  Delete
+                </button>
 
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowAssignModal(true);
-                }}
-              >
-                Assign
-              </button>
+                <button
+                  className="btn-assign"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowAssignModal(true);
+                  }}
+                >
+                  Assign
+                </button>
+              </div>
 
             </td>
 
@@ -357,8 +364,8 @@ console.log(filteredCandidates);
 
     </tbody>
 
-  </table>
-
+    </table>
+  </div>
 )}
 
         {showModal && (

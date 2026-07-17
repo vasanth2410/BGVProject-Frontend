@@ -10,52 +10,207 @@
 }
 
 .page-title {
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.search-input {
+  padding: 12px 18px;
+  width: 300px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
 }
 
 .add-button {
   background-color: #2563eb;
   color: white;
   border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
+  padding: 12px 20px;
+  border-radius: 12px;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 4px 6px rgba(37,99,235,0.2);
+  transition: all 0.3s ease;
 }
 
 .add-button:hover {
   background-color: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(37,99,235,0.3);
+}
+
+.table-container {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05);
+  overflow-x: auto;
 }
 
 .candidate-table {
   width: 100%;
-  border-collapse: collapse;
-  background: white;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .candidate-table th {
-  background: #f5f7fb;
-  padding: 14px;
+  background: #f9fafb;
+  padding: 16px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #111827;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #e5e7eb;
 }
 
 .candidate-table td {
-  padding: 14px;
-  border-bottom: 1px solid #eee;
+  padding: 16px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
+  color: #374151;
+  vertical-align: middle;
+}
+
+.candidate-table tr {
+  transition: background-color 0.2s ease;
+}
+
+.candidate-table tr:hover {
+  background-color: #f9fafb;
 }
 
 .status-pending {
-  color: orange;
-  font-weight: bold;
+  background: #fef3c7;
+  color: #d97706;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
 }
 
-.status-completed {
-  color: green;
-  font-weight: bold;
+.status-approved {
+  background: #d1fae5;
+  color: #059669;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
 }
 
 .status-rejected {
-  color: red;
-  font-weight: bold;
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-view {
+  background: #eff6ff;
+  color: #2563eb;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-view:hover { background: #dbeafe; color: #1d4ed8; }
+
+.btn-edit {
+  background: #fef3c7;
+  color: #d97706;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-edit:hover { background: #fde68a; color: #b45309; }
+
+.btn-delete {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-delete:hover { background: #fecaca; color: #b91c1c; }
+
+.btn-assign {
+  background: #f3e8ff;
+  color: #9333ea;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-assign:hover { background: #e9d5ff; color: #7e22ce; }
+
+/* Dark mode styles */
+body.dark-mode .page-title {
+  color: #f8fafc;
+}
+
+body.dark-mode .search-input {
+  background: #1a1e2d;
+  border-color: rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+}
+
+body.dark-mode .search-input::placeholder {
+  color: #94a3b8;
+}
+
+body.dark-mode .table-container {
+  background: #1a1e2d;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .candidate-table th {
+  background: #1e2436;
+  color: #f8fafc;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .candidate-table td {
+  color: #cbd5e1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .candidate-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.02);
 }

@@ -31,13 +31,15 @@ export default function StatCard({
 
         borderRadius: 4,
 
-        border: "1px solid #e5e7eb",
+        border: "1px solid",
+
+        borderColor: "rgba(128, 128, 128, 0.2)",
 
         transition: "0.25s",
 
         height: "100%",
 
-        background: "#ffffff",
+        bgcolor: "background.paper",
 
         "&:hover": {
 
@@ -82,6 +84,8 @@ export default function StatCard({
 
               fontSize: 32,
 
+              color: "inherit !important",
+
             },
 
           }}
@@ -117,8 +121,6 @@ export default function StatCard({
             mt: 1,
 
             mb: 1,
-
-            color: "#111827",
 
           }}
         >

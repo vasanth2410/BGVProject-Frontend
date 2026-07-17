@@ -30,7 +30,7 @@ export default function ReviewerLayout() {
             padding: "30px",
             minHeight: "calc(100vh - 70px)",
             overflowY: "auto",
-            overflowX: "hidden",
+            overflowX: "auto",
           }}
         >
 

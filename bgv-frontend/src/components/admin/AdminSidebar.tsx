@@ -35,113 +35,109 @@ export default function AdminSidebar() {
 
   const menuItems = [
 
-  {
-    name: "Dashboard",
-    path: "/admin",
-    icon: <Dashboard />,
-  },
+    {
+      name: "Dashboard",
+      path: "/admin",
+      icon: <Dashboard />,
+    },
 
-  {
-    name: "Candidates",
-    path: "/admin/candidates",
-    icon: <People />,
-  },
+    {
+      name: "Candidates",
+      path: "/admin/candidates",
+      icon: <People />,
+    },
 
-  {
-    name: "Assignments",
-    path: "/admin/assignments",
-    icon: <Assignment />,
-  },
+    {
+      name: "Assignments",
+      path: "/admin/assignments",
+      icon: <Assignment />,
+    },
 
-  {
-    name: "Verifications",
-    path: "/admin/verifications",
-    icon: <Assignment />,
-  },
+    {
+      name: "Verifications",
+      path: "/admin/verifications",
+      icon: <Assignment />,
+    },
 
-  {
-    name: "Documents",
-    path: "/admin/documents",
-    icon: <Assignment />,
-  },
+    {
+      name: "Documents",
+      path: "/admin/documents",
+      icon: <Assignment />,
+    },
 
-  {
-    name: "Reports",
-    path: "/admin/reports",
-    icon: <Report />,
-  },
+    {
+      name: "Reports",
+      path: "/admin/reports",
+      icon: <Report />,
+    },
 
-  {
-    name: "Notifications",
-    path: "/admin/notifications",
-    icon: <Notifications />,
-  },
+    {
+      name: "Notifications",
+      path: "/admin/notifications",
+      icon: <Notifications />,
+    },
 
-  {
-    name: "Dead Letters",
-    path: "/admin/deadletters",
-    icon: <Report />,
-  },
+    {
+      name: "Dead Letters",
+      path: "/admin/deadletters",
+      icon: <Report />,
+    },
 
-  {
-    name: "Audit Logs",
-    path: "/admin/auditlogs",
-    icon: <History />,
-  },
+    {
+      name: "Audit Logs",
+      path: "/admin/auditlogs",
+      icon: <History />,
+    },
 
-];
+  ];
 
   return (
 
     <div className="sidebar">
 
-      <div>
+      <div className="logo-section">
 
-        <div className="logo-section">
+        <h2>
+          BGV System
+        </h2>
 
-          <h2>
-            BGV System
-          </h2>
+        <p>
+          Background Verification
+        </p>
 
-          <p>
-            Background Verification
-          </p>
+      </div>
 
-        </div>
+      <div className="menu-list">
 
-        <div className="menu-list">
+        {menuItems.map(
+          (item) => (
 
-          {menuItems.map(
-            (item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={
+                location.pathname === item.path
+                  ? "menu-link active"
+                  : "menu-link"
+              }
+            >
 
-              <Link
-                key={item.path}
-                to={item.path}
-                className={
-                  location.pathname === item.path
-                    ? "menu-link active"
-                    : "menu-link"
-                }
-              >
+              {item.icon}
 
-                {item.icon}
+              <span>
+                {item.name}
+              </span>
 
-                <span>
-                  {item.name}
-                </span>
+            </Link>
 
-              </Link>
-
-            )
-          )}
-
-        </div>
+          )
+        )}
 
       </div>
 
       <div className="sidebar-footer">
 
-        <div className="user-info">
+        <div className="user-info" onClick={() => navigate('/admin/profile')} style={{ cursor: "pointer" }}>
 
           <div className="avatar">
 

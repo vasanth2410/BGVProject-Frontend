@@ -4,18 +4,6 @@ import {
 } from "react";
 
 import {
-  Paper,
-  Typography,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  Chip,
-  TableContainer,
-} from "@mui/material";
-
-import {
   getAllNotifications,
 } from "../../services/AdminNotificationService";
 
@@ -50,93 +38,55 @@ export default function AdminNotificationsPage() {
 
   return (
 
-    <Paper
-      sx={{
-        p: 4,
-        borderRadius: 3,
-      }}
-    >
+    <>
+      <div style={{ padding: "30px" }}>
+        <div className="page-header">
+          <h1 className="page-title">
+            Notifications
+          </h1>
+        </div>
 
-      <Typography
-        variant="h4"
-        sx={{
-          mb: 3,
-          fontWeight: 700,
-        }}
-      >
-        Notifications
-      </Typography>
+        <div className="table-container">
+          <table className="candidate-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Subject</th>
+                <th>Status</th>
+                <th>Created</th>
+              </tr>
+            </thead>
 
-      <TableContainer>
-
-        <Table>
-
-          <TableHead>
-
-            <TableRow>
-
-              <TableCell>ID</TableCell>
-
-              <TableCell>Email</TableCell>
-
-              <TableCell>Subject</TableCell>
-
-              <TableCell>Status</TableCell>
-
-              <TableCell>Created</TableCell>
-
-            </TableRow>
-
-          </TableHead>
-
-          <TableBody>
-
-            {notifications.map((n) => (
-
-              <TableRow key={n.id}>
-
-                <TableCell>
-                  {n.id}
-                </TableCell>
-
-                <TableCell>
-                  {n.toEmail}
-                </TableCell>
-
-                <TableCell>
-                  {n.subject}
-                </TableCell>
-
-                <TableCell>
-
-                  <Chip
-                    label={n.status}
-                    color={
-                      n.status === "Sent"
-                        ? "success"
-                        : "error"
-                    }
-                  />
-
-                </TableCell>
-
-                <TableCell>
-                  {new Date(
-                    n.createdAt
-                  ).toLocaleString()}
-                </TableCell>
-
-              </TableRow>
-
-            ))}
-
-          </TableBody>
-
-        </Table>
-
-      </TableContainer>
-
-    </Paper>
+            <tbody>
+              {notifications.map((n) => (
+                <tr key={n.id}>
+                  <td>
+                    {n.id}
+                  </td>
+                  <td>
+                    {n.toEmail}
+                  </td>
+                  <td>
+                    {n.subject}
+                  </td>
+                  <td>
+                    <span className={`status-${n.status === "Sent" ? "approved" : "rejected"}`}>
+                      {n.status}
+                    </span>
+                  </td>
+                  <td>
+                    {new Date(
+                      n.createdAt
+                    ).toLocaleString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
 
   );
 

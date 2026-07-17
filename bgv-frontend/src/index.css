@@ -7,38 +7,17 @@
 }
 
 body {
-  font-family:
-    "Segoe UI",
-    sans-serif;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
 }
 .layout {
   display: flex;
   height: 100vh;
 }
 
-.sidebar {
-  width: 250px;
-  background: #062b6b;
-  color: white;
-  padding: 20px;
-
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebar h2 {
-  margin-bottom: 30px;
-}
-
-.menu-link {
-  color: white;
-  text-decoration: none;
-  margin-bottom: 15px;
-}
-
 .content {
   flex: 1;
   background: #f4f7fc;
+  min-width: 0;
 }
 
 .header {
@@ -88,6 +67,86 @@ td {
   padding: 12px;
 }
 
-th {
-  background: #f5f5f5;
+th, .MuiTableCell-head {
+  background: #f9fafb;
+  color: #111827;
+}
+
+/* Global dark mode styles for all tables */
+body.dark-mode table, 
+body.dark-mode .MuiTable-root,
+body.dark-mode .MuiPaper-root {
+  background: #1a1e2d !important;
+  color: #f8fafc !important;
+}
+
+body.dark-mode td, 
+body.dark-mode .MuiTableCell-body,
+body.dark-mode .MuiTableCell-root.MuiTableCell-body {
+  color: #cbd5e1 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+body.dark-mode .MuiTableCell-root {
+  color: #cbd5e1 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+body.dark-mode th, 
+body.dark-mode .MuiTableCell-head,
+body.dark-mode .MuiTableCell-root.MuiTableCell-head {
+  background: #1e2436 !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Ensure text inputs and other base text are also readable */
+body.dark-mode .MuiInputBase-root,
+body.dark-mode .MuiInputBase-input,
+body.dark-mode .MuiOutlinedInput-root,
+body.dark-mode .MuiOutlinedInput-input,
+body.dark-mode input,
+body.dark-mode textarea {
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+}
+
+body.dark-mode .MuiInputLabel-root {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .MuiInputLabel-root.Mui-focused {
+  color: #3b82f6 !important;
+}
+
+body.dark-mode .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+body.dark-mode .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+body.dark-mode .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #3b82f6 !important;
+}
+
+body.dark-mode .MuiSvgIcon-root {
+  color: #94a3b8;
+}
+
+body.dark-mode {
+  color-scheme: dark;
+  --text-color: #f8fafc;
+}
+
+body.dark-mode input[type="date"]::-webkit-datetime-edit-text,
+body.dark-mode input[type="date"]::-webkit-datetime-edit-month-field,
+body.dark-mode input[type="date"]::-webkit-datetime-edit-day-field,
+body.dark-mode input[type="date"]::-webkit-datetime-edit-year-field {
+  color: #f8fafc;
+}
+
+body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
 }

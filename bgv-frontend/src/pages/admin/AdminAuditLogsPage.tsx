@@ -1,18 +1,6 @@
 import { useEffect, useState } from "react";
 
-import
-{
-    Paper,
-    Typography,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    TableContainer,
-    Chip,
-}
-from "@mui/material";
+
 
 import
 {
@@ -56,111 +44,57 @@ export default function AdminAuditLogsPage()
 
     return (
 
-        <Paper
-            sx={{
-                p: 4,
-                borderRadius: 3,
-            }}
-        >
+        <>
+            <div style={{ padding: "30px" }}>
+                <div className="page-header">
+                    <h1 className="page-title">
+                        Audit Logs
+                    </h1>
+                </div>
 
-            <Typography
-                variant="h4"
-                sx={{
-                    mb: 3,
-                    fontWeight: 700,
-                }}
-            >
+                <div className="table-container">
+                    <table className="candidate-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Action</th>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
 
-                Audit Logs
-
-            </Typography>
-
-            <TableContainer>
-
-                <Table>
-
-                    <TableHead>
-
-                        <TableRow>
-
-                            <TableCell>ID</TableCell>
-
-                            <TableCell>Action</TableCell>
-
-                            <TableCell>User</TableCell>
-
-                            <TableCell>Role</TableCell>
-
-                            <TableCell>Date</TableCell>
-
-                        </TableRow>
-
-                    </TableHead>
-
-                    <TableBody>
-
-                        {
-
-                            logs.map(log => (
-
-                                <TableRow
-                                    key={log.id}
-                                    hover
-                                >
-
-                                    <TableCell>
-
-                                        {log.id}
-
-                                    </TableCell>
-
-                                    <TableCell>
-
-                                        {log.action}
-
-                                    </TableCell>
-
-                                    <TableCell>
-
-                                        {log.performedBy}
-
-                                    </TableCell>
-
-                                    <TableCell>
-
-                                        <Chip
-                                            label={log.role}
-                                            color="primary"
-                                            size="small"
-                                        />
-
-                                    </TableCell>
-
-                                    <TableCell>
-
-                                        {
-
-                                            new Date(
-                                                log.performedAt
-                                            ).toLocaleString()
-
-                                        }
-
-                                    </TableCell>
-
-                                </TableRow>
-
-                            ))
-
-                        }
-
-                    </TableBody>
-
-                </Table>
-
-            </TableContainer>
-
-        </Paper>
+                        <tbody>
+                            {
+                                logs.map(log => (
+                                    <tr key={log.id}>
+                                        <td>
+                                            {log.id}
+                                        </td>
+                                        <td>
+                                            {log.action}
+                                        </td>
+                                        <td>
+                                            {log.performedBy}
+                                        </td>
+                                        <td>
+                                            {log.role}
+                                        </td>
+                                        <td>
+                                            {
+                                                new Date(
+                                                    log.performedAt
+                                                ).toLocaleString()
+                                            }
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </>
 
     );
 }

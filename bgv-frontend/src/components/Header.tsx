@@ -4,8 +4,12 @@ import {
   Search,
   NotificationsNone,
 } from "@mui/icons-material";
+import DarkModeToggle from "./DarkModeToggle";
+
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const navigate = useNavigate();
 
   const email =
     localStorage.getItem("email") ??
@@ -17,6 +21,27 @@ export default function Header() {
 
   const userName =
     email.split("@")[0];
+
+  const getBasePath = () => {
+    if (role.toLowerCase() === "admin") return "/admin";
+    if (role.toLowerCase() === "reviewer") return "/reviewer";
+    return "/candidate";
+  };
+
+  const handleSearchClick = () => {
+    // Navigate to candidates/directory page for searching
+    if (role.toLowerCase() === "admin") {
+      navigate("/admin/candidates");
+    }
+  };
+
+  const handleNotificationsClick = () => {
+    navigate(`${getBasePath()}/notifications`);
+  };
+
+  const handleProfileClick = () => {
+    navigate(`${getBasePath()}/profile`);
+  };
 
   return (
 
@@ -46,19 +71,19 @@ export default function Header() {
 
       <div className="header-right">
 
-        <button className="header-icon">
+        <DarkModeToggle />
 
-          <Search />
+        {role.toLowerCase() === "admin" && (
+          <button className="header-icon" style={{ marginLeft: "15px" }} onClick={handleSearchClick}>
+            <Search />
+          </button>
+        )}
 
-        </button>
-
-        <button className="header-icon">
-
+        <button className="header-icon" onClick={handleNotificationsClick}>
           <NotificationsNone />
-
         </button>
 
-        <div className="header-user">
+        <div className="header-user" onClick={handleProfileClick} style={{ cursor: "pointer" }}>
 
           <div className="header-avatar">
 

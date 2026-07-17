@@ -40,6 +40,8 @@ export default function StatusBreakdownChart({
     "#ef4444",
   ];
 
+  const total = pending + approved + rejected;
+
   return (
     <ResponsiveContainer
       width="100%"
@@ -53,8 +55,10 @@ export default function StatusBreakdownChart({
           nameKey="name"
           cx="50%"
           cy="50%"
-          outerRadius={90}
-          label
+          innerRadius={60}
+          outerRadius={85}
+          paddingAngle={3}
+          label={false}
         >
           {data.map((_, index) => (
             <Cell
@@ -67,6 +71,33 @@ export default function StatusBreakdownChart({
         <Tooltip />
 
         <Legend />
+
+        <text
+          x="50%"
+          y="46%"
+          textAnchor="middle"
+          dominantBaseline="middle"
+          style={{
+            fontSize: "14px",
+            fill: "#6b7280",
+            fontWeight: 500,
+          }}
+        >
+          Total
+        </text>
+        <text
+          x="50%"
+          y="56%"
+          textAnchor="middle"
+          dominantBaseline="middle"
+          style={{
+            fontSize: "24px",
+            fill: "var(--text-color, #111827)",
+            fontWeight: 700,
+          }}
+        >
+          {total}
+        </text>
 
       </PieChart>
     </ResponsiveContainer>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./CandidatesPage.css";
 
 import type {
   Assignment,

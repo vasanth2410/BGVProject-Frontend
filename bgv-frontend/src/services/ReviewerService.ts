@@ -161,6 +161,22 @@ async (
 
 };
 
+export const createVerification =
+async (
+    candidateId: number,
+    verificationType: string
+) => {
+    const response =
+        await apiClient.post(
+            "/Verification",
+            {
+                candidateId,
+                verificationType
+            }
+        );
+    return response.data;
+};
+
 export const getReviewerDocument =
 async (
     documentId: number
