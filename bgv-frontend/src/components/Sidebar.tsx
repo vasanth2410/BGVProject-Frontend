@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Dashboard,
   Assignment,
@@ -21,13 +22,20 @@ export default function Sidebar() {
 
   const navigate = useNavigate();
 
-  const email =
-    localStorage.getItem("email") ??
-    "reviewer@test.com";
+  const [email, setEmail] = useState(localStorage.getItem("email") || "reviewer@test.com");
+  const [role, setRole] = useState(localStorage.getItem("role") || "Reviewer");
 
-  const role =
-    localStorage.getItem("role") ??
-    "Reviewer";
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setEmail(localStorage.getItem("email") || "reviewer@test.com");
+      setRole(localStorage.getItem("role") || "Reviewer");
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   const items = [
 

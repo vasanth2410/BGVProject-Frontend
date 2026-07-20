@@ -63,9 +63,10 @@ export default function CandidateProfileCard({
           sx={{
             width: 80,
             height: 80,
-            bgcolor: "#0F5D4B",
+            bgcolor: "var(--sidebar-bg)",
             fontSize: 32,
             fontWeight: "bold",
+            transition: "background-color 0.3s ease",
           }}
         >
           {fullName.charAt(0)}

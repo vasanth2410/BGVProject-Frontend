@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Box,
   Drawer,
@@ -12,6 +13,11 @@ import {
   Divider,
   Button,
   IconButton,
+  Popover,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  TextField,
 } from "@mui/material";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -21,6 +27,7 @@ import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import LogoutIcon from "@mui/icons-material/Logout";
 import NotificationsNoneIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
+import DarkModeToggle from "../components/DarkModeToggle";
 
 import {
   Outlet,
@@ -35,6 +42,23 @@ export default function CandidateLayout() {
   const navigate = useNavigate();
 
   const location = useLocation();
+
+  const [notificationAnchor, setNotificationAnchor] = useState<null | HTMLElement>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleNotificationOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setNotificationAnchor(event.currentTarget);
+  };
+  const handleNotificationClose = () => {
+    setNotificationAnchor(null);
+  };
+
+  const mockNotifications = [
+    { id: 1, text: "Background verification process started.", time: "2 hours ago" },
+    { id: 2, text: "Documents received and under initial review.", time: "1 day ago" },
+    { id: 3, text: "Welcome to the Background Verification Portal.", time: "2 days ago" },
+  ];
 
   const handleLogout = () => {
 
@@ -72,8 +96,9 @@ export default function CandidateLayout() {
     <Box
       sx={{
         display: "flex",
-        bgcolor: "#F4F7FB",
+        bgcolor: "var(--background-bg)",
         minHeight: "100vh",
+        transition: "background-color 0.3s ease",
       }}
     >
 
@@ -87,7 +112,7 @@ export default function CandidateLayout() {
 
             width: drawerWidth,
 
-            background: "#0F5D4B",
+            background: "var(--sidebar-bg)",
 
             color: "#fff",
 
@@ -98,6 +123,8 @@ export default function CandidateLayout() {
             flexDirection: "column",
 
             justifyContent: "space-between",
+
+            transition: "background-color 0.3s ease, color 0.3s ease",
 
           },
 
@@ -140,7 +167,7 @@ export default function CandidateLayout() {
 
           <Divider
             sx={{
-              borderColor: "rgba(255,255,255,.15)",
+              borderColor: "var(--sidebar-divider)",
             }}
           />
 
@@ -189,7 +216,7 @@ export default function CandidateLayout() {
 
                   "&:hover": {
 
-                    bgcolor: "#156B58",
+                    bgcolor: "#3B82F6",
 
                   },
 
@@ -222,15 +249,21 @@ export default function CandidateLayout() {
 
           <Divider
             sx={{
-              borderColor: "rgba(255,255,255,.15)",
+              borderColor: "var(--sidebar-divider)",
             }}
           />
 
           <Box
+            onClick={() => navigate("/candidate/profile")}
             sx={{
               display: "flex",
               alignItems: "center",
               p: 3,
+              cursor: "pointer",
+              transition: "background-color 0.25s ease",
+              "&:hover": {
+                bgcolor: "rgba(255, 255, 255, 0.05)",
+              },
             }}
           >
 
@@ -246,15 +279,16 @@ export default function CandidateLayout() {
             <Box>
 
              <Typography
-  sx={{
-    fontWeight: 700,
-  }}
->
+                sx={{
+                  fontWeight: 700,
+                }}
+              >
                 Candidate
               </Typography>
 
               <Typography
                 variant="body2"
+                sx={{ opacity: 0.8 }}
               >
                 candidate@test.com
               </Typography>
@@ -269,13 +303,27 @@ export default function CandidateLayout() {
             }}
           >
 
-           <Button
-    fullWidth
-    variant="contained"
-    color="error"
-    startIcon={<LogoutIcon />}
-    onClick={handleLogout}
->
+            <Button
+              fullWidth
+              variant="text"
+              startIcon={<LogoutIcon />}
+              onClick={handleLogout}
+              sx={{
+                color: "#fff",
+                justifyContent: "flex-start",
+                borderRadius: 3,
+                px: 2.5,
+                py: 1.5,
+                textTransform: "none",
+                fontSize: "15px",
+                fontWeight: 500,
+                transition: "all 0.25s ease",
+                "&:hover": {
+                  bgcolor: "rgba(255, 255, 255, 0.12)",
+                  transform: "translateX(3px)",
+                },
+              }}
+            >
               Logout
             </Button>
 
@@ -299,9 +347,11 @@ export default function CandidateLayout() {
 
           sx={{
 
-            bgcolor: "#fff",
+            bgcolor: "var(--appbar-bg)",
 
-            color: "#222",
+            color: "var(--appbar-text)",
+
+            transition: "background-color 0.3s ease, color 0.3s ease",
 
           }}
 
@@ -318,22 +368,32 @@ export default function CandidateLayout() {
               Home • Dashboard
             </Typography>
 
-            <IconButton>
+            <Box sx={{ mr: 2, display: "flex", alignItems: "center" }}>
+              <DarkModeToggle />
+            </Box>
+
+            <IconButton onClick={() => setSearchOpen(true)}>
 
               <SearchIcon />
 
             </IconButton>
 
-            <IconButton>
+            <IconButton onClick={handleNotificationOpen}>
 
               <NotificationsNoneIcon />
 
             </IconButton>
 
             <Avatar
+              onClick={() => navigate("/candidate/profile")}
               sx={{
                 ml: 2,
-                bgcolor: "#0F5D4B",
+                bgcolor: "var(--sidebar-bg)",
+                transition: "background-color 0.3s ease, transform 0.2s ease",
+                cursor: "pointer",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
               }}
             >
               C
@@ -355,6 +415,76 @@ export default function CandidateLayout() {
 
       </Box>
 
+      {/* Notifications Popover */}
+      <Popover
+        open={Boolean(notificationAnchor)}
+        anchorEl={notificationAnchor}
+        onClose={handleNotificationClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        PaperProps={{
+          sx: {
+            p: 2.5,
+            width: 320,
+            borderRadius: 3,
+            mt: 1.5,
+            boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
+          }
+        }}
+      >
+        <Typography variant="h6" sx={{ fontWeight: 700, mb: 1.5, fontSize: "16px" }}>
+          Notifications
+        </Typography>
+        <Divider sx={{ mb: 1.5 }} />
+        {mockNotifications.map((notif) => (
+          <Box key={notif.id} sx={{ mb: 1.5, "&:last-child": { mb: 0 } }}>
+            <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: 1.4 }}>
+              {notif.text}
+            </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ display: "block", mt: 0.5 }}>
+              {notif.time}
+            </Typography>
+          </Box>
+        ))}
+      </Popover>
+
+      {/* Search Dialog */}
+      <Dialog open={searchOpen} onClose={() => setSearchOpen(false)} maxWidth="xs" fullWidth>
+        <DialogContent sx={{ p: 3 }}>
+          <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
+            Search Portal
+          </Typography>
+          <TextField
+            fullWidth
+            autoFocus
+            label="Type to search..."
+            placeholder="Search documents or status..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            sx={{ mb: 2 }}
+          />
+          <Typography variant="body2" color="text.secondary">
+            Try searching for "Degree", "Resume", or "Approved".
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 3 }}>
+          <Button onClick={() => setSearchOpen(false)} color="inherit">
+            Close
+          </Button>
+          <Button onClick={() => {
+            setSearchOpen(false);
+            navigate("/candidate/documents");
+          }} variant="contained">
+            Search Documents
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
 
   );

@@ -1,3 +1,11 @@
+:root {
+  --background-bg: #F4F7FB;
+  --appbar-bg: #ffffff;
+  --appbar-text: #222222;
+  --sidebar-bg: #1E3A8A;
+  --sidebar-divider: rgba(255,255,255,.15);
+}
+
 * {
   margin: 0;
 
@@ -138,6 +146,11 @@ body.dark-mode .MuiSvgIcon-root {
 body.dark-mode {
   color-scheme: dark;
   --text-color: #f8fafc;
+  --background-bg: #0f111a;
+  --appbar-bg: #1a1e2d;
+  --appbar-text: #f8fafc;
+  --sidebar-bg: #131623;
+  --sidebar-divider: rgba(255,255,255,.05);
 }
 
 body.dark-mode input[type="date"]::-webkit-datetime-edit-text,
@@ -149,4 +162,26 @@ body.dark-mode input[type="date"]::-webkit-datetime-edit-year-field {
 
 body.dark-mode input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
+}
+
+/* Disabled MUI Button overrides in dark mode */
+body.dark-mode .MuiButton-root.Mui-disabled {
+  color: rgba(255, 255, 255, 0.3) !important;
+}
+
+body.dark-mode .MuiButton-contained.Mui-disabled {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+body.dark-mode .MuiButton-outlined.Mui-disabled {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Read-only and disabled input field overrides in dark mode */
+body.dark-mode .MuiInputBase-input.Mui-disabled,
+body.dark-mode .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input,
+body.dark-mode input[disabled],
+body.dark-mode input[readonly] {
+  color: #cbd5e1 !important;
+  -webkit-text-fill-color: #cbd5e1 !important;
 }
