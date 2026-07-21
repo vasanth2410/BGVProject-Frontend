@@ -100,6 +100,7 @@ export default function ReviewerProfilePage() {
               height: 90,
               fontSize: 32,
               mb: 2,
+              bgcolor: "#2563eb",
             }}
           >
             {getInitials(reviewer.name)}

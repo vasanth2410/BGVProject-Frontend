@@ -96,7 +96,7 @@ export default function AddCandidateModal({
       </DialogTitle>
       <DialogContent dividers>
         <Grid container spacing={2} sx={{ mt: 1 }}>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
               Full Name
             </Typography>
@@ -106,10 +106,10 @@ export default function AddCandidateModal({
               value={formData.fullName}
               onChange={handleChange}
               variant="outlined"
-              inputProps={{ style: inputStyle }}
+              slotProps={{ htmlInput: { style: inputStyle } }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
               Email
             </Typography>
@@ -120,10 +120,10 @@ export default function AddCandidateModal({
               value={formData.email}
               onChange={handleChange}
               variant="outlined"
-              inputProps={{ style: inputStyle }}
+              slotProps={{ htmlInput: { style: inputStyle } }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
               Phone Number
             </Typography>
@@ -133,10 +133,10 @@ export default function AddCandidateModal({
               value={formData.phoneNumber}
               onChange={handleChange}
               variant="outlined"
-              inputProps={{ style: inputStyle }}
+              slotProps={{ htmlInput: { style: inputStyle } }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
               Address
             </Typography>
@@ -146,10 +146,10 @@ export default function AddCandidateModal({
               value={formData.address}
               onChange={handleChange}
               variant="outlined"
-              inputProps={{ style: inputStyle }}
+              slotProps={{ htmlInput: { style: inputStyle } }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
               Date of Birth
             </Typography>
@@ -160,10 +160,10 @@ export default function AddCandidateModal({
               value={formData.dateOfBirth}
               onChange={handleChange}
               variant="outlined"
-              inputProps={{ style: inputStyle }}
+              slotProps={{ htmlInput: { style: inputStyle } }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
               Gender
             </Typography>
@@ -173,10 +173,10 @@ export default function AddCandidateModal({
               value={formData.gender}
               onChange={handleChange}
               variant="outlined"
-              inputProps={{ style: inputStyle }}
+              slotProps={{ htmlInput: { style: inputStyle } }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
               PAN Number
             </Typography>
@@ -186,10 +186,10 @@ export default function AddCandidateModal({
               value={formData.panNumber}
               onChange={handleChange}
               variant="outlined"
-              inputProps={{ style: inputStyle }}
+              slotProps={{ htmlInput: { style: inputStyle } }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
               Aadhaar Number
             </Typography>
@@ -199,10 +199,10 @@ export default function AddCandidateModal({
               value={formData.aadhaarNumber}
               onChange={handleChange}
               variant="outlined"
-              inputProps={{ style: inputStyle }}
+              slotProps={{ htmlInput: { style: inputStyle } }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
               Applied Role
             </Typography>
@@ -212,10 +212,10 @@ export default function AddCandidateModal({
               value={formData.appliedRole}
               onChange={handleChange}
               variant="outlined"
-              inputProps={{ style: inputStyle }}
+              slotProps={{ htmlInput: { style: inputStyle } }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 0.5, ml: 1, fontWeight: 500 }}>
               Date of Joining
             </Typography>
@@ -226,7 +226,7 @@ export default function AddCandidateModal({
               value={formData.dateOfJoining}
               onChange={handleChange}
               variant="outlined"
-              inputProps={{ style: inputStyle }}
+              slotProps={{ htmlInput: { style: inputStyle } }}
             />
           </Grid>
         </Grid>
