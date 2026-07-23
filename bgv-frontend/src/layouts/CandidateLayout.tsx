@@ -428,13 +428,15 @@ export default function CandidateLayout() {
           vertical: "top",
           horizontal: "right",
         }}
-        PaperProps={{
-          sx: {
-            p: 2.5,
-            width: 320,
-            borderRadius: 3,
-            mt: 1.5,
-            boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
+        slotProps={{
+          paper: {
+            sx: {
+              p: 2.5,
+              width: 320,
+              borderRadius: 3,
+              mt: 1.5,
+              boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
+            }
           }
         }}
       >

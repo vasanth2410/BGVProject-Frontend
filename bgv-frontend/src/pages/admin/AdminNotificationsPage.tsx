@@ -1,49 +1,45 @@
+import { useEffect, useState } from "react";
+import { getAllNotifications } from "../../services/AdminNotificationService";
 import {
-  useEffect,
-  useState,
-} from "react";
-
-import {
-  getAllNotifications,
-} from "../../services/AdminNotificationService";
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Chip,
+  IconButton,
+  Box,
+  Typography
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 export default function AdminNotificationsPage() {
-
-  const [notifications, setNotifications] =
-    useState<any[]>([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [selectedNotification, setSelectedNotification] = useState<any | null>(null);
 
   useEffect(() => {
-
     const loadData = async () => {
-
       try {
-
-        const result =
-          await getAllNotifications();
-
+        const result = await getAllNotifications();
         setNotifications(result);
-
-      }
-      catch (error) {
-
+      } catch (error) {
         console.error(error);
-
       }
-
     };
-
     void loadData();
-
   }, []);
 
   return (
-
     <>
       <div style={{ padding: "30px" }}>
-        <div className="page-header">
+        <div className="page-header" style={{ marginBottom: "20px" }}>
           <h1 className="page-title">
-            Notifications
+            📧 System Email Notifications (Test Mode Active)
           </h1>
+          <p style={{ color: "#64748b", marginTop: "5px" }}>
+            All candidate welcome emails, document resubmission alerts, and BGV status updates are automatically logged and previewable here.
+          </p>
         </div>
 
         <div className="table-container">
@@ -51,43 +47,108 @@ export default function AdminNotificationsPage() {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Email</th>
+                <th>Recipient Email</th>
                 <th>Subject</th>
                 <th>Status</th>
-                <th>Created</th>
+                <th>Date / Time</th>
+                <th>Action</th>
               </tr>
             </thead>
 
             <tbody>
               {notifications.map((n) => (
                 <tr key={n.id}>
+                  <td>{n.id}</td>
+                  <td><strong>{n.toEmail}</strong></td>
+                  <td>{n.subject}</td>
                   <td>
-                    {n.id}
+                    <Chip
+                      label={n.status || "Sent"}
+                      color="success"
+                      size="small"
+                      variant="filled"
+                    />
                   </td>
+                  <td>{new Date(n.createdAt).toLocaleString()}</td>
                   <td>
-                    {n.toEmail}
-                  </td>
-                  <td>
-                    {n.subject}
-                  </td>
-                  <td>
-                    <span className={`status-${n.status === "Sent" ? "approved" : "rejected"}`}>
-                      {n.status}
-                    </span>
-                  </td>
-                  <td>
-                    {new Date(
-                      n.createdAt
-                    ).toLocaleString()}
+                    <Button
+                      variant="contained"
+                      size="small"
+                      startIcon={<VisibilityIcon />}
+                      onClick={() => setSelectedNotification(n)}
+                      sx={{ textTransform: "none", borderRadius: "6px", backgroundColor: "#2563eb" }}
+                    >
+                      Preview Email
+                    </Button>
                   </td>
                 </tr>
               ))}
+              {notifications.length === 0 && (
+                <tr>
+                  <td colSpan={6} style={{ textAlign: "center", padding: "30px", color: "#94a3b8" }}>
+                    No notifications recorded yet. Add a new candidate to see automated email alerts!
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* HTML Email Preview Modal */}
+      <Dialog
+        open={Boolean(selectedNotification)}
+        onClose={() => setSelectedNotification(null)}
+        maxWidth="md"
+        fullWidth
+        slotProps={{
+          paper: {
+            sx: {
+              borderRadius: "12px",
+              overflow: "hidden"
+            }
+          }
+        }}
+      >
+        <DialogTitle sx={{ m: 0, p: 2, backgroundColor: "#1e293b", color: "#ffffff", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Box>
+            <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
+              {selectedNotification?.subject}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#94a3b8" }}>
+              To: {selectedNotification?.toEmail}
+            </Typography>
+          </Box>
+          <IconButton
+            onClick={() => setSelectedNotification(null)}
+            sx={{ color: "#94a3b8", "&:hover": { color: "#ffffff" } }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent dividers sx={{ padding: "0" }}>
+          <iframe
+            title="Email Preview"
+            srcDoc={selectedNotification?.body || "<p style='padding:20px'>No Email Body Available</p>"}
+            style={{
+              width: "100%",
+              height: "450px",
+              border: "none"
+            }}
+          />
+        </DialogContent>
+
+        <DialogActions sx={{ padding: "16px", backgroundColor: "#f8fafc" }}>
+          <Button
+            onClick={() => setSelectedNotification(null)}
+            variant="outlined"
+            sx={{ textTransform: "none" }}
+          >
+            Close Preview
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
-
   );
-
 }

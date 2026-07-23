@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Typography,
+  Button,
+  CircularProgress
 } from "@mui/material";
 
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -9,6 +11,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
 import CandidateProfileCard from "../../components/candidate/CandidateProfileCard";
 import OverallStatusCard from "../../components/candidate/OverallStatusCard";
@@ -19,26 +22,33 @@ import "../admin/AdminDashboardPage.css";
 
 import {
   getCandidateDashboard,
+  getCandidateProfile,
   getCandidateVerifications,
 } from "../../services/CandidatePortalService";
+import { downloadCandidatePdfReport } from "../../services/ReportService";
 
 import type {
   CandidateDashboard,
+  CandidateProfile,
   CandidateVerification,
 } from "../../types/CandidatePortal";
 
 export default function CandidateDashboardPage() {
   const [dashboard, setDashboard] = useState<CandidateDashboard | null>(null);
+  const [profile, setProfile] = useState<CandidateProfile | null>(null);
   const [verifications, setVerifications] = useState<CandidateVerification[]>([]);
   const [loading, setLoading] = useState(true);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
 
   const loadDashboard = async () => {
     try {
-      const [dashboardResult, verificationResult] = await Promise.all([
+      const [dashboardResult, profileResult, verificationResult] = await Promise.all([
         getCandidateDashboard(),
+        getCandidateProfile().catch(() => null),
         getCandidateVerifications(),
       ]);
       setDashboard(dashboardResult);
+      setProfile(profileResult);
       setVerifications(verificationResult);
     } catch (error) {
       console.error(error);
@@ -50,6 +60,19 @@ export default function CandidateDashboardPage() {
   useEffect(() => {
     void loadDashboard();
   }, []);
+
+  const handleDownloadPdf = async () => {
+    if (!profile?.id) return;
+    try {
+      setDownloadingPdf(true);
+      await downloadCandidatePdfReport(profile.id, profile.fullName || dashboard?.candidateName);
+    } catch (err) {
+      console.error("Failed to download PDF report:", err);
+      alert("Failed to download PDF report. Please try again.");
+    } finally {
+      setDownloadingPdf(false);
+    }
+  };
 
   const today = useMemo(() => {
     return new Date().toLocaleDateString(
@@ -90,9 +113,32 @@ export default function CandidateDashboardPage() {
           <p className="dashboard-subtitle">
             Here's the status of your background verification process.
           </p>
-          <div className="dashboard-date-badge">
-            <CalendarTodayIcon fontSize="small" />
-            <span>{today}</span>
+          <div style={{ display: "flex", gap: "12px", alignItems: "center", marginTop: "12px" }}>
+            <div className="dashboard-date-badge">
+              <CalendarTodayIcon fontSize="small" />
+              <span>{today}</span>
+            </div>
+
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              startIcon={downloadingPdf ? <CircularProgress size={16} color="inherit" /> : <PictureAsPdfIcon fontSize="small" />}
+              onClick={handleDownloadPdf}
+              disabled={downloadingPdf}
+              sx={{
+                textTransform: "none",
+                borderRadius: "20px",
+                px: 2,
+                py: 0.5,
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                backgroundColor: "#16a34a",
+                "&:hover": { backgroundColor: "#15803d" }
+              }}
+            >
+              {downloadingPdf ? "Generating Report..." : "📄 Download PDF BGV Report"}
+            </Button>
           </div>
         </div>
 
