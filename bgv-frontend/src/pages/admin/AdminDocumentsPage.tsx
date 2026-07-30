@@ -96,7 +96,7 @@ export default function AdminDocumentsPage() {
       <div style={{ padding: "30px" }}>
         <div className="page-header">
           <h1 className="page-title">
-            Documents
+            <span className="document-emoji-icon">📑</span> Documents
           </h1>
 
           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>

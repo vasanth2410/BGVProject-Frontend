@@ -2,8 +2,7 @@ import {
   useEffect,
   useState,
 } from "react";
-
-
+import "./CandidatesPage.css";
 
 import {
   getDeadLetters,
@@ -43,7 +42,7 @@ export default function AdminDeadLettersPage() {
       <div style={{ padding: "30px" }}>
         <div className="page-header">
           <h1 className="page-title">
-            Dead Letters
+            <span className="deadletter-emoji-icon">📭</span> Dead Letters
           </h1>
         </div>
 

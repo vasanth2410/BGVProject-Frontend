@@ -34,6 +34,10 @@ import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
 import BadgeIcon from "@mui/icons-material/Badge";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import VerifiedIcon from "@mui/icons-material/Verified";
+
+import { LiveMatchVerificationModal } from "../../components/verification/LiveMatchVerificationModal";
+
 
 import {
   getReviewerCandidate,
@@ -110,6 +114,9 @@ const [selectedVerificationId, setSelectedVerificationId] =
 const [dialogAction, setDialogAction] =
   useState<"approve" | "reject" | "rereview">("approve");
 
+const [liveModalOpen, setLiveModalOpen] = useState(false);
+
+
   const loadData = async () => {
 
     if (!id) return;
@@ -139,33 +146,39 @@ const [dialogAction, setDialogAction] =
           Number(id)
         );
 
-      const filterUnique = (list: any[]) => {
-        const seen = new Set();
-        return list.filter((item) => {
-          const duplicate = seen.has(item.verificationType);
-          seen.add(item.verificationType);
-          return !duplicate;
-        });
-      };
-
-      if (verificationResult.length === 0 && documentResult.length > 0) {
-        // Automatically create a verification task for each uploaded document
-        for (const doc of documentResult) {
-          try {
-            await createVerification(Number(id), doc.fileName);
-          } catch (e) {
-            console.error("Error auto-creating verification:", e);
+      const deduplicateVerifications = (list: any[]) => {
+        const map = new Map<string, any>();
+        for (const item of list) {
+          const existing = map.get(item.verificationType);
+          if (!existing || (existing.status === "Pending" && item.status !== "Pending") || item.id > existing.id) {
+            map.set(item.verificationType, item);
           }
         }
-        
-        // Re-fetch verifications
-        const freshVerifications = await getReviewerCandidateVerifications(Number(id));
-        setVerifications(filterUnique(freshVerifications));
-      } else {
-        setVerifications(
-          filterUnique(verificationResult)
-        );
+        return Array.from(map.values());
+      };
+
+      const existingTypes = new Set(verificationResult.map((v: any) => v.verificationType));
+      let hasNewVerifications = false;
+
+      for (const doc of documentResult) {
+        if (!existingTypes.has(doc.fileName)) {
+          try {
+            await createVerification(Number(id), doc.fileName);
+            hasNewVerifications = true;
+          } catch (e) {
+            console.error("Error auto-creating verification for", doc.fileName, e);
+          }
+        }
       }
+
+      if (hasNewVerifications) {
+        const freshVerifications = await getReviewerCandidateVerifications(Number(id));
+        setVerifications(deduplicateVerifications(freshVerifications));
+      } else {
+        setVerifications(deduplicateVerifications(verificationResult));
+      }
+
+
 
     }
     catch (error) {
@@ -414,17 +427,28 @@ if (!remark.trim()) {
 
       <CardContent>
 
-        <Typography
-          variant="h5"
-          sx={{
-            fontWeight: 700,
-            mb: 3,
-          }}
-        >
-          Candidate Information
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 700,
+            }}
+          >
+            Candidate Information
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<VerifiedIcon />}
+            onClick={() => setLiveModalOpen(true)}
+            sx={{ borderRadius: 2, fontWeight: 700 }}
+          >
+            Run Live AI/Third-Party Verification Engine
+          </Button>
+        </Box>
 
         <Divider sx={{ mb: 3 }} />
+
 
         <Grid
           container
@@ -984,6 +1008,16 @@ if (!remark.trim()) {
   
 
 </Dialog>
+
+{candidate && (
+  <LiveMatchVerificationModal
+    open={liveModalOpen}
+    onClose={() => setLiveModalOpen(false)}
+    candidateId={candidate.id || (candidate as any).candidateId || Number(id)}
+    candidateName={candidate.fullName}
+  />
+)}
+
 </Box>
 
 );

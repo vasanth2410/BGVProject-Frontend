@@ -33,14 +33,34 @@ export default function AdminNotificationsPage() {
   return (
     <>
       <div style={{ padding: "30px" }}>
-        <div className="page-header" style={{ marginBottom: "20px" }}>
-          <h1 className="page-title">
-            📧 System Email Notifications (Test Mode Active)
-          </h1>
-          <p style={{ color: "#64748b", marginTop: "5px" }}>
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="h4" sx={{ fontWeight: 700, color: "text.primary", mb: 0.5, display: "flex", alignItems: "center" }}>
+            <Box
+              component="span"
+              sx={{
+                display: "inline-block",
+                mr: 1.5,
+                animation: "ringBell 2.5s infinite ease-in-out",
+                transformOrigin: "top center",
+                "@keyframes ringBell": {
+                  "0%": { transform: "rotate(0deg)" },
+                  "10%": { transform: "rotate(15deg)" },
+                  "20%": { transform: "rotate(-12deg)" },
+                  "30%": { transform: "rotate(10deg)" },
+                  "40%": { transform: "rotate(-6deg)" },
+                  "50%": { transform: "rotate(0deg)" },
+                  "100%": { transform: "rotate(0deg)" }
+                }
+              }}
+            >
+              🔔
+            </Box>
+            System Email Notifications (Test Mode Active)
+          </Typography>
+          <Typography color="text.secondary" variant="body2">
             All candidate welcome emails, document resubmission alerts, and BGV status updates are automatically logged and previewable here.
-          </p>
-        </div>
+          </Typography>
+        </Box>
 
         <div className="table-container">
           <table className="candidate-table">
@@ -139,7 +159,7 @@ export default function AdminNotificationsPage() {
           />
         </DialogContent>
 
-        <DialogActions sx={{ padding: "16px", backgroundColor: "#f8fafc" }}>
+        <DialogActions sx={{ padding: "16px", backgroundColor: "action.hover" }}>
           <Button
             onClick={() => setSelectedNotification(null)}
             variant="outlined"

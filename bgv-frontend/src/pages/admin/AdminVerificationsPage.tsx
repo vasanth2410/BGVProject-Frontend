@@ -131,7 +131,7 @@ useState<Verification | null>(
 
         <div className="page-header">
           <h1 className="page-title">
-            Verifications
+            <span className="verification-emoji-icon">📜</span> Verifications
           </h1>
 
           <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>

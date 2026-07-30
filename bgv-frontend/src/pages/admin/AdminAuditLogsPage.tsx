@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-
-
+import "./CandidatesPage.css";
 
 import
 {
@@ -52,7 +51,7 @@ export default function AdminAuditLogsPage()
             <div style={{ padding: "30px" }}>
                 <div className="page-header">
                     <h1 className="page-title">
-                        Audit Logs
+                        <span className="auditlog-emoji-icon">🛡️</span> Audit Logs
                     </h1>
                 </div>
 

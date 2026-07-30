@@ -202,7 +202,19 @@ export default function ReviewerVerificationsPage() {
       }
     };
 
-  const filteredVerifications = verifications.filter((v) => {
+  const deduplicatedVerifications = (() => {
+    const map = new Map<string, Verification>();
+    for (const v of verifications) {
+      const key = `${v.candidateId}-${v.verificationType}`;
+      const existing = map.get(key);
+      if (!existing || (existing.status === "Pending" && v.status !== "Pending") || v.id > existing.id) {
+        map.set(key, v);
+      }
+    }
+    return Array.from(map.values());
+  })();
+
+  const filteredVerifications = deduplicatedVerifications.filter((v) => {
     const keyword = search.toLowerCase();
     return (
       v.id.toString().includes(keyword) ||
@@ -211,6 +223,7 @@ export default function ReviewerVerificationsPage() {
       v.status.toLowerCase().includes(keyword)
     );
   });
+
 
   return (
 

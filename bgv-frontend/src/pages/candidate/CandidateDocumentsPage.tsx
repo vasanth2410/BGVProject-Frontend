@@ -1,154 +1,91 @@
 import { useEffect, useState } from "react";
-
 import {
   Box,
   Typography,
   Paper,
   Button,
+  CircularProgress,
 } from "@mui/material";
-
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-
-import CandidateDocumentsTable
-from "../../components/candidate/CandidateDocumentsTable";
-
+import CandidateDocumentsTable from "../../components/candidate/CandidateDocumentsTable";
+import { OcrResultCard } from "../../components/verification/OcrResultCard";
 import {
   getCandidateDocuments,
   downloadCandidateDocument,
   uploadDocument,
 } from "../../services/CandidatePortalService";
-
-import type {
-  CandidateDocument,
-} from "../../types/CandidatePortal";
+import { scanDocumentOcr } from "../../services/VerificationEngineService";
+import type { CandidateDocument } from "../../types/CandidatePortal";
+import type { OcrResult } from "../../types/VerificationEngine";
 
 export default function CandidateDocumentsPage() {
+  const [documents, setDocuments] = useState<CandidateDocument[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [latestOcr, setLatestOcr] = useState<OcrResult | null>(null);
 
-  const [documents, setDocuments] =
-    useState<CandidateDocument[]>([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [selectedFile,
-    setSelectedFile] =
-    useState<File | null>(null);
-
-  const loadDocuments =
-    async () => {
-
-      try {
-
-        const result =
-          await getCandidateDocuments();
-
-        setDocuments(result);
-
-      }
-
-      catch (error) {
-
-        console.error(error);
-
-      }
-
-      finally {
-
-        setLoading(false);
-
-      }
-
-    };
+  const loadDocuments = async () => {
+    try {
+      const result = await getCandidateDocuments();
+      setDocuments(result);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-
     loadDocuments();
-
   }, []);
 
-  const handleDownload =
-    async (id: number) => {
+  const handleDownload = async (id: number) => {
+    try {
+      await downloadCandidateDocument(id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-      try {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length > 0) {
+      setSelectedFile(event.target.files[0]);
+    }
+  };
 
-        await downloadCandidateDocument(id);
+  const handleUpload = async () => {
+    if (!selectedFile) return;
 
+    setUploading(true);
+    try {
+      await uploadDocument(selectedFile);
+      const updatedDocs = await getCandidateDocuments();
+      setDocuments(updatedDocs);
+
+      // Perform OCR scan simulation on newly uploaded document
+      if (updatedDocs.length > 0) {
+        const newlyUploaded = updatedDocs[updatedDocs.length - 1];
+        const ocrData = await scanDocumentOcr(newlyUploaded.id);
+        setLatestOcr(ocrData);
       }
 
-      catch (error) {
-
-        console.error(error);
-
-      }
-
-    };
-
-  const handleFileChange =
-    (
-      event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-
-      if (
-        event.target.files &&
-        event.target.files.length > 0
-      ) {
-
-        setSelectedFile(
-          event.target.files[0]
-        );
-
-      }
-
-    };
-
-  const handleUpload =
-    async () => {
-
-      if (!selectedFile)
-        return;
-
-      try {
-
-        await uploadDocument(
-          selectedFile
-        );
-
-        setSelectedFile(null);
-
-        await loadDocuments();
-
-      }
-
-      catch (error) {
-
-        console.error(error);
-
-      }
-
-    };
+      setSelectedFile(null);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setUploading(false);
+    }
+  };
 
   if (loading) {
-
-    return (
-      <Typography>
-        Loading Documents...
-      </Typography>
-    );
-
+    return <Typography sx={{ p: 4 }}>Loading Documents...</Typography>;
   }
 
   return (
-
-    <Box>
-
-      <Typography
-        variant="h4"
-        sx={{
-          fontWeight: 700,
-          mb: 4,
-        }}
-      >
-        My Documents
+    <Box sx={{ pb: 6 }}>
+      <Typography variant="h4" sx={{ fontWeight: 700, mb: 4 }}>
+        My Documents & Identity Reader
       </Typography>
 
       <Paper
@@ -156,109 +93,48 @@ export default function CandidateDocumentsPage() {
         sx={{
           p: 5,
           borderRadius: 4,
-          mb: 5,
+          mb: 4,
           textAlign: "center",
+          border: "2px dashed rgba(25, 118, 210, 0.3)",
+          bgcolor: "background.paper",
         }}
       >
+        <UploadFileIcon sx={{ fontSize: 70, color: "#1976d2", mb: 2 }} />
 
-        <UploadFileIcon
-          sx={{
-            fontSize: 70,
-            color: "#1976d2",
-            mb: 2,
-          }}
-        />
-
-        <Typography
-          variant="h6"
-          gutterBottom
-        >
-          Upload a Document
+        <Typography variant="h6" gutterBottom sx={{ fontWeight: 700 }}>
+          Upload Identity / Verification Document
         </Typography>
 
-        <Typography
-          color="text.secondary"
-          sx={{
-            mb: 3,
-          }}
-        >
-          PDF, DOC, DOCX, JPG or PNG
+        <Typography color="text.secondary" sx={{ mb: 3 }}>
+          Upload PAN, Aadhaar, Passport, Police Clearance, or Educational Marksheets (PDF, JPG, PNG)
         </Typography>
 
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            gap: 2,
-          }}
-        >
-
-          <Button
-            component="label"
-            variant="outlined"
-            startIcon={
-              <UploadFileIcon />
-            }
-          >
-
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 2, mb: 2 }}>
+          <Button component="label" variant="outlined" startIcon={<UploadFileIcon />}>
             Browse File
-
-            <input
-              hidden
-              type="file"
-              onChange={
-                handleFileChange
-              }
-            />
-
+            <input hidden type="file" onChange={handleFileChange} />
           </Button>
 
           <Button
             variant="contained"
-            disabled={!selectedFile}
-            onClick={
-              handleUpload
-            }
+            disabled={!selectedFile || uploading}
+            onClick={handleUpload}
+            startIcon={uploading ? <CircularProgress size={20} color="inherit" /> : null}
           >
-            Upload
+            {uploading ? "Uploading & OCR Reading..." : "Upload & Scan Document"}
           </Button>
-
         </Box>
 
-        {
-
-          selectedFile && (
-
-            <Typography
-              sx={{
-                mt: 3,
-                fontWeight: 600,
-              }}
-            >
-
-              Selected File
-
-              <br />
-
-              {selectedFile.name}
-
-            </Typography>
-
-          )
-
-        }
-
+        {selectedFile && (
+          <Typography sx={{ mt: 2, fontWeight: 600, color: "primary.main" }}>
+            Selected File: {selectedFile.name}
+          </Typography>
+        )}
       </Paper>
 
-      <CandidateDocumentsTable
-        data={documents}
-        onDownload={
-          handleDownload
-        }
-      />
+      {latestOcr && <OcrResultCard ocrData={latestOcr} />}
 
+      <CandidateDocumentsTable data={documents} onDownload={handleDownload} />
     </Box>
-
   );
-
-}
+}

@@ -42,188 +42,126 @@ export default function CandidatesPage() {
     setLoading]
       = useState(true);
 
-      const [search,
-  setSearch]
-    = useState(location.state?.filter || "");
+  const [search, setSearch] = useState(location.state?.filter || "");
+  const [statusTab, setStatusTab] = useState<"All" | "Pending" | "Approved" | "Rejected">("All");
+  const [showModal, setShowModal] = useState(false);
+  const [showAssignModal, setShowAssignModal] = useState(false);
 
-  const [showModal,
-    setShowModal]
-      = useState(false);
-
-      const [
-  showAssignModal,
-  setShowAssignModal
-] = useState(false);
-
- const loadCandidates =
-  async () => {
-
+  const loadCandidates = async () => {
     try {
-
-      const result =
-        await getCandidates();
-
+      const result = await getCandidates();
       setCandidates(result);
-
-    }
-
-    catch (error) {
-
+    } catch (error) {
       console.error(error);
-
     }
-
   };
 
-  const handleDelete =
-    async (id: number) => {
+  const handleDelete = async (id: number) => {
+    const confirmed = window.confirm("Are you sure you want to delete this candidate?");
+    if (!confirmed) return;
 
-      const confirmed =
-        window.confirm(
-          "Are you sure you want to delete this candidate?"
-        );
-
-      if (!confirmed)
-        return;
-
-      try {
-
-        await deleteCandidate(id);
-
-        alert(
-          "Candidate Deleted Successfully"
-        );
-
-        loadCandidates();
-
-      }
-      catch (error) {
-
-        console.error(error);
-
-        alert(
-          "Delete Failed"
-        );
-
-      }
-
-    };
+    try {
+      await deleteCandidate(id);
+      alert("Candidate Deleted Successfully");
+      loadCandidates();
+    } catch (error) {
+      console.error(error);
+      alert("Delete Failed");
+    }
+  };
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        await loadCandidates();
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
-  const fetchData = async () => {
+  const allCount = candidates.length;
+  const pendingCount = candidates.filter((c) => c.status === "Pending").length;
+  const approvedCount = candidates.filter((c) => c.status === "Approved").length;
+  const rejectedCount = candidates.filter((c) => c.status === "Rejected").length;
 
-    try {
-
-      setLoading(true);
-
-      await loadCandidates();
-
+  const filteredCandidates = candidates.filter((candidate) => {
+    if (statusTab !== "All" && candidate.status.toLowerCase() !== statusTab.toLowerCase()) {
+      return false;
     }
 
-    finally {
-
-      setLoading(false);
-
-    }
-
-  };
-
-  fetchData();
-
-}, []);
-
- const filteredCandidates =
-  candidates.filter((candidate) => {
-
-    const keyword =
-      search.toLowerCase();
+    const keyword = search.toLowerCase();
+    if (!keyword) return true;
 
     return (
-
-      candidate.fullName
-        .toLowerCase()
-        .includes(keyword)
-
-      ||
-
-      candidate.email
-        .toLowerCase()
-        .includes(keyword)
-
-      ||
-
-      candidate.phoneNumber
-        .toLowerCase()
-        .includes(keyword)
-
-      ||
-
-      candidate.status
-        .toLowerCase()
-        .includes(keyword)
-
-      ||
-
-      candidate.id
-        .toString()
-        .includes(keyword)
-
+      candidate.fullName.toLowerCase().includes(keyword) ||
+      candidate.email.toLowerCase().includes(keyword) ||
+      candidate.phoneNumber.toLowerCase().includes(keyword) ||
+      candidate.status.toLowerCase().includes(keyword) ||
+      candidate.id.toString().includes(keyword)
     );
-
   });
 
-  console.log(candidates);
-console.log(filteredCandidates);
-
   return (
-
     <AdminLayout>
+      <div style={{ padding: "30px" }}>
+        <div className="page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "15px", marginBottom: "25px" }}>
+          {/* Left: Title */}
+          <h1 className="page-title" style={{ margin: 0 }}>
+            <span className="candidate-emoji-icon">🧑‍💼</span> Candidates
+          </h1>
 
-      <div
-        style={{
-          padding: "30px",
-        }}
-      >
+          {/* Center: Quick Status Filter Tabs */}
+          <div className="status-tabs-container">
+            <button
+              className={`status-tab ${statusTab === "All" ? "active" : ""}`}
+              onClick={() => setStatusTab("All")}
+            >
+              All <span className="tab-count">{allCount}</span>
+            </button>
+            <button
+              className={`status-tab ${statusTab === "Pending" ? "active" : ""}`}
+              onClick={() => setStatusTab("Pending")}
+            >
+              <span className="dot pending-dot" />
+              Pending <span className="tab-count">{pendingCount}</span>
+            </button>
+            <button
+              className={`status-tab ${statusTab === "Approved" ? "active" : ""}`}
+              onClick={() => setStatusTab("Approved")}
+            >
+              <span className="dot approved-dot" />
+              Approved <span className="tab-count">{approvedCount}</span>
+            </button>
+            <button
+              className={`status-tab ${statusTab === "Rejected" ? "active" : ""}`}
+              onClick={() => setStatusTab("Rejected")}
+            >
+              <span className="dot rejected-dot" />
+              Rejected <span className="tab-count">{rejectedCount}</span>
+            </button>
+          </div>
 
-        <div className="page-header">
+          {/* Right: Search & Add Button */}
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search by Name or Email"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
 
-  <h1 className="page-title">
-    Candidates
-  </h1>
-
-  <div
-    style={{
-      display: "flex",
-      gap: "10px",
-      alignItems: "center",
-    }}
-  >
-
-    <input
-      type="text"
-      className="search-input"
-      placeholder="Search by Name or Email"
-      value={search}
-      onChange={(e) =>
-        setSearch(
-          e.target.value
-        )
-      }
-    />
-
-    <button
-      className="add-button"
-      onClick={() =>
-        setShowModal(true)
-      }
-    >
-      + Add Candidate
-    </button>
-
-  </div>
-
-</div>
+            <button
+              className="add-button"
+              onClick={() => setShowModal(true)}
+            >
+              + Add Candidate
+            </button>
+          </div>
+        </div>
 
     {loading ? (
 

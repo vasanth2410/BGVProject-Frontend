@@ -124,7 +124,7 @@ export default function AssignmentsPage() {
         <div className="page-header">
 
           <h1 className="page-title">
-            Assignments
+            <span className="assignment-emoji-icon">🎯</span> Assignments
           </h1>
 
           <div

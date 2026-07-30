@@ -8,7 +8,8 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
-  CircularProgress
+  CircularProgress,
+  Divider
 } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
@@ -51,25 +52,93 @@ export default function AdminReportsPage() {
 
   return (
     <Paper sx={{ p: 4, borderRadius: 3 }}>
-      <Typography variant="h4" sx={{ fontWeight: 700, mb: 3 }}>
+      <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, display: "flex", alignItems: "center" }}>
+        <Box
+          component="span"
+          sx={{
+            display: "inline-block",
+            mr: 1.5,
+            animation: "chartPulse 2.5s infinite ease-in-out",
+            transformOrigin: "bottom center",
+            "@keyframes chartPulse": {
+              "0%": { transform: "scale(1) translateY(0)" },
+              "20%": { transform: "scale(1.2) translateY(-3px)" },
+              "40%": { transform: "scale(1.1) rotate(6deg)" },
+              "60%": { transform: "scale(1.05) rotate(-4deg)" },
+              "80%": { transform: "scale(1) translateY(0)" },
+              "100%": { transform: "scale(1) translateY(0)" }
+            }
+          }}
+        >
+          📊
+        </Box>
         System Reports
       </Typography>
 
-      {/* 1. PDF Verification Summary Report */}
+      {/* 1. Excel Candidates Report */}
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          border: "1px solid #e2e8f0",
+          border: "1px solid",
+          borderColor: "divider",
           borderRadius: 2,
           p: 3,
-          mb: 3,
-          backgroundColor: "#f8fafc"
+          backgroundColor: "action.hover",
+          transition: "all 0.2s ease-in-out",
+          "&:hover": {
+            boxShadow: 4,
+            borderColor: "primary.main",
+            transform: "translateY(-2px)"
+          }
         }}
       >
         <Box sx={{ flex: 1, mr: 2 }}>
-          <Typography variant="h6" sx={{ fontWeight: 600, color: "#1e293b" }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, color: "text.primary" }}>
+            Candidates Excel Master List
+          </Typography>
+
+          <Typography color="text.secondary" variant="body2" sx={{ mt: 0.5 }}>
+            Download complete system candidate list as Excel spreadsheet (.xlsx).
+          </Typography>
+        </Box>
+
+        <Button
+          variant="contained"
+          startIcon={<DownloadIcon />}
+          onClick={async () => {
+            await exportCandidatesReport();
+          }}
+          sx={{ textTransform: "none", borderRadius: "8px" }}
+        >
+          Export Excel
+        </Button>
+      </Box>
+
+      <Divider sx={{ my: 3 }} />
+
+      {/* 2. PDF Verification Summary Report */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 2,
+          p: 3,
+          backgroundColor: "action.hover",
+          transition: "all 0.2s ease-in-out",
+          "&:hover": {
+            boxShadow: 4,
+            borderColor: "primary.main",
+            transform: "translateY(-2px)"
+          }
+        }}
+      >
+        <Box sx={{ flex: 1, mr: 2 }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, color: "text.primary" }}>
             📄 Candidate BGV Summary Report (PDF)
           </Typography>
           <Typography color="text.secondary" variant="body2" sx={{ mt: 0.5 }}>
@@ -105,39 +174,6 @@ export default function AdminReportsPage() {
             {downloadingPdf ? "Generating..." : "Download PDF"}
           </Button>
         </Box>
-      </Box>
-
-      {/* 2. Excel Candidates Report */}
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          border: "1px solid #ddd",
-          borderRadius: 2,
-          p: 3,
-        }}
-      >
-        <Box>
-          <Typography variant="h6" sx={{ fontWeight: 600 }}>
-            Candidates Excel Master List
-          </Typography>
-
-          <Typography color="text.secondary" variant="body2">
-            Download complete system candidate list as Excel spreadsheet (.xlsx).
-          </Typography>
-        </Box>
-
-        <Button
-          variant="contained"
-          startIcon={<DownloadIcon />}
-          onClick={async () => {
-            await exportCandidatesReport();
-          }}
-          sx={{ textTransform: "none", borderRadius: "8px" }}
-        >
-          Export Excel
-        </Button>
       </Box>
     </Paper>
   );

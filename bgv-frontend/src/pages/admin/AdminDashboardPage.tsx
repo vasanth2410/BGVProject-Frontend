@@ -140,7 +140,7 @@ export default function AdminDashboardPage() {
           <div className="header-left-col">
 
             <h1 className="dashboard-title">
-              Welcome back, Admin! 👋
+              Welcome back, Admin! <span className="hand-wave-emoji">👋</span>
             </h1>
 
             <p className="dashboard-subtitle">
@@ -217,7 +217,7 @@ export default function AdminDashboardPage() {
               <div className="dashboard-card" onClick={() => navigate('/admin/candidates', { state: { filter: '' } })}>
 
                 <div className="card-icon-wrapper icon-blue">
-                  <People sx={{ fontSize: 28, color: "#2563EB" }} />
+                  <People sx={{ fontSize: 22, color: "#2563EB" }} />
                 </div>
 
                 <h4>Total Candidates</h4>
@@ -235,7 +235,7 @@ export default function AdminDashboardPage() {
               <div className="dashboard-card" onClick={() => navigate('/admin/candidates', { state: { filter: 'Pending' } })}>
 
                 <div className="card-icon-wrapper icon-orange">
-                  <HourglassTop sx={{ fontSize: 28, color: "#F59E0B" }} />
+                  <HourglassTop sx={{ fontSize: 22, color: "#F59E0B" }} />
                 </div>
 
                 <h4>Pending</h4>
@@ -253,7 +253,7 @@ export default function AdminDashboardPage() {
               <div className="dashboard-card" onClick={() => navigate('/admin/candidates', { state: { filter: 'Approved' } })}>
 
                 <div className="card-icon-wrapper icon-green">
-                  <CheckCircle sx={{ fontSize: 28, color: "#16A34A" }} />
+                  <CheckCircle sx={{ fontSize: 22, color: "#16A34A" }} />
                 </div>
 
                 <h4>Approved</h4>
@@ -271,7 +271,7 @@ export default function AdminDashboardPage() {
               <div className="dashboard-card" onClick={() => navigate('/admin/candidates', { state: { filter: 'Rejected' } })}>
 
                 <div className="card-icon-wrapper icon-red">
-                  <Cancel sx={{ fontSize: 28, color: "#EF4444" }} />
+                  <Cancel sx={{ fontSize: 22, color: "#EF4444" }} />
                 </div>
 
                 <h4>Rejected</h4>

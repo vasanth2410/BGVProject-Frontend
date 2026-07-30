@@ -13,6 +13,98 @@
   font-size: 32px;
   font-weight: 700;
   color: #1f2937;
+  display: flex;
+  align-items: center;
+}
+
+.candidate-emoji-icon {
+  display: inline-block;
+  margin-right: 12px;
+  transform-origin: bottom center;
+  animation: candidateWave 2.5s infinite ease-in-out;
+}
+
+@keyframes candidateWave {
+  0% { transform: rotate(0deg) scale(1); }
+  12% { transform: rotate(14deg) scale(1.12); }
+  24% { transform: rotate(-10deg) scale(1.12); }
+  36% { transform: rotate(8deg) scale(1.12); }
+  48% { transform: rotate(0deg) scale(1); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+.assignment-emoji-icon {
+  display: inline-block;
+  margin-right: 12px;
+  animation: targetPulse 2.5s infinite ease-in-out;
+}
+
+@keyframes targetPulse {
+  0% { transform: scale(1) rotate(0deg); }
+  15% { transform: scale(1.25) rotate(15deg); }
+  30% { transform: scale(1.15) rotate(-10deg); }
+  45% { transform: scale(1.05) rotate(5deg); }
+  60% { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.verification-emoji-icon {
+  display: inline-block;
+  margin-right: 12px;
+  animation: scrollFloat 2.5s infinite ease-in-out;
+}
+
+@keyframes scrollFloat {
+  0% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-4px) rotate(-6deg) scale(1.1); }
+  50% { transform: translateY(0) rotate(0deg); }
+  75% { transform: translateY(-3px) rotate(6deg) scale(1.05); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+.document-emoji-icon {
+  display: inline-block;
+  margin-right: 12px;
+  animation: docTabFlip 2.5s infinite ease-in-out;
+}
+
+@keyframes docTabFlip {
+  0% { transform: scale(1) rotate(0deg); }
+  20% { transform: scale(1.2) rotate(10deg); }
+  40% { transform: scale(1.1) rotate(-8deg); }
+  60% { transform: scale(1.05) rotate(4deg); }
+  80% { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.deadletter-emoji-icon {
+  display: inline-block;
+  margin-right: 12px;
+  animation: mailboxShake 2.5s infinite ease-in-out;
+}
+
+@keyframes mailboxShake {
+  0% { transform: scale(1) rotate(0deg); }
+  15% { transform: scale(1.2) rotate(14deg); }
+  30% { transform: scale(1.1) rotate(-12deg); }
+  45% { transform: scale(1.05) rotate(6deg); }
+  60% { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+.auditlog-emoji-icon {
+  display: inline-block;
+  margin-right: 12px;
+  animation: shieldPulse 2.5s infinite ease-in-out;
+}
+
+@keyframes shieldPulse {
+  0% { transform: scale(1) rotate(0deg); }
+  15% { transform: scale(1.2) rotate(-8deg); }
+  30% { transform: scale(1.15) rotate(8deg); }
+  45% { transform: scale(1.05) rotate(0deg); }
+  60% { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(1) rotate(0deg); }
 }
 
 .search-input {
@@ -213,4 +305,102 @@ body.dark-mode .candidate-table td {
 
 body.dark-mode .candidate-table tr:hover {
   background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Quick Status Filter Tabs */
+.status-tabs-container {
+  display: flex;
+  gap: 4px;
+  background: rgba(243, 244, 246, 0.8);
+  padding: 3px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+body.dark-mode .status-tabs-container {
+  background: #1a1e2d;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.status-tab {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+}
+
+body.dark-mode .status-tab {
+  color: #94a3b8;
+}
+
+.status-tab:hover {
+  background: rgba(255, 255, 255, 0.7);
+  color: #1e293b;
+}
+
+body.dark-mode .status-tab:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #f8fafc;
+}
+
+.status-tab.active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-weight: 700;
+}
+
+body.dark-mode .status-tab.active {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.35);
+}
+
+.tab-count {
+  background: rgba(100, 116, 139, 0.12);
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.status-tab.active .tab-count {
+  background: rgba(37, 99, 235, 0.15);
+  color: #2563eb;
+}
+
+body.dark-mode .status-tab.active .tab-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.pending-dot {
+  background-color: #f59e0b;
+  box-shadow: 0 0 5px rgba(245, 158, 11, 0.6);
+}
+
+.approved-dot {
+  background-color: #16a34a;
+  box-shadow: 0 0 5px rgba(22, 163, 74, 0.6);
+}
+
+.rejected-dot {
+  background-color: #ef4444;
+  box-shadow: 0 0 5px rgba(239, 68, 68, 0.6);
 }
