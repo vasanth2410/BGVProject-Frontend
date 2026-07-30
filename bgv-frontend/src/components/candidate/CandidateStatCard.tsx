@@ -19,57 +19,49 @@ interface Props {
 }
 
 export default function CandidateStatCard({
-
   title,
-
   value,
-
   subtitle,
-
   icon,
-
   color,
-
 }: Props) {
-
   return (
-
     <Paper
       elevation={3}
       sx={{
-        p: 3,
-        borderRadius: 4,
+        p: 2,
+        borderRadius: 3,
         height: "100%",
       }}
     >
-
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          mb: 2,
+          mb: 1,
         }}
       >
-
         {icon}
 
         <Typography
           sx={{
-            color: "#777",
-            fontSize: 14,
+            color: "#94a3b8",
+            fontSize: 13,
+            fontWeight: 600,
           }}
         >
           {title}
         </Typography>
-
       </Box>
 
       <Typography
-        variant="h4"
         sx={{
+          fontSize: 28,
           fontWeight: 700,
           color,
+          my: 0.5,
+          lineHeight: 1.2,
         }}
       >
         {value}
@@ -77,15 +69,13 @@ export default function CandidateStatCard({
 
       <Typography
         sx={{
-          color: "#888",
-          mt: 1,
+          color: "#94a3b8",
+          fontSize: 12,
+          mt: 0.5,
         }}
       >
         {subtitle}
       </Typography>
-
     </Paper>
-
   );
-
 }

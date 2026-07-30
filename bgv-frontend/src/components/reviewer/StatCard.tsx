@@ -24,136 +24,81 @@ export default function StatCard({
   color,
   onClick,
 }: Props) {
-
   return (
-
     <Card
       elevation={0}
       onClick={onClick}
       sx={{
-
-        borderRadius: 4,
-
+        borderRadius: 3,
         border: "1px solid",
-
         borderColor: "rgba(128, 128, 128, 0.2)",
-
         transition: "0.25s",
-
         height: "100%",
-
         bgcolor: "background.paper",
-
         cursor: onClick ? "pointer" : "default",
-
         "&:hover": {
-
-          transform: onClick ? "translateY(-6px)" : "none",
-
-          boxShadow:
-            onClick ? "0 12px 35px rgba(0,0,0,.12)" : "none",
-
+          transform: onClick ? "translateY(-4px)" : "none",
+          boxShadow: onClick ? "0 8px 25px rgba(0,0,0,.15)" : "none",
         },
-
       }}
     >
-
       <CardContent
         sx={{
-          p: 3,
+          p: 2,
+          "&:last-child": { pb: 2 },
         }}
       >
-
         <Box
           sx={{
-
-            width: 58,
-
-            height: 58,
-
-            borderRadius: 3,
-
+            width: 42,
+            height: 42,
+            borderRadius: 2.5,
             bgcolor: `${color}15`,
-
             color,
-
             display: "flex",
-
             alignItems: "center",
-
             justifyContent: "center",
-
-            mb: 3,
-
+            mb: 1.5,
             "& svg": {
-
-              fontSize: 32,
-
+              fontSize: 24,
               color: "inherit !important",
-
             },
-
           }}
         >
-
           {icon}
-
         </Box>
 
         <Typography
           sx={{
-
-            color: "#64748b",
-
-            fontSize: 15,
-
+            color: "#94a3b8",
+            fontSize: 13,
             fontWeight: 600,
-
           }}
         >
-
           {title}
-
         </Typography>
 
         <Typography
           sx={{
-
-            fontSize: 42,
-
+            fontSize: 28,
             fontWeight: 700,
-
-            mt: 1,
-
-            mb: 1,
-
+            my: 0.5,
+            lineHeight: 1.2,
           }}
         >
-
           {value}
-
         </Typography>
 
         <Typography
           sx={{
-
-            fontSize: 14,
-
+            fontSize: 12,
             fontWeight: 600,
-
             color,
-
           }}
         >
-
           {note}
-
         </Typography>
-
       </CardContent>
-
     </Card>
-
   );
-
 }

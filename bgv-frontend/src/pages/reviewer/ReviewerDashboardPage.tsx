@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Grid, Paper, Typography, Divider } from "@mui/material";
+import { Grid, Paper, Typography, Divider, Box, TextField, InputAdornment } from "@mui/material";
 
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import SearchIcon from "@mui/icons-material/Search";
 
 import StatCard from "../../components/reviewer/StatCard";
 import CandidateRow from "../../components/reviewer/CandidateRow";
@@ -42,8 +43,19 @@ export default function ReviewerDashboardPage() {
       completionPercentage: 0,
     });
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredAssignments = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return assignments;
+    return assignments.filter((a) => {
+      const name = (a.candidateName || "").toLowerCase();
+      const candidateId = (a.candidateId || "").toString();
+      const status = (a.status || "").toLowerCase();
+      return name.includes(query) || candidateId.includes(query) || status.includes(query);
+    });
+  }, [assignments, searchQuery]);
 
   const loadData =
     async () => {
@@ -242,15 +254,37 @@ export default function ReviewerDashboardPage() {
             }}
           >
 
-            <Typography
-              variant="h6"
-              sx={{
-                fontWeight: 700,
-                mb: 2,
-              }}
-            >
-              My Assigned Candidates
-            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, flexWrap: "wrap", gap: 1 }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 700,
+                }}
+              >
+                My Assigned Candidates
+              </Typography>
+              <TextField
+                size="small"
+                placeholder="Search candidate..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                slotProps={{
+                  input: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon sx={{ color: "text.secondary", fontSize: 18 }} />
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+                sx={{
+                  width: { xs: "100%", sm: 220 },
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                  },
+                }}
+              />
+            </Box>
 
             <Divider
               sx={{
@@ -265,14 +299,14 @@ export default function ReviewerDashboardPage() {
             )}
 
             {!loading &&
-              assignments.length === 0 && (
+              filteredAssignments.length === 0 && (
                 <Typography color="text.secondary">
-                  No assignments found.
+                  {searchQuery ? "No matching candidates found." : "No assignments found."}
                 </Typography>
               )}
 
             {!loading &&
-              assignments.map(
+              filteredAssignments.map(
                 (assignment) => (
 
                <CandidateRow
@@ -295,22 +329,25 @@ export default function ReviewerDashboardPage() {
             xs: 12,
             lg: 4,
           }}
+          sx={{ display: "flex", flexDirection: "column" }}
         >
 
           <Paper
             elevation={3}
             sx={{
               borderRadius: 3,
-              p: 3,
-              minHeight: 520,
+              p: 2.5,
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
             }}
           >
-
             <Typography
               variant="h6"
               sx={{
                 fontWeight: 700,
-                mb: 2,
+                mb: 1.5,
+                fontSize: 16,
               }}
             >
               Verification Progress
@@ -318,37 +355,44 @@ export default function ReviewerDashboardPage() {
 
             <Divider
               sx={{
-                mb: 2,
+                mb: 1.5,
               }}
             />
 
-            {loading && (
-              <Typography>
-                Loading...
-              </Typography>
-            )}
+            <Box
+              sx={{
+                flex: 1,
+                overflowY: "auto",
+                pr: 0.5,
+                "&::-webkit-scrollbar": {
+                  width: 5,
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  bgcolor: "rgba(128,128,128,0.2)",
+                  borderRadius: 3,
+                },
+              }}
+            >
+              {loading && (
+                <Typography sx={{ fontSize: 13 }}>Loading...</Typography>
+              )}
 
-            {!loading &&
-              assignments.length === 0 && (
-                <Typography color="text.secondary">
+              {!loading && assignments.length === 0 && (
+                <Typography color="text.secondary" sx={{ fontSize: 13 }}>
                   No progress available.
                 </Typography>
               )}
 
-            {!loading &&
-              assignments.map(
-                (assignment) => (
-
+              {!loading &&
+                assignments.map((assignment) => (
                   <ProgressCard
                     key={assignment.assignmentId}
                     name={assignment.candidateName}
                     completed={dashboard.approved}
                     total={dashboard.assigned}
                   />
-
-                )
-              )}
-
+                ))}
+            </Box>
           </Paper>
 
         </Grid>
