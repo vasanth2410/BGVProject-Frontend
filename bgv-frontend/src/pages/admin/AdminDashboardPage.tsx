@@ -23,6 +23,7 @@ import WeeklyTrendChart
 
 import AddCandidateModal
   from "../../components/AddCandidateModal";
+import AnimatedCounter from "../../components/AnimatedCounter";
 
 import "./AdminDashboardPage.css";
 
@@ -223,7 +224,7 @@ export default function AdminDashboardPage() {
                 <h4>Total Candidates</h4>
 
                 <h1 className="blue">
-                  {summary.totalCandidates}
+                  <AnimatedCounter value={summary.totalCandidates} />
                 </h1>
 
                 <div className="card-trend green-trend">
@@ -241,7 +242,7 @@ export default function AdminDashboardPage() {
                 <h4>Pending</h4>
 
                 <h1 className="orange">
-                  {summary.pendingCandidates}
+                  <AnimatedCounter value={summary.pendingCandidates} />
                 </h1>
 
                 <div className="card-trend green-trend">
@@ -259,7 +260,7 @@ export default function AdminDashboardPage() {
                 <h4>Approved</h4>
 
                 <h1 className="green">
-                  {summary.completedCandidates}
+                  <AnimatedCounter value={summary.completedCandidates} />
                 </h1>
 
                 <div className="card-trend green-trend">
@@ -277,7 +278,7 @@ export default function AdminDashboardPage() {
                 <h4>Rejected</h4>
 
                 <h1 className="red">
-                  {summary.rejectedCandidates}
+                  <AnimatedCounter value={summary.rejectedCandidates} />
                 </h1>
 
                 <div className="card-trend green-trend">

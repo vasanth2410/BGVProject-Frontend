@@ -68,10 +68,16 @@ export default function ReviewerDocumentsPage() {
 
     if (nameLower.endsWith(".pdf") || typeLower.includes("pdf")) {
       return {
-        icon: <PictureAsPdfIcon sx={{ fontSize: 18, color: "#f87171" }} />,
-        bg: "rgba(239, 68, 68, 0.2)",
-        textColor: "#fca5a5",
         label: "PDF",
+        iconType: "pdf" as const,
+        lightIconColor: "#dc2626",
+        darkIconColor: "#f87171",
+        lightBg: "#fee2e2",
+        darkBg: "rgba(239, 68, 68, 0.2)",
+        lightTextColor: "#991b1b",
+        darkTextColor: "#fca5a5",
+        lightBorderColor: "#fca5a5",
+        darkBorderColor: "rgba(239, 68, 68, 0.4)",
       };
     }
 
@@ -82,10 +88,16 @@ export default function ReviewerDocumentsPage() {
       typeLower.includes("doc")
     ) {
       return {
-        icon: <DescriptionIcon sx={{ fontSize: 18, color: "#60a5fa" }} />,
-        bg: "rgba(37, 99, 235, 0.2)",
-        textColor: "#93c5fd",
         label: "DOC",
+        iconType: "doc" as const,
+        lightIconColor: "#2563eb",
+        darkIconColor: "#60a5fa",
+        lightBg: "#dbeafe",
+        darkBg: "rgba(37, 99, 235, 0.2)",
+        lightTextColor: "#1e40af",
+        darkTextColor: "#93c5fd",
+        lightBorderColor: "#93c5fd",
+        darkBorderColor: "rgba(37, 99, 235, 0.4)",
       };
     }
 
@@ -96,18 +108,30 @@ export default function ReviewerDocumentsPage() {
       typeLower.includes("image")
     ) {
       return {
-        icon: <ImageIcon sx={{ fontSize: 18, color: "#c084fc" }} />,
-        bg: "rgba(168, 85, 247, 0.2)",
-        textColor: "#e9d5ff",
         label: "IMG",
+        iconType: "img" as const,
+        lightIconColor: "#9333ea",
+        darkIconColor: "#c084fc",
+        lightBg: "#f3e8ff",
+        darkBg: "rgba(168, 85, 247, 0.2)",
+        lightTextColor: "#6b21a8",
+        darkTextColor: "#e9d5ff",
+        lightBorderColor: "#e9d5ff",
+        darkBorderColor: "rgba(168, 85, 247, 0.4)",
       };
     }
 
     return {
-      icon: <InsertDriveFileIcon sx={{ fontSize: 18, color: "#2dd4bf" }} />,
-      bg: "rgba(13, 148, 136, 0.2)",
-      textColor: "#99f6e4",
       label: fileType || "FILE",
+      iconType: "file" as const,
+      lightIconColor: "#0d9488",
+      darkIconColor: "#2dd4bf",
+      lightBg: "#ccfbf1",
+      darkBg: "rgba(13, 148, 136, 0.2)",
+      lightTextColor: "#115e59",
+      darkTextColor: "#99f6e4",
+      lightBorderColor: "#99f6e4",
+      darkBorderColor: "rgba(13, 148, 136, 0.4)",
     };
   };
 
@@ -314,13 +338,51 @@ export default function ReviewerDocumentsPage() {
                           sx={{
                             p: 1,
                             borderRadius: 2,
-                            bgcolor: typeConfig.bg,
+                            bgcolor: typeConfig.lightBg,
+                            "body.dark-mode &": {
+                              bgcolor: typeConfig.darkBg,
+                            },
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
                           }}
                         >
-                          {typeConfig.icon}
+                          {typeConfig.iconType === "pdf" && (
+                            <PictureAsPdfIcon
+                              sx={{
+                                fontSize: 18,
+                                color: typeConfig.lightIconColor,
+                                "body.dark-mode &": { color: typeConfig.darkIconColor },
+                              }}
+                            />
+                          )}
+                          {typeConfig.iconType === "doc" && (
+                            <DescriptionIcon
+                              sx={{
+                                fontSize: 18,
+                                color: typeConfig.lightIconColor,
+                                "body.dark-mode &": { color: typeConfig.darkIconColor },
+                              }}
+                            />
+                          )}
+                          {typeConfig.iconType === "img" && (
+                            <ImageIcon
+                              sx={{
+                                fontSize: 18,
+                                color: typeConfig.lightIconColor,
+                                "body.dark-mode &": { color: typeConfig.darkIconColor },
+                              }}
+                            />
+                          )}
+                          {typeConfig.iconType === "file" && (
+                            <InsertDriveFileIcon
+                              sx={{
+                                fontSize: 18,
+                                color: typeConfig.lightIconColor,
+                                "body.dark-mode &": { color: typeConfig.darkIconColor },
+                              }}
+                            />
+                          )}
                         </Box>
                         <Box>
                           <Typography sx={{ fontWeight: 700, fontSize: 14.5, color: "text.primary" }}>
@@ -338,9 +400,14 @@ export default function ReviewerDocumentsPage() {
                           fontWeight: 800,
                           fontSize: 11,
                           height: 22,
-                          bgcolor: typeConfig.bg,
-                          color: typeConfig.textColor,
-                          border: `1px solid ${typeConfig.textColor}50`,
+                          bgcolor: typeConfig.lightBg,
+                          color: typeConfig.lightTextColor,
+                          border: `1px solid ${typeConfig.lightBorderColor}`,
+                          "body.dark-mode &": {
+                            bgcolor: typeConfig.darkBg,
+                            color: typeConfig.darkTextColor,
+                            borderColor: typeConfig.darkBorderColor,
+                          },
                           borderRadius: 1.5,
                         }}
                       />

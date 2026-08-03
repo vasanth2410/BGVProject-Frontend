@@ -72,9 +72,9 @@
 
 /* Top Left Brand Header */
 .brand-header {
-  width: 100%;
+  width: 100%; align-items: center;
+ 
   display: flex;
-  align-items: center;
   justify-content: flex-start;
   padding-bottom: 5px;
 }

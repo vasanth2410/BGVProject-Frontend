@@ -25,6 +25,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useNavigate } from "react-router-dom";
 import { getAssignedCandidates } from "../../services/ReviewerService";
 import type { ReviewerAssignment } from "../../types/ReviewerAssignment";
+import { getSavedAvatar } from "../../utils/avatarUtils";
 
 export default function ReviewerAssignmentsPage() {
   const navigate = useNavigate();
@@ -108,12 +109,14 @@ export default function ReviewerAssignmentsPage() {
           size="small"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: "text.secondary", fontSize: 20 }} />
-              </InputAdornment>
-            ),
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ color: "text.secondary", fontSize: 20 }} />
+                </InputAdornment>
+              ),
+            },
           }}
           sx={{
             width: { xs: "100%", sm: 260 },
@@ -162,7 +165,7 @@ export default function ReviewerAssignmentsPage() {
               <TableRow>
                 <TableCell colSpan={3} align="center" sx={{ py: 5 }}>
                   <AssignmentIndIcon sx={{ fontSize: 44, color: "text.secondary", mb: 1, opacity: 0.5 }} />
-                  <Typography variant="body1" fontWeight={600} color="text.secondary">
+                  <Typography variant="body1" sx={{ fontWeight: 600 }} color="text.secondary">
                     No assignments found
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -172,6 +175,7 @@ export default function ReviewerAssignmentsPage() {
               </TableRow>
             ) : (
               filteredAssignments.map((assignment) => {
+                const savedAvatar = getSavedAvatar(assignment.candidateId, assignment.candidateName);
                 const avatarColor = getAvatarColor(assignment.candidateName);
                 const formattedDate = new Date(assignment.assignedDate).toLocaleDateString("en-IN", {
                   day: "numeric",
@@ -192,6 +196,7 @@ export default function ReviewerAssignmentsPage() {
                     <TableCell>
                       <Box sx={{ display: "flex", alignItems: "center", gap: 1.75 }}>
                         <Avatar
+                          src={savedAvatar || undefined}
                           sx={{
                             bgcolor: avatarColor,
                             width: 38,
@@ -201,7 +206,7 @@ export default function ReviewerAssignmentsPage() {
                             boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
                           }}
                         >
-                          {assignment.candidateName.substring(0, 2).toUpperCase()}
+                          {!savedAvatar && assignment.candidateName.substring(0, 2).toUpperCase()}
                         </Avatar>
                         <Box>
                           <Typography sx={{ fontWeight: 700, fontSize: 14.5, color: "text.primary" }}>

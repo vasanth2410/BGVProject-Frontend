@@ -15,6 +15,7 @@ import {
 } from "react-router-dom";
 
 import "./Sidebar.css";
+import { clearAuthSession } from "../utils/avatarUtils";
 
 export default function Sidebar() {
 
@@ -32,51 +33,46 @@ export default function Sidebar() {
     };
 
     window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("profileUpdated", handleStorageChange);
     return () => {
       window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("profileUpdated", handleStorageChange);
     };
   }, []);
 
   const items = [
-
     {
       name: "Dashboard",
       path: "/reviewer",
       icon: <Dashboard />,
     },
-
     {
       name: "My Assignments",
       path: "/reviewer/assignments",
       icon: <Assignment />,
+      badge: 4,
     },
-
     {
       name: "Verifications",
       path: "/reviewer/verifications",
       icon: <FactCheck />,
     },
-
     {
       name: "Documents",
       path: "/reviewer/documents",
       icon: <Description />,
     },
-
     {
       name: "Notifications",
       path: "/reviewer/notifications",
       icon: <Notifications />,
+      badge: 2,
     },
-
   ];
 
   const handleLogout = () => {
-
-    localStorage.clear();
-
+    clearAuthSession();
     navigate("/");
-
   };
 
   const getProfilePath = () => {
@@ -86,71 +82,32 @@ export default function Sidebar() {
   };
 
   return (
-
     <aside className="sidebar">
-
       {/* Logo */}
-
       <div className="logo-section">
-
-        <h2>
-
-          BGV System
-
-        </h2>
-
-        <p>
-
-          Background Verification
-
-        </p>
-
+        <h2>BGV System</h2>
+        <p>Background Verification</p>
       </div>
 
       {/* Menu */}
-
       <div className="menu-list">
-
-        {
-
-          items.map((item) => (
-
-            <Link
-
-              key={item.path}
-
-              to={item.path}
-
-              className={
-
-                location.pathname === item.path
-
-                  ? "menu-link active"
-
-                  : "menu-link"
-
-              }
-
-            >
-
-              <span className="menu-icon">
-
-                {item.icon}
-
-              </span>
-
-              <span>
-
-                {item.name}
-
-              </span>
-
-            </Link>
-
-          ))
-
-        }
-
+        {items.map((item) => (
+          <Link
+            key={item.path}
+            to={item.path}
+            className={
+              location.pathname === item.path
+                ? "menu-link active"
+                : "menu-link"
+            }
+          >
+            <span className="menu-icon">{item.icon}</span>
+            <span>{item.name}</span>
+            {item.badge && (
+              <span className="sidebar-badge">{item.badge}</span>
+            )}
+          </Link>
+        ))}
       </div>
 
       {/* Footer */}

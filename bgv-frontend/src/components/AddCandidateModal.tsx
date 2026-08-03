@@ -90,7 +90,56 @@ export default function AddCandidateModal({
     };
 
   return (
-    <Dialog open={true} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog
+      open={true}
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      slotProps={{
+        backdrop: {
+          sx: {
+            backdropFilter: "blur(8px)",
+            backgroundColor: "rgba(15, 23, 42, 0.65)",
+          },
+        },
+        paper: {
+          sx: {
+            borderRadius: "16px",
+            animation: "modalScaleBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+            border: isDark ? "1px solid rgba(0, 240, 255, 0.3)" : "1px solid #e2e8f0",
+            boxShadow: isDark
+              ? "0 25px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 240, 255, 0.15)"
+              : "0 20px 40px rgba(0, 0, 0, 0.2)",
+            backgroundColor: isDark ? "#1a1e2d" : "#ffffff",
+            color: isDark ? "#f8fafc" : "inherit",
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "10px",
+              transition: "all 0.25s ease-in-out",
+              "&.Mui-focused": {
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#00F0FF !important",
+                  borderWidth: "2px",
+                  boxShadow: "0 0 14px rgba(0, 240, 255, 0.4)",
+                },
+              },
+            },
+            "@keyframes modalScaleBounce": {
+              "0%": {
+                opacity: 0,
+                transform: "scale(0.82) translateY(20px)",
+              },
+              "70%": {
+                transform: "scale(1.03) translateY(-4px)",
+              },
+              "100%": {
+                opacity: 1,
+                transform: "scale(1) translateY(0)",
+              },
+            },
+          },
+        },
+      }}
+    >
       <DialogTitle sx={{ fontWeight: 700, fontSize: "24px" }}>
         Add Candidate
       </DialogTitle>

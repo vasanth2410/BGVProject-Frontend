@@ -64,35 +64,47 @@ export default function ReviewerNotificationsPage() {
       return {
         label: "Sent",
         icon: <CheckCircleIcon sx={{ fontSize: 13 }} />,
-        bgcolor: "rgba(34, 197, 94, 0.15)",
-        color: "#4ade80",
-        borderColor: "rgba(74, 222, 128, 0.3)",
+        bgcolor: "#dcfce7",
+        color: "#15803d",
+        borderColor: "1px solid #86efac",
+        darkBgcolor: "rgba(34, 197, 94, 0.2)",
+        darkColor: "#4ade80",
+        darkBorderColor: "1px solid rgba(74, 222, 128, 0.4)",
       };
     }
     if (s.includes("simulat")) {
       return {
         label: "Sent (Simulated)",
         icon: <ScienceIcon sx={{ fontSize: 13 }} />,
-        bgcolor: "rgba(168, 85, 247, 0.15)",
-        color: "#c084fc",
-        borderColor: "rgba(192, 132, 252, 0.3)",
+        bgcolor: "#f3e8ff",
+        color: "#6b21a8",
+        borderColor: "1px solid #e9d5ff",
+        darkBgcolor: "rgba(168, 85, 247, 0.2)",
+        darkColor: "#c084fc",
+        darkBorderColor: "1px solid rgba(192, 132, 252, 0.4)",
       };
     }
     if (s.includes("dead") || s.includes("error") || s.includes("fail")) {
       return {
         label: "DeadLetter",
         icon: <ErrorIcon sx={{ fontSize: 13 }} />,
-        bgcolor: "rgba(239, 68, 68, 0.15)",
-        color: "#f87171",
-        borderColor: "rgba(248, 113, 113, 0.3)",
+        bgcolor: "#fee2e2",
+        color: "#991b1b",
+        borderColor: "1px solid #fca5a5",
+        darkBgcolor: "rgba(239, 68, 68, 0.2)",
+        darkColor: "#f87171",
+        darkBorderColor: "1px solid rgba(248, 113, 113, 0.4)",
       };
     }
     return {
       label: status || "Pending",
       icon: <AccessTimeIcon sx={{ fontSize: 13 }} />,
-      bgcolor: "rgba(245, 158, 11, 0.15)",
-      color: "#fbbf24",
-      borderColor: "rgba(251, 191, 36, 0.3)",
+      bgcolor: "#fef3c7",
+      color: "#9a3412",
+      borderColor: "1px solid #fde68a",
+      darkBgcolor: "rgba(245, 158, 11, 0.2)",
+      darkColor: "#fbbf24",
+      darkBorderColor: "1px solid rgba(251, 191, 36, 0.4)",
     };
   };
 
@@ -327,6 +339,14 @@ export default function ReviewerNotificationsPage() {
                           "& .MuiChip-icon": {
                             color: statusCfg.color,
                           },
+                          "body.dark-mode &": {
+                            bgcolor: statusCfg.darkBgcolor || statusCfg.bgcolor,
+                            color: statusCfg.darkColor || statusCfg.color,
+                            border: statusCfg.darkBorderColor || statusCfg.borderColor,
+                            "& .MuiChip-icon": {
+                              color: statusCfg.darkColor || statusCfg.color,
+                            },
+                          },
                         }}
                       />
                     </TableCell>
@@ -348,8 +368,22 @@ export default function ReviewerNotificationsPage() {
 
                     <TableCell sx={{ pr: 3 }}>
                       {n.sentAt ? (
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, color: "#4ade80" }}>
-                          <AccessTimeIcon sx={{ fontSize: 15, opacity: 0.8 }} />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 0.75,
+                            color: "#334155",
+                            "body.dark-mode &": { color: "#cbd5e1" },
+                          }}
+                        >
+                          <AccessTimeIcon
+                            sx={{
+                              fontSize: 15,
+                              color: "#059669",
+                              "body.dark-mode &": { color: "#34d399" },
+                            }}
+                          />
                           <Typography variant="body2" sx={{ fontSize: 12.5, fontWeight: 600 }}>
                             {new Date(n.sentAt).toLocaleString("en-IN", {
                               day: "numeric",

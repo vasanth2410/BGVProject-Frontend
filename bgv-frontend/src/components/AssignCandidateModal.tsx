@@ -42,13 +42,9 @@ useState<
 Reviewer[]
 >([]);
 
-  const [candidateId,
-    setCandidateId] =
-      useState("");
-
-  const [reviewerId,
-    setReviewerId] =
-      useState("");
+  const [candidateId, setCandidateId] = useState("");
+  const [reviewerId, setReviewerId] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   // Searchable dropdown states
   const [isOpenCandidate, setIsOpenCandidate] = useState(false);
@@ -122,48 +118,32 @@ const pendingCandidates =
 
   };
 
-  const handleSubmit =
-    async () => {
+  const handleSubmit = async () => {
+    if (submitting) return;
 
-      if (
-        !candidateId ||
-        !reviewerId
-      ) {
+    if (!candidateId || !reviewerId) {
+      alert("Please select Candidate and Reviewer");
+      return;
+    }
 
-        alert(
-          "Please select Candidate and Reviewer"
-        );
+    setSubmitting(true);
+    try {
+      await createAssignment(
+        Number(candidateId),
+        Number(reviewerId)
+      );
 
-        return;
-      }
-
-      try {
-
-        await createAssignment(
-          Number(candidateId),
-          Number(reviewerId)
-        );
-
-        alert(
-          "Assignment Created Successfully"
-        );
-
-        onSuccess();
-
-        onClose();
-
-      }
-      catch (error) {
-
-        console.error(error);
-
-        alert(
-          "Assignment Failed"
-        );
-
-      }
-
-    };
+      alert("Assignment Created Successfully");
+      onSuccess();
+      onClose();
+    } catch (error: any) {
+      console.error(error);
+      const errMsg = error.response?.data || error.message || "Assignment Failed";
+      alert(typeof errMsg === "string" ? errMsg : "Assignment Failed");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const selectedCandidate = candidates.find(
     (c) => c.id.toString() === candidateId
@@ -309,8 +289,9 @@ const pendingCandidates =
           <button
             onClick={handleSubmit}
             className="btn-assign"
+            disabled={submitting}
           >
-            Assign
+            {submitting ? "Assigning..." : "Assign"}
           </button>
 
           <button

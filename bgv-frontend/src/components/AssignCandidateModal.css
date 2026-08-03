@@ -1,29 +1,64 @@
+/* ===========================
+   MODAL OVERLAY & BOX ANIMATIONS
+=========================== */
+
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 17, 26, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1100;
+  animation: overlayFadeIn 0.3s ease-out;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+  }
 }
 
 .modal-box {
   background: white;
   width: 460px;
+  max-width: 90vw;
   padding: 30px;
   border-radius: 16px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 240, 255, 0.1);
   display: flex;
   flex-direction: column;
   gap: 20px;
   border: 1px solid #e2e8f0;
+  animation: modalScaleBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+@keyframes modalScaleBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.82) translateY(20px);
+  }
+  70% {
+    transform: scale(1.03) translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 body.dark-mode .modal-box {
   background: #1a1e2d;
-  border-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(0, 240, 255, 0.3);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 240, 255, 0.15);
   color: #f8fafc;
 }
 
@@ -38,6 +73,10 @@ body.dark-mode .modal-box h2 {
   color: #f8fafc;
 }
 
+/* ===========================
+   INPUT & DROPDOWN FOCUS GLOW
+=========================== */
+
 .modal-select {
   width: 100%;
   padding: 12px 16px;
@@ -47,13 +86,13 @@ body.dark-mode .modal-box h2 {
   font-size: 14px;
   color: #334155;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
 .modal-select:focus {
-  border-color: #2563EB;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  border-color: #00F0FF !important;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.45) !important;
 }
 
 body.dark-mode .modal-select {
@@ -75,7 +114,7 @@ body.dark-mode .modal-select option {
 }
 
 .btn-assign {
-  background: #2563EB;
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
   color: white;
   border: none;
   padding: 12px 24px;
@@ -83,12 +122,14 @@ body.dark-mode .modal-select option {
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .btn-assign:hover {
-  background: #3B82F6;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  box-shadow: 0 6px 18px rgba(0, 240, 255, 0.4);
+  transform: translateY(-2px);
 }
 
 .btn-cancel {
@@ -100,13 +141,14 @@ body.dark-mode .modal-select option {
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.25s ease;
 }
 
 .btn-cancel:hover {
   background: #f1f5f9;
   color: #334155;
   border-color: #94a3b8;
+  transform: translateY(-1px);
 }
 
 body.dark-mode .btn-cancel {
@@ -119,7 +161,10 @@ body.dark-mode .btn-cancel:hover {
   color: #f8fafc;
 }
 
-/* Custom Searchable Dropdown */
+/* ===========================
+   CUSTOM SEARCHABLE DROPDOWN
+=========================== */
+
 .custom-dropdown-container {
   position: relative;
   width: 100%;
@@ -138,38 +183,51 @@ body.dark-mode .btn-cancel:hover {
   align-items: center;
   cursor: pointer;
   user-select: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .custom-dropdown-trigger:hover {
   border-color: #94a3b8;
 }
 
-.custom-dropdown-trigger:focus-within {
-  border-color: #2563EB;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+.custom-dropdown-trigger:focus-within,
+.custom-dropdown-container:focus-within .custom-dropdown-trigger {
+  border-color: #00F0FF !important;
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.45) !important;
 }
 
 .dropdown-arrow {
   font-size: 10px;
   color: #64748b;
-  transition: transform 0.2s;
+  transition: transform 0.25s ease;
 }
 
 .custom-dropdown-menu {
   position: absolute;
-  top: calc(100% + 5px);
+  top: calc(100% + 6px);
   left: 0;
   width: 100%;
   background: white;
   border: 1px solid #cbd5e1;
   border-radius: 12px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
   z-index: 1200;
   padding: 8px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  animation: dropdownMenuSlide 0.25s ease-out;
+}
+
+@keyframes dropdownMenuSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .dropdown-search-input {
@@ -181,10 +239,12 @@ body.dark-mode .btn-cancel:hover {
   outline: none;
   background: #f8fafc;
   color: #334155;
+  transition: all 0.25s ease;
 }
 
 .dropdown-search-input:focus {
-  border-color: #2563EB;
+  border-color: #00F0FF !important;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.35) !important;
   background: #ffffff;
 }
 
@@ -236,8 +296,8 @@ body.dark-mode .custom-dropdown-trigger {
 
 body.dark-mode .custom-dropdown-menu {
   background-color: #1a1e2d;
-  border-color: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+  border-color: rgba(0, 240, 255, 0.2);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
 body.dark-mode .dropdown-search-input {
@@ -247,7 +307,7 @@ body.dark-mode .dropdown-search-input {
 }
 
 body.dark-mode .dropdown-search-input:focus {
-  border-color: #3b82f6;
+  border-color: #00F0FF !important;
   background-color: #181d2e;
 }
 
@@ -261,6 +321,6 @@ body.dark-mode .custom-dropdown-option:hover {
 }
 
 body.dark-mode .custom-dropdown-option.selected {
-  background-color: rgba(59, 130, 246, 0.15);
+  background-color: rgba(59, 130, 246, 0.2);
   color: #60a5fa;
 }

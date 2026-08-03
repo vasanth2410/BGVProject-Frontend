@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Drawer,
@@ -35,6 +35,9 @@ import {
   useLocation,
 } from "react-router-dom";
 
+import { getCandidateProfile } from "../services/CandidatePortalService";
+import { getSavedAvatar, clearAuthSession } from "../utils/avatarUtils";
+
 const drawerWidth = 290;
 
 export default function CandidateLayout() {
@@ -46,6 +49,35 @@ export default function CandidateLayout() {
   const [notificationAnchor, setNotificationAnchor] = useState<null | HTMLElement>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [profile, setProfile] = useState<{ fullName: string; email: string } | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadProfileData = async () => {
+      try {
+        const data = await getCandidateProfile();
+        if (data) {
+          setProfile({ fullName: data.fullName, email: data.email });
+          const savedAvatar = getSavedAvatar(data.id, data.fullName, data.email);
+          if (savedAvatar) {
+            setAvatarUrl(savedAvatar);
+          }
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    void loadProfileData();
+  }, [location.pathname]);
+
+  const getInitials = (name: string) => {
+    if (!name) return "C";
+    const parts = name.trim().split(" ");
+    if (parts.length >= 2) {
+      return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
+  };
 
   const handleNotificationOpen = (event: React.MouseEvent<HTMLElement>) => {
     setNotificationAnchor(event.currentTarget);
@@ -62,7 +94,7 @@ export default function CandidateLayout() {
 
   const handleLogout = () => {
 
-  localStorage.clear();
+  clearAuthSession();
 
   navigate("/");
 
@@ -268,31 +300,42 @@ export default function CandidateLayout() {
           >
 
             <Avatar
+              src={avatarUrl || undefined}
               sx={{
                 bgcolor: "#2F66E8",
                 mr: 2,
+                fontWeight: 700,
               }}
             >
-              C
+              {!avatarUrl && (profile?.fullName ? getInitials(profile.fullName) : "C")}
             </Avatar>
 
-            <Box>
-
-             <Typography
+            <Box sx={{ overflow: "hidden" }}>
+              <Typography
                 sx={{
                   fontWeight: 700,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: 170,
                 }}
               >
-                Candidate
+                {profile?.fullName || "Candidate"}
               </Typography>
 
               <Typography
                 variant="body2"
-                sx={{ opacity: 0.8 }}
+                sx={{
+                  opacity: 0.8,
+                  fontSize: 12,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  maxWidth: 170,
+                }}
               >
-                candidate@test.com
+                {profile?.email || "candidate@test.com"}
               </Typography>
-
             </Box>
 
           </Box>
@@ -385,10 +428,12 @@ export default function CandidateLayout() {
             </IconButton>
 
             <Avatar
+              src={avatarUrl || undefined}
               onClick={() => navigate("/candidate/profile")}
               sx={{
                 ml: 2,
                 bgcolor: "var(--sidebar-bg)",
+                fontWeight: 700,
                 transition: "background-color 0.3s ease, transform 0.2s ease",
                 cursor: "pointer",
                 "&:hover": {
@@ -396,7 +441,7 @@ export default function CandidateLayout() {
                 },
               }}
             >
-              C
+              {!avatarUrl && (profile?.fullName ? getInitials(profile.fullName) : "C")}
             </Avatar>
 
           </Toolbar>

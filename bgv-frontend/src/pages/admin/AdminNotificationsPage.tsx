@@ -76,9 +76,9 @@ export default function AdminNotificationsPage() {
             </thead>
 
             <tbody>
-              {notifications.map((n) => (
+              {notifications.map((n, index) => (
                 <tr key={n.id}>
-                  <td>{n.id}</td>
+                  <td>{index + 1}</td>
                   <td><strong>{n.toEmail}</strong></td>
                   <td>{n.subject}</td>
                   <td>

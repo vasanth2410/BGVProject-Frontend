@@ -10,65 +10,48 @@ from "../../layouts/AdminLayout";
 
 import {
   getAssignments,
-}
-from "../../services/AssignmentService";
+  deleteAssignment,
+  cleanupDuplicateAssignments,
+} from "../../services/AssignmentService";
 
-import AssignCandidateModal
-from "../../components/AssignCandidateModal";
+import AssignCandidateModal from "../../components/AssignCandidateModal";
 
 export default function AssignmentsPage() {
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
-  const [
-    assignments,
-    setAssignments,
-  ] =
-    useState<Assignment[]>([]);
+  const loadAssignments = async () => {
+    try {
+      setLoading(true);
+      await cleanupDuplicateAssignments().catch(() => {});
+      const result: Assignment[] = await getAssignments();
 
-  const [
-    loading,
-    setLoading,
-  ] =
-    useState(true);
+      // Deduplicate assignments by candidateId (keeps latest assignment)
+      const uniqueMap = new Map<number, Assignment>();
+      result.forEach((item) => {
+        uniqueMap.set(item.candidateId, item);
+      });
 
-  const [
-    search,
-    setSearch,
-  ] =
-    useState("");
+      setAssignments(Array.from(uniqueMap.values()));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const [
-    showModal,
-    setShowModal,
-  ] =
-    useState(false);
-
-  const loadAssignments =
-    async () => {
-
+  const handleDelete = async (id: number) => {
+    if (window.confirm("Are you sure you want to remove this assignment?")) {
       try {
-
-        setLoading(true);
-
-        const result =
-          await getAssignments();
-
-        setAssignments(result);
-
+        await deleteAssignment(id);
+      } catch (error) {
+        console.warn("Delete API notice:", error);
       }
-
-      catch (error) {
-
-        console.error(error);
-
-      }
-
-      finally {
-
-        setLoading(false);
-
-      }
-
-    };
+      setAssignments((prev) => prev.filter((a) => a.id !== id));
+    }
+  };
 
   useEffect(() => {
 
@@ -180,75 +163,55 @@ export default function AssignmentsPage() {
                 <tr>
 
                   <th>ID</th>
-
                   <th>Candidate</th>
-
                   <th>Reviewer</th>
-
                   <th>Assigned Date</th>
-
+                  <th>Action</th>
                 </tr>
-
               </thead>
-
               <tbody>
-
                 {filteredAssignments.length === 0 ? (
-
                   <tr>
-
                     <td
-                      colSpan={4}
+                      colSpan={5}
                       style={{
-                        textAlign:
-                          "center",
-                        padding:
-                          "30px",
+                        textAlign: "center",
+                        padding: "30px",
                       }}
                     >
-
                       No assignments found.
-
                     </td>
-
                   </tr>
-
                 ) : (
-
-                  filteredAssignments.map(
-                    (assignment) => (
-
-                      <tr
-                        key={
-                          assignment.id
-                        }
-                      >
-
-                        <td>
-                          {assignment.id}
-                        </td>
-
-                        <td>
-                          {assignment.candidateName}
-                        </td>
-
-                        <td>
-                          {assignment.reviewerName}
-                        </td>
-
-                        <td>
-
-                          {new Date(
-                            assignment.assignedDate
-                          ).toLocaleString()}
-
-                        </td>
-
-                      </tr>
-
-                    )
-                  )
-
+                  filteredAssignments.map((assignment, index) => (
+                    <tr key={assignment.id}>
+                      <td>{index + 1}</td>
+                      <td>{assignment.candidateName}</td>
+                      <td>{assignment.reviewerName}</td>
+                      <td>
+                        {new Date(
+                          assignment.assignedDate
+                        ).toLocaleString()}
+                      </td>
+                      <td>
+                        <button
+                          onClick={() => handleDelete(assignment.id)}
+                          style={{
+                            backgroundColor: "rgba(239, 68, 68, 0.15)",
+                            color: "#ef4444",
+                            border: "1px solid rgba(239, 68, 68, 0.3)",
+                            borderRadius: "6px",
+                            padding: "4px 10px",
+                            fontSize: "12px",
+                            fontWeight: 600,
+                            cursor: "pointer",
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </td>
+                    </tr>
+                  ))
                 )}
 
               </tbody>

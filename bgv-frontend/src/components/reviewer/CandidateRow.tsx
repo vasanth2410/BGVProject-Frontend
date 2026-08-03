@@ -17,8 +17,8 @@ from "@mui/icons-material/Visibility";
 import ChevronRightIcon
 from "@mui/icons-material/ChevronRight";
 
-import { useNavigate }
-from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { getSavedAvatar } from "../../utils/avatarUtils";
 
 interface Props {
 
@@ -67,6 +67,8 @@ export default function CandidateRow({
       }
 
     };
+
+  const savedAvatar = getSavedAvatar(candidateId, name, email);
 
   return (
 
@@ -127,27 +129,16 @@ export default function CandidateRow({
       >
 
         <Avatar
-
+          src={savedAvatar || undefined}
           sx={{
-
             bgcolor: "#0b5d4b",
-
             width: 52,
-
             height: 52,
-
             fontWeight: 700,
-
             fontSize: 18,
-
           }}
-
         >
-
-          {name
-            .substring(0, 2)
-            .toUpperCase()}
-
+          {!savedAvatar && name.substring(0, 2).toUpperCase()}
         </Avatar>
 
         <Box>

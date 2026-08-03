@@ -100,32 +100,58 @@ export const LiveMatchVerificationModal: React.FC<LiveMatchVerificationModalProp
     }
   };
 
+  const isDark = document.body.classList.contains("dark-mode");
+
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="md"
+      fullWidth
+      slotProps={{
+        backdrop: {
+          sx: {
+            backdropFilter: "blur(8px)",
+            backgroundColor: "rgba(15, 23, 42, 0.65)",
+          },
+        },
+        paper: {
+          sx: {
+            borderRadius: "16px",
+            border: isDark ? "1px solid rgba(0, 240, 255, 0.3)" : "1px solid #e2e8f0",
+            boxShadow: isDark
+              ? "0 25px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 240, 255, 0.15)"
+              : "0 20px 40px rgba(0, 0, 0, 0.2)",
+            backgroundColor: isDark ? "#1a1e2d" : "#ffffff",
+            color: isDark ? "#f8fafc" : "inherit",
+          },
+        },
+      }}
+    >
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", pb: 1 }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-          <VerifiedIcon color="primary" sx={{ fontSize: 32 }} />
+          <VerifiedIcon sx={{ color: isDark ? "#00F0FF" : "primary.main", fontSize: 32 }} />
           <Box>
-            <Typography variant="h6" sx={{ fontWeight: 700 }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, color: isDark ? "#f8fafc" : "inherit" }}>
               Live Third-Party Match Verification Engine
             </Typography>
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="caption" sx={{ color: isDark ? "#94a3b8" : "text.secondary" }}>
               Candidate: {candidateName} (ID: #{candidateId})
             </Typography>
           </Box>
         </Box>
       </DialogTitle>
 
-      <Divider />
+      <Divider sx={{ borderColor: isDark ? "rgba(255, 255, 255, 0.12)" : undefined }} />
 
       <DialogContent sx={{ minHeight: 380, py: 3 }}>
         {!result && !loading && (
           <Box sx={{ textAlign: "center", py: 5 }}>
-            <VerifiedIcon sx={{ fontSize: 80, color: "primary.main", mb: 2, opacity: 0.8 }} />
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+            <VerifiedIcon sx={{ fontSize: 80, color: isDark ? "#00F0FF" : "primary.main", mb: 2, opacity: 0.8 }} />
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1, color: isDark ? "#f8fafc" : "inherit" }}>
               Simulate Live Third-Party Verification
             </Typography>
-            <Typography color="text.secondary" sx={{ maxWidth: 500, mx: "auto", mb: 4 }}>
+            <Typography sx={{ color: isDark ? "#94a3b8" : "text.secondary", maxWidth: 500, mx: "auto", mb: 4 }}>
               Click below to initiate automated live matching across Govt Income Tax PAN (NSDL), UIDAI Aadhaar Vault,
               and CCTNS National Police & Court Records.
             </Typography>
@@ -143,11 +169,11 @@ export const LiveMatchVerificationModal: React.FC<LiveMatchVerificationModalProp
 
         {loading && (
           <Box sx={{ textAlign: "center", py: 8 }}>
-            <CircularProgress size={64} thickness={4} sx={{ mb: 3 }} />
-            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-              Executing Live Verification Engine...
+            <CircularProgress size={60} thickness={4} sx={{ mb: 3 }} />
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1, color: isDark ? "#f8fafc" : "inherit" }}>
+              Querying Govt & Judicial Records Vaults...
             </Typography>
-            <Typography variant="body2" color="primary" sx={{ fontWeight: 600 }}>
+            <Typography variant="body2" sx={{ color: isDark ? "#38bdf8" : "primary.main", fontWeight: 600 }}>
               {stepMessage}
             </Typography>
           </Box>
@@ -181,7 +207,7 @@ export const LiveMatchVerificationModal: React.FC<LiveMatchVerificationModalProp
             {/* Real Tesseract OCR Extraction Results Section */}
             {ocrResults.length > 0 ? (
               <Box sx={{ mb: 3 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5, color: "primary.main" }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5, color: isDark ? "#38bdf8" : "primary.main" }}>
                   📄 Real Tesseract OCR Extracted Document Details ({ocrResults.length})
                 </Typography>
                 {ocrResults.map((ocrItem, idx) => (
@@ -195,16 +221,16 @@ export const LiveMatchVerificationModal: React.FC<LiveMatchVerificationModalProp
             ) : null}
 
             {/* Grid of Third-Party Gateway Results */}
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5, color: "text.primary" }}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1.5, color: isDark ? "#f8fafc" : "text.primary" }}>
               🌐 Govt Gateway & Judicial Verification Results
             </Typography>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2.5 }}>
               {/* 1. PAN Check Card */}
-              <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 3, borderColor: result.panCheck.status === "Verified" ? "success.main" : "warning.main" }}>
+              <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 3, bgcolor: isDark ? "rgba(30, 41, 59, 0.6)" : "#ffffff", borderColor: result.panCheck.status === "Verified" ? "success.main" : "warning.main", color: isDark ? "#f8fafc" : "inherit" }}>
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1.5 }}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <BadgeIcon color="primary" />
-                    <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700, color: isDark ? "#f8fafc" : "inherit" }}>
                       PAN Gateway Match (NSDL)
                     </Typography>
                   </Box>
@@ -216,27 +242,27 @@ export const LiveMatchVerificationModal: React.FC<LiveMatchVerificationModalProp
                   />
                 </Box>
                 <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr 1fr" }, gap: 1 }}>
-                  <Typography variant="caption" color="text.secondary">
-                    PAN No: <b>{result.panCheck.panNumber}</b>
+                  <Typography variant="caption" sx={{ color: isDark ? "#94a3b8" : "text.secondary" }}>
+                    PAN No: <b style={{ color: isDark ? "#f8fafc" : "inherit" }}>{result.panCheck.panNumber}</b>
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    Matched Name: <b>{result.panCheck.matchedName}</b>
+                  <Typography variant="caption" sx={{ color: isDark ? "#94a3b8" : "text.secondary" }}>
+                    Matched Name: <b style={{ color: isDark ? "#f8fafc" : "inherit" }}>{result.panCheck.matchedName}</b>
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    Score: <b>{result.panCheck.nameMatchScore}%</b>
+                  <Typography variant="caption" sx={{ color: isDark ? "#94a3b8" : "text.secondary" }}>
+                    Score: <b style={{ color: isDark ? "#38bdf8" : "inherit" }}>{result.panCheck.nameMatchScore}%</b>
                   </Typography>
                 </Box>
-                <Typography variant="caption" color="text.disabled" sx={{ display: "block", mt: 1 }}>
+                <Typography variant="caption" sx={{ display: "block", mt: 1, color: isDark ? "#64748b" : "text.disabled" }}>
                   Source: {result.panCheck.issuedBy}
                 </Typography>
               </Paper>
 
               {/* 2. Aadhaar Check Card */}
-              <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 3, borderColor: result.aadhaarCheck.status === "Verified" ? "success.main" : "warning.main" }}>
+              <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 3, bgcolor: isDark ? "rgba(30, 41, 59, 0.6)" : "#ffffff", borderColor: result.aadhaarCheck.status === "Verified" ? "success.main" : "warning.main", color: isDark ? "#f8fafc" : "inherit" }}>
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1.5 }}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <FingerprintIcon color="secondary" />
-                    <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700, color: isDark ? "#f8fafc" : "inherit" }}>
                       Aadhaar Demographic Vault (UIDAI)
                     </Typography>
                   </Box>
@@ -248,27 +274,27 @@ export const LiveMatchVerificationModal: React.FC<LiveMatchVerificationModalProp
                   />
                 </Box>
                 <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr 1fr" }, gap: 1 }}>
-                  <Typography variant="caption" color="text.secondary">
-                    Aadhaar Ref: <b>{result.aadhaarCheck.maskedAadhaar}</b>
+                  <Typography variant="caption" sx={{ color: isDark ? "#94a3b8" : "text.secondary" }}>
+                    Aadhaar Ref: <b style={{ color: isDark ? "#f8fafc" : "inherit" }}>{result.aadhaarCheck.maskedAadhaar}</b>
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    Name Score: <b>{result.aadhaarCheck.nameMatchScore}%</b>
+                  <Typography variant="caption" sx={{ color: isDark ? "#94a3b8" : "text.secondary" }}>
+                    Name Score: <b style={{ color: isDark ? "#38bdf8" : "inherit" }}>{result.aadhaarCheck.nameMatchScore}%</b>
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    Address: <b>{result.aadhaarCheck.addressMatched ? "Matched" : "Mismatch"}</b>
+                  <Typography variant="caption" sx={{ color: isDark ? "#94a3b8" : "text.secondary" }}>
+                    Address: <b style={{ color: isDark ? "#f8fafc" : "inherit" }}>{result.aadhaarCheck.addressMatched ? "Matched" : "Mismatch"}</b>
                   </Typography>
                 </Box>
-                <Typography variant="caption" color="text.disabled" sx={{ display: "block", mt: 1 }}>
+                <Typography variant="caption" sx={{ display: "block", mt: 1, color: isDark ? "#64748b" : "text.disabled" }}>
                   Source: {result.aadhaarCheck.issuedBy}
                 </Typography>
               </Paper>
 
               {/* 3. Criminal Check Card */}
-              <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 3, borderColor: result.criminalCheck.status === "Clean" ? "success.main" : "error.main" }}>
+              <Paper variant="outlined" sx={{ p: 2.5, borderRadius: 3, bgcolor: isDark ? "rgba(30, 41, 59, 0.6)" : "#ffffff", borderColor: result.criminalCheck.status === "Clean" ? "success.main" : "error.main", color: isDark ? "#f8fafc" : "inherit" }}>
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1.5 }}>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <GavelIcon color={result.criminalCheck.status === "Clean" ? "success" : "error"} />
-                    <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700, color: isDark ? "#f8fafc" : "inherit" }}>
                       Criminal & Judicial Records Search (CCTNS)
                     </Typography>
                   </Box>
@@ -279,10 +305,10 @@ export const LiveMatchVerificationModal: React.FC<LiveMatchVerificationModalProp
                     sx={{ fontWeight: 700 }}
                   />
                 </Box>
-                <Typography variant="body2" sx={{ fontWeight: 600, color: result.criminalCheck.status === "Clean" ? "success.dark" : "error.dark", mb: 1 }}>
+                <Typography variant="body2" sx={{ fontWeight: 600, color: result.criminalCheck.status === "Clean" ? (isDark ? "#4ade80" : "success.dark") : (isDark ? "#f87171" : "error.dark"), mb: 1 }}>
                   {result.criminalCheck.summary}
                 </Typography>
-                <Typography variant="caption" color="text.disabled" sx={{ display: "block" }}>
+                <Typography variant="caption" sx={{ display: "block", color: isDark ? "#64748b" : "text.disabled" }}>
                   Database Searched: {result.criminalCheck.databaseSearched}
                 </Typography>
               </Paper>
@@ -291,13 +317,37 @@ export const LiveMatchVerificationModal: React.FC<LiveMatchVerificationModalProp
         )}
       </DialogContent>
 
-      <DialogActions sx={{ p: 2.5 }}>
+      <DialogActions sx={{ p: 2.5, borderTop: isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid #e2e8f0" }}>
         {result && (
-          <Button onClick={handleStartVerification} variant="outlined" disabled={loading}>
+          <Button
+            onClick={handleStartVerification}
+            variant="outlined"
+            disabled={loading}
+            sx={{
+              borderColor: isDark ? "#00F0FF" : "primary.main",
+              color: isDark ? "#00F0FF" : "primary.main",
+              fontWeight: 600,
+              "&:hover": {
+                borderColor: "#00F0FF",
+                bgcolor: "rgba(0, 240, 255, 0.1)",
+              },
+            }}
+          >
             Re-Run Matching Engine
           </Button>
         )}
-        <Button onClick={onClose} variant="contained" color="inherit">
+        <Button
+          onClick={onClose}
+          variant="contained"
+          sx={{
+            bgcolor: isDark ? "rgba(255, 255, 255, 0.15)" : "#334155",
+            color: "#ffffff",
+            fontWeight: 600,
+            "&:hover": {
+              bgcolor: isDark ? "rgba(255, 255, 255, 0.25)" : "#1e293b",
+            },
+          }}
+        >
           Close
         </Button>
       </DialogActions>

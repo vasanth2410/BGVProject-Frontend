@@ -212,7 +212,7 @@ export default function CandidatesPage() {
 
       ) : (
 
-        filteredCandidates.map((candidate) => (
+        filteredCandidates.map((candidate, index) => (
 
           <tr
             key={candidate.id}
@@ -224,7 +224,7 @@ export default function CandidatesPage() {
             }}
           >
 
-            <td>{candidate.id}</td>
+            <td>{index + 1}</td>
 
             <td>{candidate.fullName}</td>
 

@@ -34,8 +34,8 @@ export default function AdminProfilePage() {
     setEmail(editEmail);
     setOpenEdit(false);
     
-    // Optionally trigger a custom event so the sidebar updates instantly
     window.dispatchEvent(new Event("storage"));
+    window.dispatchEvent(new Event("profileUpdated"));
   };
 
   return (

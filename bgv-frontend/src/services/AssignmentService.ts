@@ -35,3 +35,13 @@ export const createAssignment =
 
     return response.data;
   };
+
+export const deleteAssignment = async (id: number) => {
+  const response = await apiClient.delete(`/Assignment/${id}`);
+  return response.data;
+};
+
+export const cleanupDuplicateAssignments = async () => {
+  const response = await apiClient.post("/Assignment/cleanup-duplicates");
+  return response.data;
+};

@@ -413,12 +413,14 @@ export default function ReviewerVerificationsPage() {
             placeholder="Search by ID, type, remarks..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon sx={{ color: "text.secondary", fontSize: 18 }} />
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ color: "text.secondary", fontSize: 18 }} />
+                  </InputAdornment>
+                ),
+              },
             }}
             sx={{
               width: { xs: "100%", sm: 260 },
@@ -473,7 +475,7 @@ export default function ReviewerVerificationsPage() {
             {filteredVerifications.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} align="center" sx={{ py: 5 }}>
-                  <Typography color="text.secondary" fontWeight={500}>
+                  <Typography color="text.secondary" sx={{ fontWeight: 500 }}>
                     No verifications match the current filter or search criteria.
                   </Typography>
                 </TableCell>
@@ -551,7 +553,7 @@ export default function ReviewerVerificationsPage() {
                   </TableCell>
 
                   <TableCell align="right" sx={{ pr: 2 }}>
-                    <Stack direction="row" spacing={1} justifyContent="flex-end">
+                    <Stack direction="row" spacing={1} sx={{ justifyContent: "flex-end" }}>
                       <Button
                         size="small"
                         variant="outlined"
