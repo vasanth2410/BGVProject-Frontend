@@ -157,11 +157,12 @@ const [liveModalOpen, setLiveModalOpen] = useState(false);
         return Array.from(map.values());
       };
 
-      const existingTypes = new Set(verificationResult.map((v: any) => v.verificationType));
+      const existingTypes = new Set(verificationResult.map((v: any) => v.verificationType?.toLowerCase()?.trim()));
       let hasNewVerifications = false;
 
       for (const doc of documentResult) {
-        if (!existingTypes.has(doc.fileName)) {
+        const dName = doc.fileName?.toLowerCase()?.trim();
+        if (dName && !existingTypes.has(dName)) {
           try {
             await createVerification(Number(id), doc.fileName);
             hasNewVerifications = true;
@@ -171,129 +172,101 @@ const [liveModalOpen, setLiveModalOpen] = useState(false);
         }
       }
 
-      if (hasNewVerifications) {
-        const freshVerifications = await getReviewerCandidateVerifications(Number(id));
-        setVerifications(deduplicateVerifications(freshVerifications));
-      } else {
-        setVerifications(deduplicateVerifications(verificationResult));
+      let finalVerifications = deduplicateVerifications(
+        hasNewVerifications
+          ? await getReviewerCandidateVerifications(Number(id))
+          : verificationResult
+      );
+
+      // Virtual Fallback: Ensure every document in documentResult has a card
+      const existingVerifTypes = new Set(
+        finalVerifications.map((v: any) => v.verificationType?.toLowerCase()?.trim())
+      );
+
+      for (const doc of documentResult) {
+        const docName = doc.fileName?.toLowerCase()?.trim();
+        if (docName && !existingVerifTypes.has(docName)) {
+          finalVerifications.push({
+            id: doc.id,
+            candidateId: Number(id),
+            verificationType: doc.fileName,
+            status: doc.status || "Pending",
+            reviewerRemarks: "Document uploaded and awaiting reviewer audit.",
+          } as any);
+        }
       }
 
-
-
-    }
-    catch (error) {
-
+      setVerifications(finalVerifications);
+    } catch (error) {
       console.error(error);
-
     }
-
   };
 
   useEffect(() => {
-
     void loadData();
-
   }, [id]);
 
-  const showMessage = (
-
-    message: string
-
-  ) => {
-
+  const showMessage = (message: string) => {
     setSnackbarMessage(message);
-
     setOpenSnackbar(true);
-
   };
 
   const openConfirmation = (
-
-  verificationId: number,
-
-  action: "approve" | "reject" | "rereview"
-
-) => {
-
-  if (action !== "rereview") {
-
-    const remark =
-      remarks[verificationId] ?? "";
-
-    if (!remark.trim()) {
-
-      showMessage(
-        "Please enter reviewer remarks."
-      );
-
-      return;
-
-    }
-
-  }
-
-  setSelectedVerificationId(
-    verificationId
-  );
-
-  setDialogAction(action);
-
-  setDialogOpen(true);
-
-};
-
-  const handleApprove = async (
-
-    verificationId: number
-
+    verificationId: number,
+    action: "approve" | "reject" | "rereview"
   ) => {
-
-    const remark =
-  remarks[verificationId] ?? "";
-
-if (!remark.trim()) {
-
-  showMessage(
-    "Please enter remarks."
-  );
-
-  return;
-}
-
-    try {
-
-      await approveVerification(
-    verificationId,
-    remark
-);
-
-      setRemarks((previous) => ({
-
-    ...previous,
-
-    [verificationId]: ""
-
-}));
-
-      showMessage(
-        "Verification Approved Successfully"
-      );
-
-      await loadData();
-
+    if (action !== "rereview") {
+      const remark = remarks[verificationId] ?? "";
+      if (!remark.trim()) {
+        showMessage("Please enter reviewer remarks.");
+        return;
+      }
     }
-
-    catch {
-
-      showMessage(
-        "Approval Failed"
-      );
-
-    }
-
+    setSelectedVerificationId(verificationId);
+    setDialogAction(action);
+    setDialogOpen(true);
   };
 
- const handleReject = async (
+  const handleApprove = async (verificationId: number) => {
+    const remark = remarks[verificationId] ?? "";
+    if (!remark.trim()) {
+      showMessage("Please enter remarks.");
+      return;
+    }
+
+    try {
+      const targetVerif = verifications.find((v) => v.id === verificationId);
+      let realVerifId = verificationId;
+
+      if (targetVerif && targetVerif.verificationType) {
+        try {
+          await createVerification(Number(id), targetVerif.verificationType);
+          const fresh = await getReviewerCandidateVerifications(Number(id));
+          const match = fresh.find(
+            (v: any) =>
+              v.verificationType?.toLowerCase() === targetVerif.verificationType.toLowerCase()
+          );
+          if (match) realVerifId = match.id;
+        } catch (e) {
+          console.log("Auto create notice:", e);
+        }
+      }
+
+      await approveVerification(realVerifId, remark);
+
+      setRemarks((previous) => ({
+        ...previous,
+        [verificationId]: "",
+      }));
+
+      showMessage("Verification Approved Successfully");
+      await loadData();
+    } catch {
+      showMessage("Approval Failed");
+    }
+  };
+
+  const handleReject = async (
 
   verificationId: number
 
@@ -682,47 +655,58 @@ if (!remark.trim()) {
 
         <TableBody>
 
-          {documents.map((document) => (
+          {documents.map((document) => {
+            const matchingVerification = verifications.find(
+              (v) =>
+                v.verificationType.toLowerCase() === document.fileName.toLowerCase()
+            );
+            const effectiveStatus =
+              matchingVerification?.status &&
+              (matchingVerification.status === "Approved" || matchingVerification.status === "Rejected")
+                ? matchingVerification.status
+                : document.status;
 
-            <TableRow
-              key={document.id}
-              hover
-            >
+            return (
+              <TableRow
+                key={document.id}
+                hover
+              >
+                <TableCell>
+                  {document.fileName}
+                </TableCell>
 
-              <TableCell>
-                {document.fileName}
-              </TableCell>
+                <TableCell>
+                  {document.fileType}
+                </TableCell>
 
-              <TableCell>
-                {document.fileType}
-              </TableCell>
+                <TableCell>
+                  <Chip
+                    label={effectiveStatus}
+                    color={
+                      effectiveStatus === "Approved"
+                        ? "success"
+                        : effectiveStatus === "Rejected"
+                        ? "error"
+                        : "warning"
+                    }
+                    size="small"
+                    sx={{ fontWeight: 600 }}
+                  />
+                </TableCell>
 
-              <TableCell>
-
-                <Chip
-                  label={document.status}
-                  color="success"
-                  size="small"
-                />
-
-              </TableCell>
-
-              <TableCell align="center">
-
-                <Button
-                  variant="outlined"
-                  startIcon={<VisibilityIcon />}
-                  href={getDocumentUrl(document.id)}
-                  target="_blank"
-                >
-                  View
-                </Button>
-
-              </TableCell>
-
-            </TableRow>
-
-          ))}
+                <TableCell align="center">
+                  <Button
+                    variant="outlined"
+                    startIcon={<VisibilityIcon />}
+                    href={getDocumentUrl(document.id)}
+                    target="_blank"
+                  >
+                    View
+                  </Button>
+                </TableCell>
+              </TableRow>
+            );
+          })}
 
         </TableBody>
 

@@ -82,15 +82,21 @@ export default function CandidatesPage() {
     fetchData();
   }, []);
 
+  const isCandidateApproved = (c: Candidate) =>
+    c.status?.toLowerCase() === "approved" || c.status?.toLowerCase() === "completed";
+
+  const isCandidateRejected = (c: Candidate) =>
+    c.status?.toLowerCase() === "rejected";
+
   const allCount = candidates.length;
-  const pendingCount = candidates.filter((c) => c.status === "Pending").length;
-  const approvedCount = candidates.filter((c) => c.status === "Approved").length;
-  const rejectedCount = candidates.filter((c) => c.status === "Rejected").length;
+  const pendingCount = candidates.filter((c) => !isCandidateApproved(c) && !isCandidateRejected(c)).length;
+  const approvedCount = candidates.filter((c) => isCandidateApproved(c)).length;
+  const rejectedCount = candidates.filter((c) => isCandidateRejected(c)).length;
 
   const filteredCandidates = candidates.filter((candidate) => {
-    if (statusTab !== "All" && candidate.status.toLowerCase() !== statusTab.toLowerCase()) {
-      return false;
-    }
+    if (statusTab === "Approved" && !isCandidateApproved(candidate)) return false;
+    if (statusTab === "Pending" && (isCandidateApproved(candidate) || isCandidateRejected(candidate))) return false;
+    if (statusTab === "Rejected" && !isCandidateRejected(candidate)) return false;
 
     const keyword = search.toLowerCase();
     if (!keyword) return true;

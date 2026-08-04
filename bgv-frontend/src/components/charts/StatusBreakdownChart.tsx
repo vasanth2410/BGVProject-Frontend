@@ -40,6 +40,10 @@ export default function StatusBreakdownChart({
   ];
 
   const total = pending + approved + rejected;
+  const isAllZero = total === 0;
+  const chartData = isAllZero
+    ? [{ name: "No Data", value: 1, color: "rgba(255, 255, 255, 0.12)" }]
+    : data;
 
   const renderActiveShape = (props: any) => {
     const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
@@ -63,7 +67,7 @@ export default function StatusBreakdownChart({
   };
 
   const PieComponent = Pie as any;
-  const activeItem = activeIndex !== null ? data[activeIndex] : null;
+  const activeItem = activeIndex !== null && !isAllZero ? data[activeIndex] : null;
   const activePct = activeItem && total > 0 ? Math.round((activeItem.value / total) * 100) : 0;
 
   return (
@@ -71,21 +75,21 @@ export default function StatusBreakdownChart({
       <ResponsiveContainer width="100%" height={185}>
         <PieChart>
           <PieComponent
-            data={data}
+            data={chartData}
             dataKey="value"
             nameKey="name"
             cx="50%"
             cy="50%"
             innerRadius={45}
             outerRadius={65}
-            paddingAngle={3}
+            paddingAngle={isAllZero ? 0 : 3}
             label={false}
-            activeIndex={activeIndex !== null ? activeIndex : undefined}
-            activeShape={renderActiveShape}
-            onMouseEnter={(_: any, index: number) => setActiveIndex(index)}
+            activeIndex={activeIndex !== null && !isAllZero ? activeIndex : undefined}
+            activeShape={isAllZero ? undefined : renderActiveShape}
+            onMouseEnter={isAllZero ? undefined : (_: any, index: number) => setActiveIndex(index)}
             onMouseLeave={() => setActiveIndex(null)}
           >
-            {data.map((entry, index) => {
+            {chartData.map((entry, index) => {
               const isHovered = activeIndex === index;
               const isAnyHovered = activeIndex !== null;
               const opacity = isAnyHovered ? (isHovered ? 1 : 0.25) : 1;
@@ -97,7 +101,7 @@ export default function StatusBreakdownChart({
                   opacity={opacity}
                   style={{
                     transition: "opacity 0.25s ease-in-out",
-                    cursor: "pointer"
+                    cursor: isAllZero ? "default" : "pointer"
                   }}
                 />
               );

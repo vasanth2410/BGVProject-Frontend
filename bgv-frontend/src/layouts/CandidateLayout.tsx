@@ -37,6 +37,7 @@ import {
 
 import { getCandidateProfile } from "../services/CandidatePortalService";
 import { getSavedAvatar, clearAuthSession } from "../utils/avatarUtils";
+import "../components/Sidebar.css";
 
 const drawerWidth = 290;
 
@@ -210,68 +211,74 @@ export default function CandidateLayout() {
             }}
           >
 
-            {menus.map((menu) => (
-
-              <ListItemButton
-
-                key={menu.path}
-
-                selected={
-                  location.pathname === menu.path
-                }
-
-                onClick={() =>
-                  navigate(menu.path)
-                }
-
-                sx={{
-
-                  borderRadius: 3,
-
-                  mb: 1,
-
-                  color: "#fff",
-
-                  "&.Mui-selected": {
-
-                    bgcolor: "#2F66E8",
-
-                    color: "#fff",
-
-                  },
-
-                  "&.Mui-selected:hover": {
-
-                    bgcolor: "#2F66E8",
-
-                  },
-
-                  "&:hover": {
-
-                    bgcolor: "#3B82F6",
-
-                  },
-
-                }}
-
-              >
-
-                <ListItemIcon
+            {menus.map((menu) => {
+              const isActive = location.pathname === menu.path;
+              return (
+                <ListItemButton
+                  key={menu.path}
+                  className={`menu-link ${isActive ? "active" : ""}`}
+                  selected={isActive}
+                  onClick={() => navigate(menu.path)}
                   sx={{
-                    color: "#fff",
-                    minWidth: 40,
+                    position: "relative",
+                    borderRadius: "12px",
+                    mb: 1,
+                    px: "18px",
+                    py: "12px",
+                    color: isActive ? "#ffffff" : "#cbd5e1",
+                    transition: "all 0.28s cubic-bezier(0.4, 0, 0.2, 1)",
+                    "&.Mui-selected": {
+                      background: "linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important",
+                      color: "#ffffff !important",
+                      boxShadow: "0 6px 20px rgba(37, 99, 235, 0.45)",
+                      fontWeight: 600,
+                      transform: "translateX(4px)",
+                    },
+                    "&.Mui-selected::before": {
+                      content: '""',
+                      position: "absolute",
+                      left: 0,
+                      top: "15%",
+                      height: "70%",
+                      width: "4px",
+                      background: "#00F0FF",
+                      borderRadius: "0 4px 4px 0",
+                      boxShadow: "0 0 10px #00F0FF, 0 0 20px #00F0FF",
+                      animation: "activeIndicatorPulse 2s infinite ease-in-out",
+                    },
+                    "&:hover": {
+                      background: "rgba(255, 255, 255, 0.12)",
+                      color: "#ffffff",
+                      transform: "translateX(6px)",
+                    },
+                    "&:hover .menu-icon, &:hover svg": {
+                      transform: "scale(1.18) rotate(5deg)",
+                      color: "#00F0FF !important",
+                    },
                   }}
                 >
-                  {menu.icon}
-                </ListItemIcon>
+                  <ListItemIcon
+                    className="menu-icon"
+                    sx={{
+                      color: isActive ? "#ffffff" : "#cbd5e1",
+                      minWidth: 38,
+                      transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease",
+                    }}
+                  >
+                    {menu.icon}
+                  </ListItemIcon>
 
-                <ListItemText
-                  primary={menu.text}
-                />
-
-              </ListItemButton>
-
-            ))}
+                  <ListItemText
+                    primary={menu.text}
+                    primaryTypographyProps={{
+                      fontSize: "14.5px",
+                      fontWeight: isActive ? 600 : 500,
+                      color: isActive ? "#ffffff" : "#cbd5e1",
+                    }}
+                  />
+                </ListItemButton>
+              );
+            })}
 
           </List>
 

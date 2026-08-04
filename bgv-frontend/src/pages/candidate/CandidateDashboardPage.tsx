@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -34,6 +35,7 @@ import type {
 } from "../../types/CandidatePortal";
 
 export default function CandidateDashboardPage() {
+  const navigate = useNavigate();
   const [dashboard, setDashboard] = useState<CandidateDashboard | null>(null);
   const [profile, setProfile] = useState<CandidateProfile | null>(null);
   const [verifications, setVerifications] = useState<CandidateVerification[]>([]);
@@ -149,7 +151,11 @@ export default function CandidateDashboardPage() {
 
       {/* Stats Cards */}
       <div className="dashboard-cards">
-        <div className="dashboard-card" style={{ cursor: "default" }}>
+        <div
+          className="dashboard-card"
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate("/candidate/documents")}
+        >
           <div className="card-icon-wrapper icon-blue">
             <DescriptionIcon sx={{ fontSize: 28, color: "#2563EB" }} />
           </div>
@@ -160,7 +166,11 @@ export default function CandidateDashboardPage() {
           </div>
         </div>
 
-        <div className="dashboard-card" style={{ cursor: "default" }}>
+        <div
+          className="dashboard-card"
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate("/candidate/verifications")}
+        >
           <div className="card-icon-wrapper icon-green">
             <CheckCircleIcon sx={{ fontSize: 28, color: "#16A34A" }} />
           </div>
@@ -171,7 +181,11 @@ export default function CandidateDashboardPage() {
           </div>
         </div>
 
-        <div className="dashboard-card" style={{ cursor: "default" }}>
+        <div
+          className="dashboard-card"
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate("/candidate/documents")}
+        >
           <div className="card-icon-wrapper icon-orange">
             <PendingActionsIcon sx={{ fontSize: 28, color: "#F59E0B" }} />
           </div>
@@ -182,7 +196,11 @@ export default function CandidateDashboardPage() {
           </div>
         </div>
 
-        <div className="dashboard-card" style={{ cursor: "default" }}>
+        <div
+          className="dashboard-card"
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate("/candidate/documents")}
+        >
           <div className="card-icon-wrapper icon-red">
             <CancelIcon sx={{ fontSize: 28, color: "#EF4444" }} />
           </div>
