@@ -23,7 +23,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import ImageIcon from "@mui/icons-material/Image";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CheckIcon from "@mui/icons-material/Check";
 import CancelIcon from "@mui/icons-material/Cancel";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -380,24 +379,24 @@ function VerificationRow({ item }: { item: CandidateVerification }) {
                 🔍 Document Pipeline Details & Activity Logs
               </Typography>
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={4}>
-                  <Typography variant="caption" color="text.secondary" display="block">
+                <Box sx={{ flex: 1, minWidth: 200 }}>
+                  <Typography variant="caption" color="text.secondary" sx={{ display: "block" }}>
                     Document Format:
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 600, color: "#0F172A", "body.dark-mode &": { color: "#F8FAFC" } }}>
                     {item.fileName.split(".").pop()?.toUpperCase()} File
                   </Typography>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Typography variant="caption" color="text.secondary" display="block">
+                </Box>
+                <Box sx={{ flex: 1, minWidth: 200 }}>
+                  <Typography variant="caption" color="text.secondary" sx={{ display: "block" }}>
                     AI OCR Extraction Status:
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 600, color: "#059669", "body.dark-mode &": { color: "#34D399" } }}>
                     ✓ 100% Extracted & Verified
                   </Typography>
-                </Grid>
-                <Grid item xs={12} sm={4}>
-                  <Typography variant="caption" color="text.secondary" display="block">
+                </Box>
+                <Box sx={{ flex: 1, minWidth: 200 }}>
+                  <Typography variant="caption" color="text.secondary" sx={{ display: "block" }}>
                     Current Workflow Stage:
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 600, color: isApproved ? "#059669" : "#D97706", "body.dark-mode &": { color: isApproved ? "#34D399" : "#F59E0B" } }}>
@@ -407,7 +406,7 @@ function VerificationRow({ item }: { item: CandidateVerification }) {
                       ? "Requires Candidate Action / Resubmission"
                       : "Assigned to Senior BGV Specialist Reviewer"}
                   </Typography>
-                </Grid>
+                </Box>
               </Grid>
             </Box>
           </Collapse>
@@ -628,12 +627,14 @@ export default function CandidateVerificationPage() {
             placeholder="Search document name or ID..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon fontSize="small" sx={{ color: "#94A3B8" }} />
-                </InputAdornment>
-              ),
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon fontSize="small" sx={{ color: "#94A3B8" }} />
+                  </InputAdornment>
+                ),
+              },
             }}
             sx={{
               width: { xs: "100%", sm: 260 },

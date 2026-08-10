@@ -37,6 +37,7 @@ import {
 
 import { getCandidateProfile } from "../services/CandidatePortalService";
 import { getSavedAvatar, clearAuthSession } from "../utils/avatarUtils";
+import LogoutConfirmModal from "../components/LogoutConfirmModal";
 import "../components/Sidebar.css";
 
 const drawerWidth = 290;
@@ -93,13 +94,17 @@ export default function CandidateLayout() {
     { id: 3, text: "Welcome to the Background Verification Portal.", time: "2 days ago" },
   ];
 
-  const handleLogout = () => {
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  clearAuthSession();
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
 
-  navigate("/");
-
-};
+  const handleConfirmLogout = () => {
+    setShowLogoutModal(false);
+    clearAuthSession();
+    navigate("/");
+  };
 
   const menus = [
     {
@@ -268,14 +273,17 @@ export default function CandidateLayout() {
                     {menu.icon}
                   </ListItemIcon>
 
-                  <ListItemText
-                    primary={menu.text}
-                    primaryTypographyProps={{
-                      fontSize: "14.5px",
-                      fontWeight: isActive ? 600 : 500,
-                      color: isActive ? "#ffffff" : "#cbd5e1",
-                    }}
-                  />
+                  <ListItemText>
+                    <Typography
+                      sx={{
+                        fontSize: "14.5px",
+                        fontWeight: isActive ? 600 : 500,
+                        color: isActive ? "#ffffff" : "#cbd5e1",
+                      }}
+                    >
+                      {menu.text}
+                    </Typography>
+                  </ListItemText>
                 </ListItemButton>
               );
             })}
@@ -357,7 +365,7 @@ export default function CandidateLayout() {
               fullWidth
               variant="text"
               startIcon={<LogoutIcon />}
-              onClick={handleLogout}
+              onClick={handleLogoutClick}
               sx={{
                 color: "#fff",
                 justifyContent: "flex-start",
@@ -539,6 +547,12 @@ export default function CandidateLayout() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <LogoutConfirmModal
+        open={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={handleConfirmLogout}
+      />
     </Box>
 
   );

@@ -16,6 +16,7 @@ import {
 
 import "./Sidebar.css";
 import { clearAuthSession } from "../utils/avatarUtils";
+import LogoutConfirmModal from "./LogoutConfirmModal";
 
 export default function Sidebar() {
 
@@ -70,7 +71,14 @@ export default function Sidebar() {
     },
   ];
 
-  const handleLogout = () => {
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
+
+  const handleConfirmLogout = () => {
+    setShowLogoutModal(false);
     clearAuthSession();
     navigate("/");
   };
@@ -148,7 +156,7 @@ export default function Sidebar() {
 
           className="logout-btn"
 
-          onClick={handleLogout}
+          onClick={handleLogoutClick}
 
         >
 
@@ -159,6 +167,12 @@ export default function Sidebar() {
         </button>
 
       </div>
+
+      <LogoutConfirmModal
+        open={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={handleConfirmLogout}
+      />
 
     </aside>
 

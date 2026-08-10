@@ -5,6 +5,7 @@ import {
   Paper,
   Button,
   CircularProgress,
+  Alert,
 } from "@mui/material";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import CandidateDocumentsTable from "../../components/candidate/CandidateDocumentsTable";
@@ -54,25 +55,44 @@ export default function CandidateDocumentsPage() {
     }
   };
 
+  const [uploadMessage, setUploadMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
+
   const handleUpload = async () => {
     if (!selectedFile) return;
 
     setUploading(true);
+    setUploadMessage(null);
+
     try {
       await uploadDocument(selectedFile);
+      setUploadMessage({ text: "Document uploaded successfully!", type: "success" });
+      setSelectedFile(null);
+
       const updatedDocs = await getCandidateDocuments();
       setDocuments(updatedDocs);
 
-      // Perform OCR scan simulation on newly uploaded document
+      // Perform OCR scan simulation safely on newly uploaded document
       if (updatedDocs.length > 0) {
         const newlyUploaded = updatedDocs[updatedDocs.length - 1];
-        const ocrData = await scanDocumentOcr(newlyUploaded.id);
-        setLatestOcr(ocrData);
+        try {
+          const ocrData = await scanDocumentOcr(newlyUploaded.id);
+          setLatestOcr(ocrData);
+        } catch (ocrErr) {
+          console.warn("OCR Notice:", ocrErr);
+        }
       }
-
-      setSelectedFile(null);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      console.error("Upload error:", error);
+      const data = error?.response?.data;
+      let errMsg = "Upload failed. Please check backend connection.";
+      if (typeof data === "string") {
+        errMsg = data;
+      } else if (data && typeof data === "object") {
+        errMsg = data.message || data.title || (data.errors ? JSON.stringify(data.errors) : JSON.stringify(data));
+      } else if (error?.message) {
+        errMsg = error.message;
+      }
+      setUploadMessage({ text: errMsg, type: "error" });
     } finally {
       setUploading(false);
     }
@@ -129,6 +149,12 @@ export default function CandidateDocumentsPage() {
           <Typography sx={{ mt: 2, fontWeight: 600, color: "primary.main" }}>
             Selected File: {selectedFile.name}
           </Typography>
+        )}
+
+        {uploadMessage && (
+          <Alert severity={uploadMessage.type} sx={{ mt: 2, maxWidth: 500, mx: "auto", borderRadius: 2 }}>
+            {uploadMessage.text}
+          </Alert>
         )}
       </Paper>
 

@@ -13,9 +13,6 @@ import {
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import ImageIcon from "@mui/icons-material/Image";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import HourglassTopIcon from "@mui/icons-material/HourglassTop";
-import CancelIcon from "@mui/icons-material/Cancel";
 
 import type { CandidateVerification } from "../../types/CandidatePortal";
 
