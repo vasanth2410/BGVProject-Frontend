@@ -16,10 +16,18 @@ export default function DarkModeToggle() {
     }
   }, [isDark]);
 
+  const toggleTheme = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDark((prev) => !prev);
+  };
+
   return (
     <div 
       className={`theme-toggle ${isDark ? "on" : "off"}`} 
-      onClick={() => setIsDark(!isDark)}
+      onClick={toggleTheme}
+      role="button"
+      tabIndex={0}
+      title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
     >
       <div className="toggle-track">
         <span className="toggle-text">{isDark ? "ON" : "OFF"}</span>

@@ -7,8 +7,8 @@ import {
 import ProtectedRoute
 from "../components/ProtectedRoute";
 
-import LoginPage
-from "../pages/auth/LoginPage";
+import LoginPage from "../pages/auth/LoginPage";
+import HomePage from "../pages/HomePage";
 
 /* ===========================
    Admin
@@ -112,12 +112,10 @@ export default function AppRoutes() {
 
       <Routes>
 
-        {/* Login */}
-
-        <Route
-          path="/"
-          element={<LoginPage />}
-        />
+        {/* Home & Auth */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
 
         {/* ===========================
             ADMIN

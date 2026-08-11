@@ -27,6 +27,7 @@
   display: flex;
   align-items: center;
   box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);
+  pointer-events: none;
 }
 
 .toggle-text {
@@ -59,6 +60,7 @@
   justify-content: center;
   transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.2);
+  pointer-events: none;
 }
 
 .theme-toggle.on .toggle-thumb {
