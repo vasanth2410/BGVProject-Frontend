@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import DarkModeToggle from "../components/DarkModeToggle";
 import "./HomePage.css";
@@ -7,6 +7,17 @@ export default function HomePage() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<string | null>(null);
+
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  const handleHeroMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!heroRef.current) return;
+    const rect = heroRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    heroRef.current.style.setProperty("--mouse-x", `${x}px`);
+    heroRef.current.style.setProperty("--mouse-y", `${y}px`);
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -121,7 +132,11 @@ export default function HomePage() {
       {/* ============================================================ */}
       {/* 2. HERO SECTION */}
       {/* ============================================================ */}
-      <section className="hero-section">
+      <section className="hero-section" ref={heroRef} onMouseMove={handleHeroMouseMove}>
+        {/* Interactive Spotlight & Grid Mesh */}
+        <div className="hero-grid-pattern"></div>
+        <div className="hero-cursor-spotlight"></div>
+
         {/* Glow Effects */}
         <div className="hero-glow hero-glow-1"></div>
         <div className="hero-glow hero-glow-2"></div>
@@ -131,10 +146,10 @@ export default function HomePage() {
           <div className="hero-text-col">
             <div className="hero-badge">
               <svg viewBox="0 0 24 24" fill="none" className="badge-shield-icon">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#38bdf8" strokeWidth="2"/>
-                <path d="M9 12l2 2 4-4" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round"/>
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#38bdf8" strokeWidth="2" />
+                <path d="M9 12l2 2 4-4" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" />
               </svg>
-              <span>SOC 2 aligned • 99.9% data accuracy</span>
+              <span>Enterprise-ready security • Automated document verification</span>
             </div>
 
             <h1 className="hero-title">
@@ -149,7 +164,7 @@ export default function HomePage() {
               <button className="btn-primary-hero" onClick={() => handleAuthNavigation()}>
                 <span>Start Verifying</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
 
@@ -181,7 +196,7 @@ export default function HomePage() {
                 />
               </div>
               <p className="social-proof-text">
-                <strong>500+ organizations</strong> verify candidates on this platform
+                <strong>Built for modern hiring teams</strong> to verify candidates on this platform
               </p>
             </div>
           </div>
@@ -194,11 +209,11 @@ export default function HomePage() {
                 <div className="candidate-id-wrap">
                   <span className="id-label">CANDIDATE ID</span>
                   <span className="id-dot">•</span>
-                  <span className="id-value">#BGV-88204</span>
+                  <span className="id-value">#DEMO-SAMPLE</span>
                 </div>
                 <div className="live-status-pill">
                   <span className="pulse-dot"></span>
-                  <span>LIVE</span>
+                  <span>DEMO VERIFICATION</span>
                 </div>
               </div>
 
@@ -289,16 +304,16 @@ export default function HomePage() {
               {/* Bottom Metrics Bar */}
               <div className="card-metrics-footer">
                 <div className="metric-col">
-                  <span className="metric-lbl">TRUST SCORE</span>
-                  <span className="metric-val text-white">94/100</span>
+                  <span className="metric-lbl">METRIC</span>
+                  <span className="metric-val text-white">Verification Progress</span>
                 </div>
                 <div className="metric-col">
-                  <span className="metric-lbl">TURNAROUND</span>
-                  <span className="metric-val text-white">1.8 days</span>
+                  <span className="metric-lbl">TRACKING</span>
+                  <span className="metric-val text-white">Workflow tracking</span>
                 </div>
                 <div className="metric-col">
                   <span className="metric-lbl">STATUS</span>
-                  <span className="metric-val text-emerald">3/4 Cleared</span>
+                  <span className="metric-val text-emerald">Verification in Progress</span>
                 </div>
               </div>
             </div>
@@ -312,49 +327,54 @@ export default function HomePage() {
       <div className="ticker-banner">
         <div className="ticker-track">
           <div className="ticker-item">
-            <span className="item-id">#BGV-88201</span>
-            <span className="item-txt">Education verified • Anna University</span>
+            <span className="item-id">DEMO</span>
+            <span className="item-txt">Identity Verification</span>
           </div>
           <div className="ticker-divider">•</div>
           <div className="ticker-item">
-            <span className="item-id">#BGV-88155</span>
-            <span className="item-txt">Employment record matched</span>
+            <span className="item-id">DEMO</span>
+            <span className="item-txt">Education Verification</span>
           </div>
           <div className="ticker-divider">•</div>
           <div className="ticker-item">
-            <span className="item-id">#BGV-88190</span>
-            <span className="item-txt">Criminal check in progress</span>
+            <span className="item-id">DEMO</span>
+            <span className="item-txt">Employment Verification</span>
           </div>
           <div className="ticker-divider">•</div>
           <div className="ticker-item">
-            <span className="item-id">#BGV-88204</span>
-            <span className="item-txt">Address verified</span>
+            <span className="item-id">DEMO</span>
+            <span className="item-txt">Document Review</span>
           </div>
           <div className="ticker-divider">•</div>
           <div className="ticker-item">
-            <span className="item-id">#BGV-88210</span>
-            <span className="item-txt">Aadhaar & PAN validated</span>
+            <span className="item-id">DEMO</span>
+            <span className="item-txt">BGV Workflow</span>
           </div>
           <div className="ticker-divider">•</div>
           {/* Duplicate set for smooth infinite marquee */}
           <div className="ticker-item">
-            <span className="item-id">#BGV-88201</span>
-            <span className="item-txt">Education verified • Anna University</span>
+            <span className="item-id">DEMO</span>
+            <span className="item-txt">Identity Verification</span>
           </div>
           <div className="ticker-divider">•</div>
           <div className="ticker-item">
-            <span className="item-id">#BGV-88155</span>
-            <span className="item-txt">Employment record matched</span>
+            <span className="item-id">DEMO</span>
+            <span className="item-txt">Education Verification</span>
           </div>
           <div className="ticker-divider">•</div>
           <div className="ticker-item">
-            <span className="item-id">#BGV-88190</span>
-            <span className="item-txt">Criminal check in progress</span>
+            <span className="item-id">DEMO</span>
+            <span className="item-txt">Employment Verification</span>
           </div>
           <div className="ticker-divider">•</div>
           <div className="ticker-item">
-            <span className="item-id">#BGV-88204</span>
-            <span className="item-txt">Address verified</span>
+            <span className="item-id">DEMO</span>
+            <span className="item-txt">Document Review</span>
+          </div>
+          <div className="ticker-divider">•</div>
+          <div className="ticker-item">
+            <span className="item-id">DEMO</span>
+            <span className="item-txt">BGV Workflow</span>
           </div>
         </div>
       </div>
@@ -413,7 +433,7 @@ export default function HomePage() {
                   <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
                 </svg>
               </div>
-              <h3 className="why-card-title">24–48 Hour Turnaround</h3>
+              <h3 className="why-card-title">Streamlined Verification Workflow</h3>
               <p className="why-card-desc">
                 Parallelized checks and real-time status updates mean most cases close before your next interview round.
               </p>
@@ -536,8 +556,8 @@ export default function HomePage() {
               </svg>
             </div>
             <div className="metric-text-group">
-              <span className="metric-number">500+</span>
-              <span className="metric-label">Organizations Onboarded</span>
+              <span className="metric-number">Enterprise</span>
+              <span className="metric-label">Built for modern hiring teams</span>
             </div>
           </div>
 
@@ -550,8 +570,8 @@ export default function HomePage() {
               </svg>
             </div>
             <div className="metric-text-group">
-              <span className="metric-number">10K+</span>
-              <span className="metric-label">Verifications Completed</span>
+              <span className="metric-number">End-to-End</span>
+              <span className="metric-label">End-to-end BGV workflow</span>
             </div>
           </div>
 
@@ -564,8 +584,8 @@ export default function HomePage() {
               </svg>
             </div>
             <div className="metric-text-group">
-              <span className="metric-number">24–48h</span>
-              <span className="metric-label">Average Turnaround</span>
+              <span className="metric-number">Streamlined</span>
+              <span className="metric-label">Streamlined verification workflow</span>
             </div>
           </div>
 
@@ -578,8 +598,8 @@ export default function HomePage() {
               </svg>
             </div>
             <div className="metric-text-group">
-              <span className="metric-number">99.9%</span>
-              <span className="metric-label">Data Accuracy</span>
+              <span className="metric-number">Automated</span>
+              <span className="metric-label">Automated document verification</span>
             </div>
           </div>
         </div>

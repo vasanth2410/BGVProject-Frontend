@@ -61,7 +61,7 @@ export const clearAuthSession = () => {
 
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (key && (key.startsWith("candidate_avatar_") || key === "theme")) {
+    if (key && (key.startsWith("candidate_avatar_") || key.startsWith("user_name_") || key === "theme")) {
       // Clean up old global key if present
       if (key === "candidate_avatar_latest" || key === "bgv_global_candidate_avatar") continue;
       const val = localStorage.getItem(key);

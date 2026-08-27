@@ -613,9 +613,19 @@
   transition: color 0.2s;
 }
 
+/* Hide browser native password reveal / clear icons */
+.input-box input::-ms-reveal,
+.input-box input::-ms-clear,
+.input-box input::-webkit-contacts-auto-fill-button,
+.input-box input::-webkit-credentials-auto-fill-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 .input-box input {
   width: 100%;
-  padding: 12px 14px 12px 42px;
+  padding: 12px 42px 12px 42px;
   background: rgba(15, 23, 42, 0.7);
   border: 1.5px solid rgba(255, 255, 255, 0.12);
   border-radius: 10px;
@@ -643,15 +653,17 @@
 
 .show-pass-btn {
   position: absolute;
-  right: 14px;
+  right: 12px;
   background: transparent;
   border: none;
-  font-size: 12px;
-  font-weight: 700;
   color: #94a3b8;
   cursor: pointer;
-  padding: 4px;
-  transition: color 0.2s;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s, transform 0.2s;
+  border-radius: 6px;
 }
 
 .show-pass-btn:hover {

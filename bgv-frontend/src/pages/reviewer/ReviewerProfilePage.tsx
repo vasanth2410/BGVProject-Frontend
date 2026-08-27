@@ -57,6 +57,7 @@ export default function ReviewerProfilePage() {
 
   const handleSave = () => {
     localStorage.setItem("name", editName);
+    localStorage.setItem(`user_name_${editEmail.toLowerCase()}`, editName);
     localStorage.setItem("email", editEmail);
     localStorage.setItem("reviewer_employeeId", editEmployeeId);
     localStorage.setItem("reviewer_department", editDepartment);

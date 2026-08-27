@@ -305,7 +305,7 @@ export default function CandidateLayout() {
             sx={{
               display: "flex",
               alignItems: "center",
-              p: 3,
+              p: 1.5,
               cursor: "pointer",
               transition: "background-color 0.25s ease",
               "&:hover": {
@@ -318,8 +318,11 @@ export default function CandidateLayout() {
               src={avatarUrl || undefined}
               sx={{
                 bgcolor: "#2F66E8",
-                mr: 2,
+                mr: 1.5,
                 fontWeight: 700,
+                width: 34,
+                height: 34,
+                fontSize: 13,
               }}
             >
               {!avatarUrl && (profile?.fullName ? getInitials(profile.fullName) : "C")}
@@ -329,6 +332,7 @@ export default function CandidateLayout() {
               <Typography
                 sx={{
                   fontWeight: 700,
+                  fontSize: 13,
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
@@ -342,7 +346,7 @@ export default function CandidateLayout() {
                 variant="body2"
                 sx={{
                   opacity: 0.8,
-                  fontSize: 12,
+                  fontSize: 11,
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
@@ -357,23 +361,23 @@ export default function CandidateLayout() {
 
           <Box
             sx={{
-              p: 2,
+              p: 1.5,
             }}
           >
 
             <Button
               fullWidth
               variant="text"
-              startIcon={<LogoutIcon />}
+              startIcon={<LogoutIcon sx={{ fontSize: 18 }} />}
               onClick={handleLogoutClick}
               sx={{
                 color: "#fff",
                 justifyContent: "flex-start",
                 borderRadius: 3,
-                px: 2.5,
-                py: 1.5,
+                px: 2,
+                py: 0.8,
                 textTransform: "none",
-                fontSize: "15px",
+                fontSize: "13px",
                 fontWeight: 500,
                 transition: "all 0.25s ease",
                 "&:hover": {

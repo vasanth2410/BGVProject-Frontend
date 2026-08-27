@@ -29,6 +29,7 @@ export default function AdminProfilePage() {
 
   const handleSave = () => {
     localStorage.setItem("name", editName);
+    localStorage.setItem(`user_name_${editEmail.toLowerCase()}`, editName);
     localStorage.setItem("email", editEmail);
     setName(editName);
     setEmail(editEmail);

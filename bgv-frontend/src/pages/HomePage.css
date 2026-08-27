@@ -17,6 +17,15 @@
   box-sizing: border-box;
 }
 
+.animated-number-span {
+  display: inline-block;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.animated-number-span:hover {
+  transform: scale(1.08);
+}
+
 /* ============================================================ */
 /* 1. NAVBAR */
 /* ============================================================ */
@@ -183,6 +192,36 @@
   background: radial-gradient(circle at 50% 0%, #0e1c3e 0%, #080c14 75%);
   padding: 3rem 2rem 3.5rem;
   overflow: hidden;
+  --mouse-x: 50%;
+  --mouse-y: 30%;
+}
+
+.hero-grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(56, 189, 248, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
+  mask-image: radial-gradient(circle 480px at var(--mouse-x) var(--mouse-y), black 0%, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle 480px at var(--mouse-x) var(--mouse-y), black 0%, transparent 80%);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.hero-cursor-spotlight {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    650px circle at var(--mouse-x) var(--mouse-y),
+    rgba(37, 99, 235, 0.22),
+    rgba(0, 240, 255, 0.08) 35%,
+    transparent 75%
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
 .hero-glow {
@@ -358,12 +397,12 @@
 
 .social-proof-text {
   font-size: 0.85rem;
-  color: #94a3b8 !important;
+  color: #94a3b8;
   margin: 0;
 }
 
 .social-proof-text strong {
-  color: #ffffff !important;
+  color: #ffffff;
 }
 
 /* Right Hero Column: Live Candidate Card */
@@ -435,9 +474,20 @@
 }
 
 @keyframes pulse-green {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
 }
 
 .checks-list {
@@ -574,8 +624,13 @@
 }
 
 @keyframes ticker-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .ticker-item {
@@ -988,24 +1043,24 @@
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }
-  
+
   .hero-title {
     font-size: 2.5rem;
   }
-  
+
   .why-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .stakeholders-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .metrics-container {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.25rem;
   }
-  
+
   .cta-card {
     padding: 2rem 1.5rem;
     flex-direction: column;
@@ -1018,7 +1073,7 @@
   .nav-links {
     display: none;
   }
-  
+
   .hero-title {
     font-size: 2rem;
   }
@@ -1026,11 +1081,11 @@
   .why-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .metrics-container {
     grid-template-columns: 1fr;
   }
-  
+
   .footer-container {
     flex-direction: column;
     gap: 0.4rem;
@@ -1081,6 +1136,15 @@ body:not(.dark-mode) .btn-secondary-hero {
   background: #ffffff;
   color: #0f172a !important;
   border: 1px solid #cbd5e1;
+}
+
+body:not(.dark-mode) .social-proof-text {
+  color: #475569 !important;
+}
+
+body:not(.dark-mode) .social-proof-text strong,
+body:not(.dark-mode) .social-proof-text .animated-number-span {
+  color: #0f172a !important;
 }
 
 body:not(.dark-mode) .candidate-live-card {
@@ -1234,4 +1298,20 @@ body:not(.dark-mode) .landing-footer {
 
 body:not(.dark-mode) .footer-container p {
   color: #64748b !important;
+}
+
+/* Light mode Grid Pattern & Spotlight */
+body:not(.dark-mode) .hero-grid-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(37, 99, 235, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(37, 99, 235, 0.12) 1px, transparent 1px);
+}
+
+body:not(.dark-mode) .hero-cursor-spotlight {
+  background: radial-gradient(
+    650px circle at var(--mouse-x) var(--mouse-y),
+    rgba(37, 99, 235, 0.14),
+    rgba(56, 189, 248, 0.06) 35%,
+    transparent 75%
+  );
 }
