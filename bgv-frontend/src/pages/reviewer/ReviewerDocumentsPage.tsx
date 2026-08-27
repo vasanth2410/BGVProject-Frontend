@@ -436,7 +436,7 @@ export default function ReviewerDocumentsPage() {
                           startIcon={<VisibilityIcon sx={{ fontSize: 15 }} />}
                           onClick={() =>
                             window.open(
-                              `https://localhost:7006/api/Documents/download/${doc.id}`,
+                              `${import.meta.env.VITE_API_BASE_URL || "https://bgvsystem-api.onrender.com/api"}/Documents/download/${doc.id}`,
                               "_blank"
                             )
                           }
@@ -454,7 +454,7 @@ export default function ReviewerDocumentsPage() {
                           variant="contained"
                           startIcon={<DownloadIcon sx={{ fontSize: 15 }} />}
                           onClick={() =>
-                            (window.location.href = `https://localhost:7006/api/Documents/download/${doc.id}`)
+                            (window.location.href = `${import.meta.env.VITE_API_BASE_URL || "https://bgvsystem-api.onrender.com/api"}/Documents/download/${doc.id}`)
                           }
                           sx={{
                             borderRadius: 2,

@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://bgvsystem-api.onrender.com/api";
+
 const apiClient = axios.create({
-  baseURL: "https://localhost:7006/api",
+  baseURL: API_BASE,
   headers: {
     "Content-Type": "application/json",
   },
