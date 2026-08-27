@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { login, resetPassword } from "../../services/AuthService";
+import { login, register, resetPassword } from "../../services/AuthService";
 import "./LoginPage.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
 
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [roleId, setRoleId] = useState(3); // Default Candidate
   const [showPassword, setShowPassword] = useState(false);
+  const [regSuccess, setRegSuccess] = useState("");
 
   // Reset password states
   const [showResetModal, setShowResetModal] = useState(false);
@@ -43,6 +47,40 @@ export default function LoginPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const handleRegister = async () => {
+    if (!fullName || !email || !password) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+      setRegSuccess("");
+
+      await register({
+        fullName,
+        email,
+        password,
+        roleId: Number(roleId),
+      });
+
+      setRegSuccess("Account registered successfully! You can now sign in.");
+      setIsRegistering(false);
+      setFullName("");
+    } catch (err: any) {
+      console.error(err);
+      setError(
+        err.response?.data?.message ||
+          err.response?.data ||
+          err.message ||
+          "Registration failed. Email may already exist."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogin = async () => {
     try {
@@ -356,23 +394,84 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Right Column: Glassmorphic Sign In Card */}
+          {/* Right Column: Glassmorphic Sign In / Register Card */}
           <div className="card-area">
             <div className="login-glass-card">
+              {/* Tab Switcher */}
+              <div className="auth-tab-row">
+                <button
+                  type="button"
+                  className={`auth-tab-btn ${!isRegistering ? "active" : ""}`}
+                  onClick={() => {
+                    setIsRegistering(false);
+                    setError("");
+                    setRegSuccess("");
+                  }}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  className={`auth-tab-btn ${isRegistering ? "active" : ""}`}
+                  onClick={() => {
+                    setIsRegistering(true);
+                    setError("");
+                    setRegSuccess("");
+                  }}
+                >
+                  Register
+                </button>
+              </div>
+
               <div className="card-top-header">
                 <h2 className="welcome-heading">
-                  Welcome Back! <span className="hand-wave">👋</span>
+                  {isRegistering ? (
+                    <>Create Account <span className="hand-wave">🚀</span></>
+                  ) : (
+                    <>Welcome Back! <span className="hand-wave">👋</span></>
+                  )}
                 </h2>
-                <p className="welcome-subtext">Sign in to continue to your account</p>
+                <p className="welcome-subtext">
+                  {isRegistering
+                    ? "Register to start your background verification"
+                    : "Sign in to continue to your account"}
+                </p>
               </div>
 
               <form
                 className="signin-form"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  handleLogin();
+                  if (isRegistering) {
+                    handleRegister();
+                  } else {
+                    handleLogin();
+                  }
                 }}
               >
+                {/* Full Name Input (Register Only) */}
+                {isRegistering && (
+                  <div className="form-field">
+                    <label className="form-label" htmlFor="fullname-input">
+                      Full Name
+                    </label>
+                    <div className="input-box">
+                      <svg className="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                      </svg>
+                      <input
+                        id="fullname-input"
+                        type="text"
+                        placeholder="Enter your full name"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {/* Email Input */}
                 <div className="form-field">
                   <label className="form-label" htmlFor="email-input">
@@ -400,16 +499,18 @@ export default function LoginPage() {
                     <label className="form-label" htmlFor="password-input">
                       Password
                     </label>
-                    <span
-                      className="forgot-pass-link"
-                      onClick={() => {
-                        setShowResetModal(true);
-                        setResetSuccessMsg("");
-                        setResetErrorMsg("");
-                      }}
-                    >
-                      Forgot Password?
-                    </span>
+                    {!isRegistering && (
+                      <span
+                        className="forgot-pass-link"
+                        onClick={() => {
+                          setShowResetModal(true);
+                          setResetSuccessMsg("");
+                          setResetErrorMsg("");
+                        }}
+                      >
+                        Forgot Password?
+                      </span>
+                    )}
                   </div>
                   <div className="input-box">
                     <svg className="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -446,21 +547,59 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* Remember Me */}
-                <div className="remember-box">
-                  <label className="checkbox-wrap">
-                    <input type="checkbox" defaultChecked />
-                    <span className="checkbox-box"></span>
-                    <span className="checkbox-label-text">Remember me</span>
-                  </label>
-                </div>
+                {/* Role Selector Input (Register Only) */}
+                {isRegistering && (
+                  <div className="form-field">
+                    <label className="form-label" htmlFor="role-input">
+                      Account Role
+                    </label>
+                    <div className="input-box">
+                      <svg className="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                      </svg>
+                      <select
+                        id="role-input"
+                        className="role-select-box"
+                        value={roleId}
+                        onChange={(e) => setRoleId(Number(e.target.value))}
+                      >
+                        <option value={3}>Candidate (Default)</option>
+                        <option value={2}>Reviewer</option>
+                        <option value={1}>Admin</option>
+                      </select>
+                    </div>
+                  </div>
+                )}
+
+                {/* Remember Me (Login Only) */}
+                {!isRegistering && (
+                  <div className="remember-box">
+                    <label className="checkbox-wrap">
+                      <input type="checkbox" defaultChecked />
+                      <span className="checkbox-box"></span>
+                      <span className="checkbox-label-text">Remember me</span>
+                    </label>
+                  </div>
+                )}
+
+                {/* Success Banner */}
+                {regSuccess && <div className="success-alert">{regSuccess}</div>}
 
                 {/* Error Banner */}
                 {error && <div className="error-alert">{error}</div>}
 
-                {/* Sign In Button */}
+                {/* Submit Button */}
                 <button type="submit" className="submit-btn" disabled={loading}>
-                  <span>{loading ? "Signing In..." : "Sign In"}</span>
+                  <span>
+                    {loading
+                      ? isRegistering
+                        ? "Creating Account..."
+                        : "Signing In..."
+                      : isRegistering
+                      ? "Create Account"
+                      : "Sign In"}
+                  </span>
                   {!loading && (
                     <svg className="arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <path d="M5 12h14M12 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
