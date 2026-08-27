@@ -48,6 +48,15 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const getErrorMessage = (err: any): string => {
+    if (!err) return "An unknown error occurred.";
+    if (typeof err.response?.data === "string") return err.response.data;
+    if (typeof err.response?.data?.Message === "string") return err.response.data.Message;
+    if (typeof err.response?.data?.message === "string") return err.response.data.message;
+    if (typeof err.message === "string") return err.message;
+    return "Registration failed. Please try again or check if email exists.";
+  };
+
   const handleRegister = async () => {
     if (!fullName || !email || !password) {
       setError("Please fill in all fields.");
@@ -71,12 +80,7 @@ export default function LoginPage() {
       setFullName("");
     } catch (err: any) {
       console.error(err);
-      setError(
-        err.response?.data?.message ||
-          err.response?.data ||
-          err.message ||
-          "Registration failed. Email may already exist."
-      );
+      setError(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
