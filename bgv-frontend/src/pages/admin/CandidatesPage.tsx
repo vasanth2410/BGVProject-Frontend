@@ -10,6 +10,9 @@ import { useNavigate, useLocation }
 import AddCandidateModal
   from "../../components/AddCandidateModal";
 
+import AddReviewerModal
+  from "../../components/admin/AddReviewerModal";
+
 import AdminLayout
   from "../../layouts/AdminLayout";
 
@@ -46,6 +49,7 @@ export default function CandidatesPage() {
   const [statusTab, setStatusTab] = useState<"All" | "Pending" | "Approved" | "Rejected">("All");
   const [showModal, setShowModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
+  const [showAddReviewerModal, setShowAddReviewerModal] = useState(false);
 
   const loadCandidates = async () => {
     try {
@@ -159,6 +163,16 @@ export default function CandidatesPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
+
+            <button
+              className="add-button"
+              onClick={() => setShowAddReviewerModal(true)}
+              style={{
+                background: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
+              }}
+            >
+              + Add Reviewer
+            </button>
 
             <button
               className="add-button"
@@ -341,6 +355,12 @@ export default function CandidatesPage() {
   />
 
 )}
+
+        <AddReviewerModal
+          open={showAddReviewerModal}
+          onClose={() => setShowAddReviewerModal(false)}
+          onSuccess={() => setShowAddReviewerModal(false)}
+        />
 
       </div>
 
