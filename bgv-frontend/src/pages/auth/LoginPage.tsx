@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login, register, resetPassword } from "../../services/AuthService";
+import ChangePasswordModal from "../../components/auth/ChangePasswordModal";
 import "./LoginPage.css";
 
 export default function LoginPage() {
@@ -13,6 +14,11 @@ export default function LoginPage() {
   const [roleId, setRoleId] = useState(3); // Default Candidate
   const [showPassword, setShowPassword] = useState(false);
   const [regSuccess, setRegSuccess] = useState("");
+
+  // Forced password change states
+  const [showMustChangePasswordModal, setShowMustChangePasswordModal] = useState(false);
+  const [pendingUserEmail, setPendingUserEmail] = useState("");
+  const [pendingUserRole, setPendingUserRole] = useState("");
 
   // Reset password states
   const [showResetModal, setShowResetModal] = useState(false);
@@ -106,6 +112,13 @@ export default function LoginPage() {
       } else if (result.fullName) {
         localStorage.setItem("name", result.fullName);
         localStorage.setItem(`user_name_${result.email.toLowerCase()}`, result.fullName);
+      }
+
+      if (result.mustChangePassword) {
+        setPendingUserEmail(result.email);
+        setPendingUserRole(result.role);
+        setShowMustChangePasswordModal(true);
+        return;
       }
 
       if (result.role === "Admin") {
@@ -551,30 +564,7 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                {/* Role Selector Input (Register Only) */}
-                {isRegistering && (
-                  <div className="form-field">
-                    <label className="form-label" htmlFor="role-input">
-                      Account Role
-                    </label>
-                    <div className="input-box">
-                      <svg className="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                      </svg>
-                      <select
-                        id="role-input"
-                        className="role-select-box"
-                        value={roleId}
-                        onChange={(e) => setRoleId(Number(e.target.value))}
-                      >
-                        <option value={3}>Candidate (Default)</option>
-                        <option value={2}>Reviewer</option>
-                        <option value={1}>Admin</option>
-                      </select>
-                    </div>
-                  </div>
-                )}
+
 
                 {/* Remember Me (Login Only) */}
                 {!isRegistering && (
@@ -719,6 +709,22 @@ export default function LoginPage() {
           </div>
         </div>
       )}
+
+      {/* Mandatory First-Login Password Change Modal */}
+      <ChangePasswordModal
+        open={showMustChangePasswordModal}
+        email={pendingUserEmail}
+        onSuccess={() => {
+          setShowMustChangePasswordModal(false);
+          if (pendingUserRole === "Admin") {
+            navigate("/admin");
+          } else if (pendingUserRole === "Reviewer") {
+            navigate("/reviewer");
+          } else {
+            navigate("/candidate");
+          }
+        }}
+      />
     </div>
   );
 }

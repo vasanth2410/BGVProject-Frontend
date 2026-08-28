@@ -45,3 +45,11 @@ export const cleanupDuplicateAssignments = async () => {
   const response = await apiClient.post("/Assignment/cleanup-duplicates");
   return response.data;
 };
+
+export const createReviewer = async (fullName: string, email: string) => {
+  const response = await apiClient.post("/Admin/reviewers", {
+    fullName,
+    email,
+  });
+  return response.data;
+};

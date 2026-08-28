@@ -8,4 +8,5 @@ export interface LoginResponse {
   email: string;
   role: string;
   fullName?: string;
+  mustChangePassword?: boolean;
 }
