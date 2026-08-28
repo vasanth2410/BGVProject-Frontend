@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [roleId, setRoleId] = useState(3); // Default Candidate
+  const roleId = 3; // Default Candidate role
   const [showPassword, setShowPassword] = useState(false);
   const [regSuccess, setRegSuccess] = useState("");
 

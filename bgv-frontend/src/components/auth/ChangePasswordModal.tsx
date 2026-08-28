@@ -73,7 +73,6 @@ export default function ChangePasswordModal({
   return (
     <Dialog
       open={open}
-      disableEscapeKeyDown
       maxWidth="xs"
       fullWidth
       slotProps={{
