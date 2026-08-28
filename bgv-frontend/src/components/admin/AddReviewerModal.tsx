@@ -193,14 +193,23 @@ export default function AddReviewerModal({
             required
             sx={{
               mb: 2,
+              "& .MuiInputBase-input": {
+                color: "#ffffff !important",
+                WebkitTextFillColor: "#ffffff !important",
+              },
+              "& input:-webkit-autofill": {
+                WebkitBoxShadow: "0 0 0 100px #1e293b inset !important",
+                WebkitTextFillColor: "#ffffff !important",
+              },
               "& .MuiOutlinedInput-root": {
                 color: "#ffffff",
                 borderRadius: "12px",
-                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
-                "&:hover fieldset": { borderColor: "rgba(56, 189, 248, 0.5)" },
+                backgroundColor: "rgba(15, 23, 42, 0.6)",
+                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.25)" },
+                "&:hover fieldset": { borderColor: "#38bdf8" },
                 "&.Mui-focused fieldset": { borderColor: "#38bdf8" },
               },
-              "& .MuiInputLabel-root": { color: "#94a3b8" },
+              "& .MuiInputLabel-root": { color: "#cbd5e1" },
               "& .MuiInputLabel-root.Mui-focused": { color: "#38bdf8" },
             }}
           />
@@ -216,14 +225,23 @@ export default function AddReviewerModal({
             required
             sx={{
               mb: 1,
+              "& .MuiInputBase-input": {
+                color: "#ffffff !important",
+                WebkitTextFillColor: "#ffffff !important",
+              },
+              "& input:-webkit-autofill": {
+                WebkitBoxShadow: "0 0 0 100px #1e293b inset !important",
+                WebkitTextFillColor: "#ffffff !important",
+              },
               "& .MuiOutlinedInput-root": {
                 color: "#ffffff",
                 borderRadius: "12px",
-                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
-                "&:hover fieldset": { borderColor: "rgba(56, 189, 248, 0.5)" },
+                backgroundColor: "rgba(15, 23, 42, 0.6)",
+                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.25)" },
+                "&:hover fieldset": { borderColor: "#38bdf8" },
                 "&.Mui-focused fieldset": { borderColor: "#38bdf8" },
               },
-              "& .MuiInputLabel-root": { color: "#94a3b8" },
+              "& .MuiInputLabel-root": { color: "#cbd5e1" },
               "& .MuiInputLabel-root.Mui-focused": { color: "#38bdf8" },
             }}
           />
@@ -249,8 +267,12 @@ export default function AddReviewerModal({
               py: 1.2,
               fontWeight: 600,
               textTransform: "none",
-              borderColor: "rgba(255, 255, 255, 0.15)",
-              color: "#cbd5e1",
+              borderColor: "rgba(255, 255, 255, 0.3)",
+              color: "#ffffff !important",
+              "&:hover": {
+                borderColor: "#ffffff",
+                background: "rgba(255, 255, 255, 0.1)",
+              },
             }}
           >
             Cancel
@@ -267,11 +289,14 @@ export default function AddReviewerModal({
               fontWeight: 700,
               textTransform: "none",
               background: "linear-gradient(135deg, #2563eb 0%, #0284c7 100%)",
-              color: "#ffffff",
+              color: "#ffffff !important",
               boxShadow: "0 6px 20px rgba(37, 99, 235, 0.4)",
+              "&:hover": {
+                background: "linear-gradient(135deg, #1d4ed8 0%, #0369a1 100%)",
+              },
             }}
           >
-            {loading ? <CircularProgress size={22} color="inherit" /> : "Create Reviewer"}
+            {loading ? <CircularProgress size={22} sx={{ color: "#ffffff" }} /> : "Create Reviewer"}
           </Button>
         </DialogActions>
       </form>

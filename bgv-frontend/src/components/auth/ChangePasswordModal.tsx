@@ -190,14 +190,23 @@ export default function ChangePasswordModal({
             placeholder="Enter temporary password"
             sx={{
               mb: 2,
+              "& .MuiInputBase-input": {
+                color: "#ffffff !important",
+                WebkitTextFillColor: "#ffffff !important",
+              },
+              "& input:-webkit-autofill": {
+                WebkitBoxShadow: "0 0 0 100px #1e293b inset !important",
+                WebkitTextFillColor: "#ffffff !important",
+              },
               "& .MuiOutlinedInput-root": {
                 color: "#ffffff",
                 borderRadius: "12px",
-                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
-                "&:hover fieldset": { borderColor: "rgba(251, 191, 36, 0.5)" },
+                backgroundColor: "rgba(15, 23, 42, 0.6)",
+                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.25)" },
+                "&:hover fieldset": { borderColor: "#fbbf24" },
                 "&.Mui-focused fieldset": { borderColor: "#fbbf24" },
               },
-              "& .MuiInputLabel-root": { color: "#94a3b8" },
+              "& .MuiInputLabel-root": { color: "#cbd5e1" },
               "& .MuiInputLabel-root.Mui-focused": { color: "#fbbf24" },
             }}
           />
@@ -214,14 +223,23 @@ export default function ChangePasswordModal({
             placeholder="Enter new password"
             sx={{
               mb: 2,
+              "& .MuiInputBase-input": {
+                color: "#ffffff !important",
+                WebkitTextFillColor: "#ffffff !important",
+              },
+              "& input:-webkit-autofill": {
+                WebkitBoxShadow: "0 0 0 100px #1e293b inset !important",
+                WebkitTextFillColor: "#ffffff !important",
+              },
               "& .MuiOutlinedInput-root": {
                 color: "#ffffff",
                 borderRadius: "12px",
-                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
-                "&:hover fieldset": { borderColor: "rgba(251, 191, 36, 0.5)" },
+                backgroundColor: "rgba(15, 23, 42, 0.6)",
+                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.25)" },
+                "&:hover fieldset": { borderColor: "#fbbf24" },
                 "&.Mui-focused fieldset": { borderColor: "#fbbf24" },
               },
-              "& .MuiInputLabel-root": { color: "#94a3b8" },
+              "& .MuiInputLabel-root": { color: "#cbd5e1" },
               "& .MuiInputLabel-root.Mui-focused": { color: "#fbbf24" },
             }}
           />
@@ -238,14 +256,23 @@ export default function ChangePasswordModal({
             placeholder="Confirm new password"
             sx={{
               mb: 1,
+              "& .MuiInputBase-input": {
+                color: "#ffffff !important",
+                WebkitTextFillColor: "#ffffff !important",
+              },
+              "& input:-webkit-autofill": {
+                WebkitBoxShadow: "0 0 0 100px #1e293b inset !important",
+                WebkitTextFillColor: "#ffffff !important",
+              },
               "& .MuiOutlinedInput-root": {
                 color: "#ffffff",
                 borderRadius: "12px",
-                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.2)" },
-                "&:hover fieldset": { borderColor: "rgba(251, 191, 36, 0.5)" },
+                backgroundColor: "rgba(15, 23, 42, 0.6)",
+                "& fieldset": { borderColor: "rgba(255, 255, 255, 0.25)" },
+                "&:hover fieldset": { borderColor: "#fbbf24" },
                 "&.Mui-focused fieldset": { borderColor: "#fbbf24" },
               },
-              "& .MuiInputLabel-root": { color: "#94a3b8" },
+              "& .MuiInputLabel-root": { color: "#cbd5e1" },
               "& .MuiInputLabel-root.Mui-focused": { color: "#fbbf24" },
             }}
           />
@@ -271,14 +298,14 @@ export default function ChangePasswordModal({
               fontWeight: 700,
               textTransform: "none",
               background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
-              color: "#ffffff",
+              color: "#ffffff !important",
               boxShadow: "0 6px 20px rgba(245, 158, 11, 0.4)",
               "&:hover": {
                 background: "linear-gradient(135deg, #d97706 0%, #b45309 100%)",
               },
             }}
           >
-            {loading ? <CircularProgress size={22} color="inherit" /> : "Update Password & Continue"}
+            {loading ? <CircularProgress size={22} sx={{ color: "#ffffff" }} /> : "Update Password & Continue"}
           </Button>
         </DialogActions>
       </form>

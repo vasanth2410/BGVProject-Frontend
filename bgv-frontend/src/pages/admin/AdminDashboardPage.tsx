@@ -6,6 +6,7 @@ import {
   CheckCircle,
   Cancel,
   Add,
+  PersonAdd,
   Assignment,
   Assessment,
   CalendarToday,
@@ -23,6 +24,8 @@ import WeeklyTrendChart
 
 import AddCandidateModal
   from "../../components/AddCandidateModal";
+import AddReviewerModal
+  from "../../components/admin/AddReviewerModal";
 import AnimatedCounter from "../../components/AnimatedCounter";
 
 import "./AdminDashboardPage.css";
@@ -86,6 +89,12 @@ export default function AdminDashboardPage() {
   const [
     showModal,
     setShowModal,
+  ] =
+    useState(false);
+
+  const [
+    showAddReviewerModal,
+    setShowAddReviewerModal,
   ] =
     useState(false);
 
@@ -160,6 +169,21 @@ export default function AdminDashboardPage() {
           </div>
 
           <div className="header-right-col">
+
+            <button
+              className="add-btn primary"
+              onClick={() =>
+                setShowAddReviewerModal(true)
+              }
+              style={{
+                background: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
+              }}
+            >
+              <PersonAdd
+                fontSize="small"
+              />
+              Add Reviewer
+            </button>
 
             <button
               className="add-btn primary"
@@ -447,6 +471,12 @@ export default function AdminDashboardPage() {
         />
 
       )}
+
+      <AddReviewerModal
+        open={showAddReviewerModal}
+        onClose={() => setShowAddReviewerModal(false)}
+        onSuccess={() => setShowAddReviewerModal(false)}
+      />
 
     </AdminLayout>
 
