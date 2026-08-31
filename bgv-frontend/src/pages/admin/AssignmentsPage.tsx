@@ -15,14 +15,13 @@ import {
 } from "../../services/AssignmentService";
 
 import AssignCandidateModal from "../../components/AssignCandidateModal";
-import AddReviewerModal from "../../components/admin/AddReviewerModal";
+
 
 export default function AssignmentsPage() {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [showAddReviewerModal, setShowAddReviewerModal] = useState(false);
 
   const loadAssignments = async () => {
     try {
@@ -131,17 +130,7 @@ export default function AssignmentsPage() {
               className="search-input"
             />
 
-            <button
-              onClick={() =>
-                setShowAddReviewerModal(true)
-              }
-              className="add-button"
-              style={{
-                background: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
-              }}
-            >
-              + Add Reviewer
-            </button>
+
 
             <button
               onClick={() =>
@@ -257,11 +246,7 @@ export default function AssignmentsPage() {
 
         )}
 
-        <AddReviewerModal
-          open={showAddReviewerModal}
-          onClose={() => setShowAddReviewerModal(false)}
-          onSuccess={() => setShowAddReviewerModal(false)}
-        />
+
 
       </div>
 

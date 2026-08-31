@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 
 import AssignCandidateModal
-from "../../components/AssignCandidateModal";
+  from "../../components/AssignCandidateModal";
 
 import { useNavigate, useLocation }
   from "react-router-dom";
@@ -10,8 +10,7 @@ import { useNavigate, useLocation }
 import AddCandidateModal
   from "../../components/AddCandidateModal";
 
-import AddReviewerModal
-  from "../../components/admin/AddReviewerModal";
+
 
 import AdminLayout
   from "../../layouts/AdminLayout";
@@ -20,12 +19,12 @@ import {
   getCandidates,
   deleteCandidate,
 }
-from "../../services/CandidateManagementService";
+  from "../../services/CandidateManagementService";
 
 import type {
   Candidate,
 }
-from "../../types/CandidateManagement";
+  from "../../types/CandidateManagement";
 
 import "./CandidatesPage.css";
 
@@ -39,17 +38,16 @@ export default function CandidatesPage() {
 
   const [candidates,
     setCandidates]
-      = useState<Candidate[]>([]);
+    = useState<Candidate[]>([]);
 
   const [loading,
     setLoading]
-      = useState(true);
+    = useState(true);
 
   const [search, setSearch] = useState(location.state?.filter || "");
   const [statusTab, setStatusTab] = useState<"All" | "Pending" | "Approved" | "Rejected">("All");
   const [showModal, setShowModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
-  const [showAddReviewerModal, setShowAddReviewerModal] = useState(false);
 
   const loadCandidates = async () => {
     try {
@@ -164,15 +162,7 @@ export default function CandidatesPage() {
               onChange={(e) => setSearch(e.target.value)}
             />
 
-            <button
-              className="add-button"
-              onClick={() => setShowAddReviewerModal(true)}
-              style={{
-                background: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
-              }}
-            >
-              + Add Reviewer
-            </button>
+
 
             <button
               className="add-button"
@@ -183,148 +173,148 @@ export default function CandidatesPage() {
           </div>
         </div>
 
-    {loading ? (
+        {loading ? (
 
-  <h3>Loading...</h3>
+          <h3>Loading...</h3>
 
-) : (
+        ) : (
 
-  <div className="table-container">
-    <table className="candidate-table">
+          <div className="table-container">
+            <table className="candidate-table">
 
-      <thead>
+              <thead>
 
-      <tr>
+                <tr>
 
-        <th>ID</th>
+                  <th>ID</th>
 
-        <th>Name</th>
+                  <th>Name</th>
 
-        <th>Email</th>
+                  <th>Email</th>
 
-        <th>Phone</th>
+                  <th>Phone</th>
 
-        <th>Status</th>
+                  <th>Status</th>
 
-        <th>Actions</th>
+                  <th>Actions</th>
 
-      </tr>
+                </tr>
 
-    </thead>
+              </thead>
 
-    <tbody>
+              <tbody>
 
-      {filteredCandidates.length === 0 ? (
+                {filteredCandidates.length === 0 ? (
 
-        <tr>
+                  <tr>
 
-          <td
-            colSpan={6}
-            style={{
-              textAlign: "center",
-              padding: "30px",
-            }}
-          >
-            No candidates found.
-          </td>
+                    <td
+                      colSpan={6}
+                      style={{
+                        textAlign: "center",
+                        padding: "30px",
+                      }}
+                    >
+                      No candidates found.
+                    </td>
 
-        </tr>
+                  </tr>
 
-      ) : (
+                ) : (
 
-        filteredCandidates.map((candidate, index) => (
+                  filteredCandidates.map((candidate, index) => (
 
-          <tr
-            key={candidate.id}
-            onClick={() =>
-              navigate(`/admin/candidates/${candidate.id}`)
-            }
-            style={{
-              cursor: "pointer",
-            }}
-          >
+                    <tr
+                      key={candidate.id}
+                      onClick={() =>
+                        navigate(`/admin/candidates/${candidate.id}`)
+                      }
+                      style={{
+                        cursor: "pointer",
+                      }}
+                    >
 
-            <td>{index + 1}</td>
+                      <td>{index + 1}</td>
 
-            <td>{candidate.fullName}</td>
+                      <td>{candidate.fullName}</td>
 
-            <td>{candidate.email}</td>
+                      <td>{candidate.email}</td>
 
-            <td>{candidate.phoneNumber}</td>
+                      <td>{candidate.phoneNumber}</td>
 
-            <td>
+                      <td>
 
-              <span
-                className={
-                  candidate.status === "Pending"
-                    ? "status-pending"
-                    : candidate.status === "Approved"
-                    ? "status-approved"
-                    : "status-rejected"
-                }
-              >
-                {candidate.status}
-              </span>
+                        <span
+                          className={
+                            candidate.status === "Pending"
+                              ? "status-pending"
+                              : candidate.status === "Approved"
+                                ? "status-approved"
+                                : "status-rejected"
+                          }
+                        >
+                          {candidate.status}
+                        </span>
 
-            </td>
+                      </td>
 
-            <td>
+                      <td>
 
-              <div className="action-buttons">
-                <button
-                  className="btn-view"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/admin/candidates/${candidate.id}`);
-                  }}
-                >
-                  View
-                </button>
+                        <div className="action-buttons">
+                          <button
+                            className="btn-view"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/admin/candidates/${candidate.id}`);
+                            }}
+                          >
+                            View
+                          </button>
 
-                <button
-                  className="btn-edit"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/admin/candidates/edit/${candidate.id}`);
-                  }}
-                >
-                  Edit
-                </button>
+                          <button
+                            className="btn-edit"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/admin/candidates/edit/${candidate.id}`);
+                            }}
+                          >
+                            Edit
+                          </button>
 
-                <button
-                  className="btn-delete"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(candidate.id);
-                  }}
-                >
-                  Delete
-                </button>
+                          <button
+                            className="btn-delete"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDelete(candidate.id);
+                            }}
+                          >
+                            Delete
+                          </button>
 
-                <button
-                  className="btn-assign"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowAssignModal(true);
-                  }}
-                >
-                  Assign
-                </button>
-              </div>
+                          <button
+                            className="btn-assign"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowAssignModal(true);
+                            }}
+                          >
+                            Assign
+                          </button>
+                        </div>
 
-            </td>
+                      </td>
 
-          </tr>
+                    </tr>
 
-        ))
+                  ))
 
-      )}
+                )}
 
-    </tbody>
+              </tbody>
 
-    </table>
-  </div>
-)}
+            </table>
+          </div>
+        )}
 
         {showModal && (
 
@@ -341,26 +331,22 @@ export default function CandidatesPage() {
 
         {showAssignModal && (
 
-  <AssignCandidateModal
-    onClose={() =>
-      setShowAssignModal(false)
-    }
-    onSuccess={() => {
+          <AssignCandidateModal
+            onClose={() =>
+              setShowAssignModal(false)
+            }
+            onSuccess={() => {
 
-      alert(
-        "Assignment Created"
-      );
+              alert(
+                "Assignment Created"
+              );
 
-    }}
-  />
+            }}
+          />
 
-)}
+        )}
 
-        <AddReviewerModal
-          open={showAddReviewerModal}
-          onClose={() => setShowAddReviewerModal(false)}
-          onSuccess={() => setShowAddReviewerModal(false)}
-        />
+
 
       </div>
 
