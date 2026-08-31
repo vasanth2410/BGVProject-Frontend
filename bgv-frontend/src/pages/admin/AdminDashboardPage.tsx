@@ -175,9 +175,6 @@ export default function AdminDashboardPage() {
               onClick={() =>
                 setShowAddReviewerModal(true)
               }
-              style={{
-                background: "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
-              }}
             >
               <PersonAdd
                 fontSize="small"
