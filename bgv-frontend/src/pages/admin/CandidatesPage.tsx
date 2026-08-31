@@ -106,8 +106,8 @@ export default function CandidatesPage() {
     return (
       candidate.fullName.toLowerCase().includes(keyword) ||
       candidate.email.toLowerCase().includes(keyword) ||
-      candidate.phoneNumber.toLowerCase().includes(keyword) ||
-      candidate.status.toLowerCase().includes(keyword) ||
+      (candidate.phoneNumber || "").toLowerCase().includes(keyword) ||
+      (candidate.status || "").toLowerCase().includes(keyword) ||
       candidate.id.toString().includes(keyword)
     );
   });

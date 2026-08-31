@@ -16,8 +16,7 @@ import {
   Alert,
   Snackbar,
   InputAdornment,
-  MenuItem,
-  Grid
+  MenuItem
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SaveIcon from "@mui/icons-material/Save";
@@ -163,7 +162,7 @@ export default function EditCandidatePage() {
             <span className="candidate-emoji-icon" style={{ marginRight: "12px" }}>✏️</span> Edit Candidate Profile
           </Typography>
           <Typography color="text.secondary" variant="body2" sx={{ mb: 4 }}>
-            Update all details of candidate including personal information, identifiers, role, and verification status.
+            Update candidate personal information, contact details, identification, role, and status.
           </Typography>
 
           <Box component="form" onSubmit={handleUpdate}>
@@ -171,8 +170,9 @@ export default function EditCandidatePage() {
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: "primary.main", display: "flex", alignItems: "center", gap: 1 }}>
               <PersonIcon fontSize="small" /> Personal & Contact Details
             </Typography>
-            <Grid container spacing={2.5} sx={{ mb: 4 }}>
-              <Grid item xs={12} sm={6}>
+
+            <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 2.5, mb: 4 }}>
+              <Box>
                 <TextField
                   fullWidth
                   label="Full Name *"
@@ -190,9 +190,9 @@ export default function EditCandidatePage() {
                     }
                   }}
                 />
-              </Grid>
+              </Box>
 
-              <Grid item xs={12} sm={6}>
+              <Box>
                 <TextField
                   fullWidth
                   label="Email Address *"
@@ -211,9 +211,9 @@ export default function EditCandidatePage() {
                     }
                   }}
                 />
-              </Grid>
+              </Box>
 
-              <Grid item xs={12} sm={6}>
+              <Box>
                 <TextField
                   fullWidth
                   label="Phone Number"
@@ -230,9 +230,9 @@ export default function EditCandidatePage() {
                     }
                   }}
                 />
-              </Grid>
+              </Box>
 
-              <Grid item xs={12} sm={6}>
+              <Box>
                 <TextField
                   fullWidth
                   select
@@ -255,9 +255,9 @@ export default function EditCandidatePage() {
                   <MenuItem value="Female">Female</MenuItem>
                   <MenuItem value="Other">Other</MenuItem>
                 </TextField>
-              </Grid>
+              </Box>
 
-              <Grid item xs={12} sm={6}>
+              <Box>
                 <TextField
                   fullWidth
                   type="date"
@@ -265,8 +265,8 @@ export default function EditCandidatePage() {
                   name="dateOfBirth"
                   value={formData.dateOfBirth}
                   onChange={handleChange}
-                  InputLabelProps={{ shrink: true }}
                   slotProps={{
+                    inputLabel: { shrink: true },
                     input: {
                       startAdornment: (
                         <InputAdornment position="start">
@@ -276,9 +276,9 @@ export default function EditCandidatePage() {
                     }
                   }}
                 />
-              </Grid>
+              </Box>
 
-              <Grid item xs={12}>
+              <Box sx={{ gridColumn: { xs: "1", sm: "1 / -1" } }}>
                 <TextField
                   fullWidth
                   multiline
@@ -297,15 +297,16 @@ export default function EditCandidatePage() {
                     }
                   }}
                 />
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
 
-            {/* Section 2: Identification Details */}
+            {/* Section 2: Identification Numbers */}
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: "primary.main", display: "flex", alignItems: "center", gap: 1 }}>
               <BadgeIcon fontSize="small" /> Identification Numbers
             </Typography>
-            <Grid container spacing={2.5} sx={{ mb: 4 }}>
-              <Grid item xs={12} sm={6}>
+
+            <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 2.5, mb: 4 }}>
+              <Box>
                 <TextField
                   fullWidth
                   label="PAN Card Number"
@@ -323,9 +324,9 @@ export default function EditCandidatePage() {
                     }
                   }}
                 />
-              </Grid>
+              </Box>
 
-              <Grid item xs={12} sm={6}>
+              <Box>
                 <TextField
                   fullWidth
                   label="Aadhaar Card Number"
@@ -343,15 +344,16 @@ export default function EditCandidatePage() {
                     }
                   }}
                 />
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
 
             {/* Section 3: Job Role & Status */}
             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: "primary.main", display: "flex", alignItems: "center", gap: 1 }}>
               <WorkIcon fontSize="small" /> Role & Verification Status
             </Typography>
-            <Grid container spacing={2.5} sx={{ mb: 4 }}>
-              <Grid item xs={12} sm={4}>
+
+            <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr 1fr" }, gap: 2.5, mb: 4 }}>
+              <Box>
                 <TextField
                   fullWidth
                   label="Applied Role"
@@ -369,9 +371,9 @@ export default function EditCandidatePage() {
                     }
                   }}
                 />
-              </Grid>
+              </Box>
 
-              <Grid item xs={12} sm={4}>
+              <Box>
                 <TextField
                   fullWidth
                   type="date"
@@ -379,8 +381,8 @@ export default function EditCandidatePage() {
                   name="dateOfJoining"
                   value={formData.dateOfJoining}
                   onChange={handleChange}
-                  InputLabelProps={{ shrink: true }}
                   slotProps={{
+                    inputLabel: { shrink: true },
                     input: {
                       startAdornment: (
                         <InputAdornment position="start">
@@ -390,9 +392,9 @@ export default function EditCandidatePage() {
                     }
                   }}
                 />
-              </Grid>
+              </Box>
 
-              <Grid item xs={12} sm={4}>
+              <Box>
                 <TextField
                   fullWidth
                   select
@@ -415,8 +417,8 @@ export default function EditCandidatePage() {
                   <MenuItem value="Approved">Approved</MenuItem>
                   <MenuItem value="Rejected">Rejected</MenuItem>
                 </TextField>
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
 
             <Stack direction="row" spacing={2} sx={{ mt: 4, justifyContent: "flex-end" }}>
               <Button
