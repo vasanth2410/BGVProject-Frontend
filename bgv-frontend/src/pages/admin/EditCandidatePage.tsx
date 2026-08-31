@@ -15,18 +15,53 @@ import {
   Stack,
   Alert,
   Snackbar,
-  InputAdornment
+  InputAdornment,
+  MenuItem,
+  Grid
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import SaveIcon from "@mui/icons-material/Save";
 import PersonIcon from "@mui/icons-material/Person";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
+import HomeIcon from "@mui/icons-material/Home";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import WcIcon from "@mui/icons-material/Wc";
+import BadgeIcon from "@mui/icons-material/Badge";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import WorkIcon from "@mui/icons-material/Work";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
+
+const formatDateForInput = (dateStr?: string) => {
+  if (!dateStr) return "";
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return "";
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  } catch {
+    return "";
+  }
+};
 
 export default function EditCandidatePage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState<any>(null);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    phoneNumber: "",
+    address: "",
+    dateOfBirth: "",
+    gender: "",
+    panNumber: "",
+    aadhaarNumber: "",
+    appliedRole: "",
+    dateOfJoining: "",
+    status: "Pending"
+  });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" }>({
@@ -40,9 +75,28 @@ export default function EditCandidatePage() {
       try {
         setLoading(true);
         const result = await getCandidateById(Number(id));
-        setFormData(result);
+        if (result) {
+          setFormData({
+            fullName: result.fullName || "",
+            email: result.email || "",
+            phoneNumber: result.phoneNumber || "",
+            address: result.address || "",
+            dateOfBirth: formatDateForInput(result.dateOfBirth),
+            gender: result.gender || "",
+            panNumber: result.panNumber || "",
+            aadhaarNumber: result.aadhaarNumber || "",
+            appliedRole: result.appliedRole || "",
+            dateOfJoining: formatDateForInput(result.dateOfJoining),
+            status: result.status || "Pending"
+          });
+        }
       } catch (err) {
         console.error(err);
+        setSnackbar({
+          open: true,
+          message: "Failed to load candidate details.",
+          severity: "error"
+        });
       } finally {
         setLoading(false);
       }
@@ -50,11 +104,12 @@ export default function EditCandidatePage() {
     void loadCandidate();
   }, [id]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleUpdate = async (e: React.FormEvent) => {
@@ -64,7 +119,7 @@ export default function EditCandidatePage() {
       await updateCandidate(Number(id), formData);
       setSnackbar({
         open: true,
-        message: "Candidate updated successfully!",
+        message: "Candidate profile updated successfully!",
         severity: "success"
       });
       setTimeout(() => {
@@ -94,31 +149,35 @@ export default function EditCandidatePage() {
 
   return (
     <AdminLayout>
-      <Box sx={{ p: 4, maxWidth: 800, mx: "auto" }}>
+      <Box sx={{ p: { xs: 2, sm: 4 }, maxWidth: 900, mx: "auto" }}>
         <Button
           startIcon={<ArrowBackIcon />}
           onClick={() => navigate(`/admin/candidates/${id}`)}
           sx={{ mb: 3, textTransform: "none", fontWeight: 600 }}
         >
-          Back to Details
+          Back to Candidate Details
         </Button>
 
-        <Paper sx={{ p: 4, borderRadius: 3, boxShadow: 3 }}>
+        <Paper sx={{ p: { xs: 3, sm: 5 }, borderRadius: 3, boxShadow: 3 }}>
           <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: "text.primary", display: "flex", alignItems: "center" }}>
             <span className="candidate-emoji-icon" style={{ marginRight: "12px" }}>✏️</span> Edit Candidate Profile
           </Typography>
           <Typography color="text.secondary" variant="body2" sx={{ mb: 4 }}>
-            Update candidate personal information and contact details below.
+            Update all details of candidate including personal information, identifiers, role, and verification status.
           </Typography>
 
           <Box component="form" onSubmit={handleUpdate}>
-            <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" }, gap: 3 }}>
-              <Box sx={{ gridColumn: "1 / -1" }}>
+            {/* Section 1: Personal & Contact Information */}
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: "primary.main", display: "flex", alignItems: "center", gap: 1 }}>
+              <PersonIcon fontSize="small" /> Personal & Contact Details
+            </Typography>
+            <Grid container spacing={2.5} sx={{ mb: 4 }}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  label="Full Name"
+                  label="Full Name *"
                   name="fullName"
-                  value={formData?.fullName || ""}
+                  value={formData.fullName}
                   onChange={handleChange}
                   required
                   slotProps={{
@@ -131,15 +190,15 @@ export default function EditCandidatePage() {
                     }
                   }}
                 />
-              </Box>
+              </Grid>
 
-              <Box>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  label="Email Address"
+                  label="Email Address *"
                   name="email"
                   type="email"
-                  value={formData?.email || ""}
+                  value={formData.email}
                   onChange={handleChange}
                   required
                   slotProps={{
@@ -152,14 +211,14 @@ export default function EditCandidatePage() {
                     }
                   }}
                 />
-              </Box>
+              </Grid>
 
-              <Box>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
                   label="Phone Number"
                   name="phoneNumber"
-                  value={formData?.phoneNumber || ""}
+                  value={formData.phoneNumber}
                   onChange={handleChange}
                   slotProps={{
                     input: {
@@ -171,8 +230,193 @@ export default function EditCandidatePage() {
                     }
                   }}
                 />
-              </Box>
-            </Box>
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  select
+                  label="Gender"
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <WcIcon color="action" />
+                        </InputAdornment>
+                      )
+                    }
+                  }}
+                >
+                  <MenuItem value="">Select Gender</MenuItem>
+                  <MenuItem value="Male">Male</MenuItem>
+                  <MenuItem value="Female">Female</MenuItem>
+                  <MenuItem value="Other">Other</MenuItem>
+                </TextField>
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  type="date"
+                  label="Date of Birth"
+                  name="dateOfBirth"
+                  value={formData.dateOfBirth}
+                  onChange={handleChange}
+                  InputLabelProps={{ shrink: true }}
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <CalendarTodayIcon color="action" />
+                        </InputAdornment>
+                      )
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={2}
+                  label="Full Residential Address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start" sx={{ alignSelf: "flex-start", mt: 1 }}>
+                          <HomeIcon color="action" />
+                        </InputAdornment>
+                      )
+                    }
+                  }}
+                />
+              </Grid>
+            </Grid>
+
+            {/* Section 2: Identification Details */}
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: "primary.main", display: "flex", alignItems: "center", gap: 1 }}>
+              <BadgeIcon fontSize="small" /> Identification Numbers
+            </Typography>
+            <Grid container spacing={2.5} sx={{ mb: 4 }}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="PAN Card Number"
+                  name="panNumber"
+                  value={formData.panNumber}
+                  onChange={handleChange}
+                  placeholder="e.g. ABCDE1234F"
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <CreditCardIcon color="action" />
+                        </InputAdornment>
+                      )
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Aadhaar Card Number"
+                  name="aadhaarNumber"
+                  value={formData.aadhaarNumber}
+                  onChange={handleChange}
+                  placeholder="e.g. 1234 5678 9012"
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <BadgeIcon color="action" />
+                        </InputAdornment>
+                      )
+                    }
+                  }}
+                />
+              </Grid>
+            </Grid>
+
+            {/* Section 3: Job Role & Status */}
+            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2, color: "primary.main", display: "flex", alignItems: "center", gap: 1 }}>
+              <WorkIcon fontSize="small" /> Role & Verification Status
+            </Typography>
+            <Grid container spacing={2.5} sx={{ mb: 4 }}>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  fullWidth
+                  label="Applied Role"
+                  name="appliedRole"
+                  value={formData.appliedRole}
+                  onChange={handleChange}
+                  placeholder="e.g. Software Engineer"
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <WorkIcon color="action" />
+                        </InputAdornment>
+                      )
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  fullWidth
+                  type="date"
+                  label="Date of Joining"
+                  name="dateOfJoining"
+                  value={formData.dateOfJoining}
+                  onChange={handleChange}
+                  InputLabelProps={{ shrink: true }}
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <CalendarTodayIcon color="action" />
+                        </InputAdornment>
+                      )
+                    }
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  fullWidth
+                  select
+                  label="Verification Status"
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                  slotProps={{
+                    input: {
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <FactCheckIcon color="action" />
+                        </InputAdornment>
+                      )
+                    }
+                  }}
+                >
+                  <MenuItem value="Pending">Pending</MenuItem>
+                  <MenuItem value="In Progress">In Progress</MenuItem>
+                  <MenuItem value="Approved">Approved</MenuItem>
+                  <MenuItem value="Rejected">Rejected</MenuItem>
+                </TextField>
+              </Grid>
+            </Grid>
 
             <Stack direction="row" spacing={2} sx={{ mt: 4, justifyContent: "flex-end" }}>
               <Button
