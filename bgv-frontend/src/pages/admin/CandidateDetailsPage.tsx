@@ -87,26 +87,39 @@ export default function CandidateDetailsPage() {
           borderRadius: "16px"
         }}
       >
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-          <Typography variant="h4" sx={{ fontWeight: 700 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "stretch", sm: "center" },
+            justifyContent: "space-between",
+            gap: 2,
+            mb: 2
+          }}
+        >
+          <Typography variant="h4" sx={{ fontWeight: 700, fontSize: { xs: "1.5rem", sm: "2.125rem" } }}>
             Candidate Details
           </Typography>
 
           <Button
             variant="contained"
             color="success"
-            startIcon={downloadingPdf ? <CircularProgress size={20} color="inherit" /> : <PictureAsPdfIcon />}
+            startIcon={downloadingPdf ? <CircularProgress size={18} color="inherit" /> : <PictureAsPdfIcon />}
             onClick={handleDownloadPdf}
             disabled={downloadingPdf}
             sx={{
               textTransform: "none",
-              borderRadius: "10px",
-              padding: "10px 20px",
+              borderRadius: "8px",
+              padding: "7px 16px",
               fontWeight: 600,
-              boxShadow: "0 4px 12px rgba(22, 163, 74, 0.25)"
+              fontSize: "0.875rem",
+              whiteSpace: "nowrap",
+              flexShrink: 0,
+              width: { xs: "100%", sm: "auto" },
+              boxShadow: "0 3px 10px rgba(22, 163, 74, 0.25)"
             }}
           >
-            {downloadingPdf ? "Generating PDF..." : "Download PDF Verification Report"}
+            {downloadingPdf ? "Generating..." : "Download PDF"}
           </Button>
         </Box>
 
