@@ -1074,6 +1074,20 @@
     display: none;
   }
 
+  .nav-actions {
+    margin-right: 0;
+    gap: 0.4rem;
+  }
+
+  .nav-theme-toggle-wrap .theme-toggle {
+    transform: scale(0.8);
+  }
+
+  .btn-signin-nav {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.8rem;
+  }
+
   .hero-title {
     font-size: 2rem;
   }

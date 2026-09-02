@@ -19,13 +19,12 @@ import { clearAuthSession } from "../utils/avatarUtils";
 import LogoutConfirmModal from "./LogoutConfirmModal";
 
 export default function Sidebar() {
-
   const location = useLocation();
-
   const navigate = useNavigate();
 
   const [email, setEmail] = useState(localStorage.getItem("email") || "reviewer@test.com");
   const [role, setRole] = useState(localStorage.getItem("role") || "Reviewer");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -40,6 +39,16 @@ export default function Sidebar() {
       window.removeEventListener("profileUpdated", handleStorageChange);
     };
   }, []);
+
+  useEffect(() => {
+    const handleToggle = () => setMobileOpen((prev) => !prev);
+    window.addEventListener("toggle-sidebar", handleToggle);
+    return () => window.removeEventListener("toggle-sidebar", handleToggle);
+  }, []);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
 
   const items = [
     {
@@ -90,92 +99,77 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="sidebar">
-      {/* Logo */}
-      <div className="logo-section">
-        <h2>BGV System</h2>
-        <p>Background Verification</p>
-      </div>
-
-      {/* Menu */}
-      <div className="menu-list">
-        {items.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={
-              location.pathname === item.path
-                ? "menu-link active"
-                : "menu-link"
-            }
-          >
-            <span className="menu-icon">{item.icon}</span>
-            <span>{item.name}</span>
-            {item.badge && (
-              <span className="sidebar-badge">{item.badge}</span>
-            )}
-          </Link>
-        ))}
-      </div>
-
-      {/* Footer */}
-
-      <div className="sidebar-footer">
-
+    <>
+      {mobileOpen && (
         <div
-          className="user-info"
-          onClick={() => navigate(getProfilePath())}
-          style={{ cursor: "pointer" }}
-        >
-
-          <div className="avatar">
-
-            {email.charAt(0).toUpperCase()}
-
-          </div>
-
-          <div>
-
-            <div className="user-name">
-
-              {role}
-
-            </div>
-
-            <div className="user-email">
-
-              {email}
-
-            </div>
-
-          </div>
-
+          className="sidebar-overlay"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+      <aside className={`sidebar ${mobileOpen ? "mobile-open" : ""}`}>
+        {/* Logo */}
+        <div className="logo-section">
+          <h2>BGV System</h2>
+          <p>Background Verification</p>
         </div>
 
-        <button
+        {/* Menu */}
+        <div className="menu-list">
+          {items.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={
+                location.pathname === item.path
+                  ? "menu-link active"
+                  : "menu-link"
+              }
+            >
+              <span className="menu-icon">{item.icon}</span>
+              <span>{item.name}</span>
+              {item.badge && (
+                <span className="sidebar-badge">{item.badge}</span>
+              )}
+            </Link>
+          ))}
+        </div>
 
-          className="logout-btn"
+        {/* Footer */}
 
-          onClick={handleLogoutClick}
+        <div className="sidebar-footer">
+          <div
+            className="user-info"
+            onClick={() => navigate(getProfilePath())}
+            style={{ cursor: "pointer" }}
+          >
+            <div className="avatar">
+              {email.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <div className="user-name">
+                {role}
+              </div>
+              <div className="user-email">
+                {email}
+              </div>
+            </div>
+          </div>
 
-        >
+          <button
+            className="logout-btn"
+            onClick={handleLogoutClick}
+          >
+            <Logout />
+            Logout
+          </button>
+        </div>
 
-          <Logout />
-
-          Logout
-
-        </button>
-
-      </div>
-
-      <LogoutConfirmModal
-        open={showLogoutModal}
-        onClose={() => setShowLogoutModal(false)}
-        onConfirm={handleConfirmLogout}
-      />
-
-    </aside>
-
+        <LogoutConfirmModal
+          open={showLogoutModal}
+          onClose={() => setShowLogoutModal(false)}
+          onConfirm={handleConfirmLogout}
+        />
+      </aside>
+    </>
   );
-
 }

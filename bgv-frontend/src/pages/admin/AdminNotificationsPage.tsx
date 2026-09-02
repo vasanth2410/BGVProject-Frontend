@@ -32,14 +32,27 @@ export default function AdminNotificationsPage() {
 
   return (
     <>
-      <div style={{ padding: "30px" }}>
+      <div className="page-container">
         <Box sx={{ mb: 3 }}>
-          <Typography variant="h4" sx={{ fontWeight: 700, color: "text.primary", mb: 0.5, display: "flex", alignItems: "center" }}>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight: 700,
+              color: "text.primary",
+              mb: 0.5,
+              display: "flex",
+              alignItems: "flex-start",
+              fontSize: { xs: "1.35rem", sm: "2rem" },
+              lineHeight: 1.3,
+            }}
+          >
             <Box
               component="span"
               sx={{
                 display: "inline-block",
                 mr: 1.5,
+                mt: 0.2,
+                flexShrink: 0,
                 animation: "ringBell 2.5s infinite ease-in-out",
                 transformOrigin: "top center",
                 "@keyframes ringBell": {
@@ -55,7 +68,9 @@ export default function AdminNotificationsPage() {
             >
               🔔
             </Box>
-            System Email Notifications (Test Mode Active)
+            <Box component="span">
+              System Email Notifications (Test Mode Active)
+            </Box>
           </Typography>
           <Typography color="text.secondary" variant="body2">
             All candidate welcome emails, document resubmission alerts, and BGV status updates are automatically logged and previewable here.
@@ -150,7 +165,56 @@ export default function AdminNotificationsPage() {
         <DialogContent dividers sx={{ padding: "0" }}>
           <iframe
             title="Email Preview"
-            srcDoc={selectedNotification?.body || "<p style='padding:20px'>No Email Body Available</p>"}
+            srcDoc={
+              selectedNotification?.body && selectedNotification.body.trim().length > 0
+                ? selectedNotification.body
+                : `
+                  <!DOCTYPE html>
+                  <html>
+                  <head>
+                    <meta charset="utf-8"/>
+                    <style>
+                      body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; color: #1e293b; margin: 0; padding: 24px; }
+                      .email-card { max-width: 580px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 28px; box-shadow: 0 4px 14px rgba(0,0,0,0.05); }
+                      .email-header { border-bottom: 2px solid #2563eb; padding-bottom: 16px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; }
+                      .brand-title { color: #2563eb; font-size: 18px; font-weight: 700; margin: 0; }
+                      .badge-tag { background: #eff6ff; color: #2563eb; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px; border: 1px solid #bfdbfe; }
+                      .email-subject { font-size: 16px; font-weight: 700; color: #0f172a; margin-top: 0; margin-bottom: 12px; }
+                      .email-content { font-size: 14px; color: #334155; line-height: 1.6; }
+                      .info-box { background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #2563eb; border-radius: 8px; padding: 14px 16px; margin: 20px 0; }
+                      .info-label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+                      .info-value { font-size: 14px; font-weight: 600; color: #0f172a; margin-top: 2px; margin-bottom: 8px; }
+                      .email-footer { border-top: 1px solid #f1f5f9; padding-top: 16px; margin-top: 28px; font-size: 12px; color: #94a3b8; text-align: center; }
+                    </style>
+                  </head>
+                  <body>
+                    <div class="email-card">
+                      <div class="email-header">
+                        <h3 class="brand-title">🛡️ BGV Verification Platform</h3>
+                        <span class="badge-tag">OFFICIAL ALERT</span>
+                      </div>
+                      <h4 class="email-subject">${selectedNotification?.subject || "System Notification"}</h4>
+                      <div class="email-content">
+                        <p>Hello,</p>
+                        <p>This is an automated background verification update regarding: <strong>${selectedNotification?.subject || "Candidate Update"}</strong>.</p>
+                      </div>
+                      <div class="info-box">
+                        <div class="info-label">RECIPIENT EMAIL</div>
+                        <div class="info-value">${selectedNotification?.toEmail || "N/A"}</div>
+                        <div class="info-label">DELIVERY STATUS</div>
+                        <div class="info-value" style="color:#16a34a;">✔ ${selectedNotification?.status || "Sent"}</div>
+                      </div>
+                      <div class="email-content">
+                        <p>Candidate background check logs, verification evidence, and compliance status have been updated in the BGV core system database.</p>
+                      </div>
+                      <div class="email-footer">
+                        © ${new Date().getFullYear()} BGV System Verification Platform. All rights reserved.
+                      </div>
+                    </div>
+                  </body>
+                  </html>
+                `
+            }
             style={{
               width: "100%",
               height: "450px",

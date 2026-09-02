@@ -9,7 +9,6 @@
   box-shadow: 0 0 10px rgba(0, 240, 255, 0.3), 0 0 10px rgba(123, 44, 191, 0.3);
   transition: all 0.3s ease;
   user-select: none;
-  margin-right: 15px;
   box-sizing: border-box;
 }
 

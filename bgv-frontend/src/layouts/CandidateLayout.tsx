@@ -18,6 +18,7 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  useMediaQuery,
 } from "@mui/material";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -27,6 +28,7 @@ import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import LogoutIcon from "@mui/icons-material/Logout";
 import NotificationsNoneIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
+import MenuIcon from "@mui/icons-material/Menu";
 import DarkModeToggle from "../components/DarkModeToggle";
 
 import {
@@ -47,6 +49,8 @@ export default function CandidateLayout() {
   const navigate = useNavigate();
 
   const location = useLocation();
+  const isMobile = useMediaQuery("(max-width:768px)");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const [notificationAnchor, setNotificationAnchor] = useState<null | HTMLElement>(null);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -141,7 +145,9 @@ export default function CandidateLayout() {
     >
 
       <Drawer
-        variant="permanent"
+        variant={isMobile ? "temporary" : "permanent"}
+        open={isMobile ? mobileOpen : true}
+        onClose={() => setMobileOpen(false)}
         sx={{
           width: drawerWidth,
           flexShrink: 0,
@@ -223,7 +229,10 @@ export default function CandidateLayout() {
                   key={menu.path}
                   className={`menu-link ${isActive ? "active" : ""}`}
                   selected={isActive}
-                  onClick={() => navigate(menu.path)}
+                  onClick={() => {
+                    navigate(menu.path);
+                    if (isMobile) setMobileOpen(false);
+                  }}
                   sx={{
                     position: "relative",
                     borderRadius: "12px",
@@ -420,6 +429,17 @@ export default function CandidateLayout() {
         >
 
           <Toolbar>
+            {isMobile && (
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={() => setMobileOpen(!mobileOpen)}
+                sx={{ mr: 1 }}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
 
             <Typography
               sx={{

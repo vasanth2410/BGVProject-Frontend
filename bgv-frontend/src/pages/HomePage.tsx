@@ -108,15 +108,14 @@ export default function HomePage() {
             <button className="nav-link" onClick={() => scrollToSection("metrics-bar")}>
               Resources
             </button>
+          </nav>
 
-            {/* Dark & White Mode Toggle Button */}
+          {/* Right Action Button & Dark/Light Mode Toggle */}
+          <div className="nav-actions">
             <div className="nav-theme-toggle-wrap">
               <DarkModeToggle />
             </div>
-          </nav>
 
-          {/* Right Action Button */}
-          <div className="nav-actions">
             <button className="btn-signin-nav" onClick={() => handleAuthNavigation()}>
               <span>{isLoggedIn ? "Go to Dashboard" : "Sign In"}</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="signin-btn-icon">

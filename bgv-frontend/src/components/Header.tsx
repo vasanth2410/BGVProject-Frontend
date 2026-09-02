@@ -4,6 +4,7 @@ import "./Header.css";
 import {
   Search,
   NotificationsNone,
+  Menu as MenuIcon,
 } from "@mui/icons-material";
 import DarkModeToggle from "./DarkModeToggle";
 
@@ -12,23 +13,27 @@ import { useNavigate } from "react-router-dom";
 export default function Header() {
   const navigate = useNavigate();
 
+  const [name, setName] = useState(localStorage.getItem("name") || "");
   const [email, setEmail] = useState(localStorage.getItem("email") || "reviewer@test.com");
   const [role, setRole] = useState(localStorage.getItem("role") || "Reviewer");
 
   useEffect(() => {
     const handleStorageChange = () => {
+      setName(localStorage.getItem("name") || "");
       setEmail(localStorage.getItem("email") || "reviewer@test.com");
       setRole(localStorage.getItem("role") || "Reviewer");
     };
 
     window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("profileUpdated", handleStorageChange);
     return () => {
       window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("profileUpdated", handleStorageChange);
     };
   }, []);
 
-  const userName =
-    email.split("@")[0];
+  const displayName = name ? name.split(" ")[0] : email.split("@")[0];
+  const avatarLetter = (name || email || "U").charAt(0).toUpperCase();
 
   const getBasePath = () => {
     if (role.toLowerCase() === "admin") return "/admin";
@@ -51,9 +56,21 @@ export default function Header() {
     navigate(`${getBasePath()}/profile`);
   };
 
+  const handleToggleSidebar = () => {
+    window.dispatchEvent(new Event("toggle-sidebar"));
+  };
+
   return (
 
     <header className="header">
+
+      <button
+        className="header-menu-btn"
+        onClick={handleToggleSidebar}
+        aria-label="Toggle menu"
+      >
+        <MenuIcon style={{ fontSize: 24 }} />
+      </button>
 
       <div className="header-left">
 
@@ -63,7 +80,7 @@ export default function Header() {
 
           <span className="header-name">
 
-            {" "}{userName}
+            {" "}{displayName}
 
           </span>
 
@@ -82,7 +99,7 @@ export default function Header() {
         <DarkModeToggle />
 
         {role.toLowerCase() === "admin" && (
-          <button className="header-icon" style={{ marginLeft: "15px" }} onClick={handleSearchClick}>
+          <button className="header-icon" onClick={handleSearchClick}>
             <Search />
           </button>
         )}
@@ -95,7 +112,7 @@ export default function Header() {
 
           <div className="header-avatar">
 
-            {userName.charAt(0).toUpperCase()}
+            {avatarLetter}
 
           </div>
 

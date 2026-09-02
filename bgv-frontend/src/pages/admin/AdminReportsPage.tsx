@@ -51,8 +51,8 @@ export default function AdminReportsPage() {
   };
 
   return (
-    <Paper sx={{ p: 4, borderRadius: 3 }}>
-      <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, display: "flex", alignItems: "center" }}>
+    <Paper sx={{ p: { xs: 2, sm: 4 }, borderRadius: 3 }}>
+      <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, display: "flex", alignItems: "center", fontSize: { xs: "1.5rem", sm: "2.125rem" } }}>
         <Box
           component="span"
           sx={{
@@ -79,12 +79,14 @@ export default function AdminReportsPage() {
       <Box
         sx={{
           display: "flex",
-          alignItems: "center",
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: { xs: "stretch", md: "center" },
           justifyContent: "space-between",
+          gap: { xs: 2, md: 0 },
           border: "1px solid",
           borderColor: "divider",
           borderRadius: 2,
-          p: 3,
+          p: { xs: 2, sm: 3 },
           backgroundColor: "action.hover",
           transition: "all 0.2s ease-in-out",
           "&:hover": {
@@ -94,7 +96,7 @@ export default function AdminReportsPage() {
           }
         }}
       >
-        <Box sx={{ flex: 1, mr: 2 }}>
+        <Box sx={{ flex: 1, mr: { xs: 0, md: 2 } }}>
           <Typography variant="h6" sx={{ fontWeight: 600, color: "text.primary" }}>
             Candidates Excel Master List
           </Typography>
@@ -110,7 +112,7 @@ export default function AdminReportsPage() {
           onClick={async () => {
             await exportCandidatesReport();
           }}
-          sx={{ textTransform: "none", borderRadius: "8px" }}
+          sx={{ textTransform: "none", borderRadius: "8px", width: { xs: "100%", md: "auto" }, whiteSpace: "nowrap", flexShrink: 0 }}
         >
           Export Excel
         </Button>
@@ -122,12 +124,14 @@ export default function AdminReportsPage() {
       <Box
         sx={{
           display: "flex",
-          alignItems: "center",
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: { xs: "stretch", md: "center" },
           justifyContent: "space-between",
+          gap: 2,
           border: "1px solid",
           borderColor: "divider",
           borderRadius: 2,
-          p: 3,
+          p: { xs: 2, sm: 3 },
           backgroundColor: "action.hover",
           transition: "all 0.2s ease-in-out",
           "&:hover": {
@@ -137,7 +141,7 @@ export default function AdminReportsPage() {
           }
         }}
       >
-        <Box sx={{ flex: 1, mr: 2 }}>
+        <Box sx={{ flex: 1, mr: { xs: 0, md: 2 } }}>
           <Typography variant="h6" sx={{ fontWeight: 600, color: "text.primary" }}>
             📄 Candidate BGV Summary Report (PDF)
           </Typography>
@@ -146,8 +150,8 @@ export default function AdminReportsPage() {
           </Typography>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <FormControl size="small" sx={{ minWidth: 200 }}>
+        <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" }, alignItems: "stretch", gap: 2, width: { xs: "100%", md: "auto" } }}>
+          <FormControl size="small" sx={{ minWidth: { xs: "100%", sm: 200 }, width: { xs: "100%", sm: "auto" } }}>
             <InputLabel id="select-candidate-label">Select Candidate</InputLabel>
             <Select
               labelId="select-candidate-label"
@@ -169,7 +173,7 @@ export default function AdminReportsPage() {
             startIcon={downloadingPdf ? <CircularProgress size={18} color="inherit" /> : <PictureAsPdfIcon />}
             onClick={handleDownloadPdf}
             disabled={!selectedCandidateId || downloadingPdf}
-            sx={{ textTransform: "none", borderRadius: "8px", fontWeight: 600, px: 3 }}
+            sx={{ textTransform: "none", borderRadius: "8px", fontWeight: 600, px: 3, width: { xs: "100%", sm: "auto" }, whiteSpace: "nowrap", flexShrink: 0 }}
           >
             {downloadingPdf ? "Generating..." : "Download PDF"}
           </Button>

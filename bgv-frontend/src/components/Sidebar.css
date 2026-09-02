@@ -268,15 +268,55 @@
 
 @media (max-width: 768px) {
   .sidebar {
-    position: relative;
-    width: 100%;
-    height: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    z-index: 1200;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 25px rgba(0, 0, 0, 0.3);
   }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
   .menu-list {
-    overflow: visible;
+    overflow-y: auto;
     padding: 14px;
   }
+
   .sidebar-footer {
-    border-top: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* ===========================
+   MOBILE OVERLAY BACKDROP
+=========================== */
+
+.sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    z-index: 1190;
+    animation: fadeInOverlay 0.25s ease;
+  }
+
+  @keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 }

@@ -20,15 +20,12 @@ import { clearAuthSession } from "../../utils/avatarUtils";
 import LogoutConfirmModal from "../LogoutConfirmModal";
 
 export default function AdminSidebar() {
-
-  const location =
-    useLocation();
-
-  const navigate =
-    useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const [name, setName] = useState(localStorage.getItem("name") || "Admin User");
   const [email, setEmail] = useState(localStorage.getItem("email") || "admin@test.com");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const syncUser = () => {
@@ -44,6 +41,16 @@ export default function AdminSidebar() {
       window.removeEventListener("profileUpdated", syncUser);
     };
   }, []);
+
+  useEffect(() => {
+    const handleToggle = () => setMobileOpen((prev) => !prev);
+    window.addEventListener("toggle-sidebar", handleToggle);
+    return () => window.removeEventListener("toggle-sidebar", handleToggle);
+  }, []);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
 
   const avatarInitial = (name || email || "A").charAt(0).toUpperCase();
 
@@ -109,81 +116,69 @@ export default function AdminSidebar() {
   ];
 
   return (
-    <div className="sidebar">
-      <div className="logo-section">
-        <h2>BGV System</h2>
-        <p>Background Verification</p>
-      </div>
-
-      <div className="menu-list">
-        {menuItems.map((item: any) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={
-              location.pathname === item.path
-                ? "menu-link active"
-                : "menu-link"
-            }
-          >
-            <span className="menu-icon">{item.icon}</span>
-            <span>{item.name}</span>
-            {item.badge && (
-              <span className="sidebar-badge">{item.badge}</span>
-            )}
-          </Link>
-        ))}
-      </div>
-
-      <div className="sidebar-footer">
-
-        <div className="user-info" onClick={() => navigate('/admin/profile')} style={{ cursor: "pointer" }}>
-
-          <div className="avatar">
-
-            {avatarInitial}
-
-          </div>
-
-          <div>
-
-            <div className="user-name">
-
-              {name}
-
-            </div>
-
-            <div className="user-email">
-
-              {email}
-
-            </div>
-
-          </div>
-
+    <>
+      {mobileOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+      <div className={`sidebar ${mobileOpen ? "mobile-open" : ""}`}>
+        <div className="logo-section">
+          <h2>BGV System</h2>
+          <p>Background Verification</p>
         </div>
 
-        <button
-          className="logout-btn"
-          onClick={handleLogoutClick}
-        >
+        <div className="menu-list">
+          {menuItems.map((item: any) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={
+                location.pathname === item.path
+                  ? "menu-link active"
+                  : "menu-link"
+              }
+            >
+              <span className="menu-icon">{item.icon}</span>
+              <span>{item.name}</span>
+              {item.badge && (
+                <span className="sidebar-badge">{item.badge}</span>
+              )}
+            </Link>
+          ))}
+        </div>
 
-          <Logout />
+        <div className="sidebar-footer">
+          <div className="user-info" onClick={() => navigate('/admin/profile')} style={{ cursor: "pointer" }}>
+            <div className="avatar">
+              {avatarInitial}
+            </div>
+            <div>
+              <div className="user-name">
+                {name}
+              </div>
+              <div className="user-email">
+                {email}
+              </div>
+            </div>
+          </div>
 
-          Logout
+          <button
+            className="logout-btn"
+            onClick={handleLogoutClick}
+          >
+            <Logout />
+            Logout
+          </button>
+        </div>
 
-        </button>
-
+        <LogoutConfirmModal
+          open={showLogoutModal}
+          onClose={() => setShowLogoutModal(false)}
+          onConfirm={handleConfirmLogout}
+        />
       </div>
-
-      <LogoutConfirmModal
-        open={showLogoutModal}
-        onClose={() => setShowLogoutModal(false)}
-        onConfirm={handleConfirmLogout}
-      />
-
-    </div>
-
+    </>
   );
-
 }

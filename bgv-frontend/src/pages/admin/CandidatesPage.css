@@ -15,6 +15,9 @@
   color: #1f2937;
   display: flex;
   align-items: center;
+  margin: 0;
+  text-align: left;
+  justify-content: flex-start;
 }
 
 .candidate-emoji-icon {
@@ -135,6 +138,11 @@
   font-size: 14px;
   box-shadow: 0 4px 6px rgba(37,99,235,0.2);
   transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .add-button:hover {
@@ -315,6 +323,13 @@ body.dark-mode .candidate-table tr:hover {
   padding: 3px;
   border-radius: 10px;
   border: 1px solid #e5e7eb;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.status-tabs-container::-webkit-scrollbar {
+  display: none;
 }
 
 body.dark-mode .status-tabs-container {
@@ -323,10 +338,10 @@ body.dark-mode .status-tabs-container {
 }
 
 .status-tab {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 10px;
+  padding: 5px 9px;
   border-radius: 7px;
   border: none;
   background: transparent;
@@ -336,6 +351,8 @@ body.dark-mode .status-tabs-container {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   user-select: none;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 body.dark-mode .status-tab {
@@ -403,4 +420,44 @@ body.dark-mode .status-tab.active .tab-count {
 .rejected-dot {
   background-color: #ef4444;
   box-shadow: 0 0 5px rgba(239, 68, 68, 0.6);
+}
+
+/* ======================================
+   RESPONSIVE MOBILE STYLES
+====================================== */
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: 16px 12px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+    width: 100%;
+  }
+
+  .page-title {
+    font-size: 24px;
+    text-align: left;
+    justify-content: flex-start;
+    align-self: flex-start;
+    width: 100%;
+    margin: 0;
+  }
+
+  .search-input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .add-button {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 10px 18px;
+    font-size: 13.5px;
+  }
 }

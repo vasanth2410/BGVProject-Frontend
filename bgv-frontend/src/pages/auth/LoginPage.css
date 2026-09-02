@@ -423,11 +423,11 @@
   text-transform: uppercase;
 }
 
-/* Precise Positioning matching Image 1 */
+/* Precise Positioning matching Image 1 - Pushed Outward to avoid shield overlap */
 
 /* 1. IDENTITY VERIFICATION (Top Center Above Shield) */
 .node-identity {
-  top: 0%;
+  top: -5%;
   left: 50%;
   transform: translateX(-50%);
   flex-direction: row;
@@ -443,29 +443,29 @@
 
 /* 2. EDUCATION VERIFICATION (Right Side) */
 .node-education {
-  top: 40%;
-  right: 2%;
+  top: 36%;
+  right: -5%;
   animation: floatN2 5.2s ease-in-out infinite;
 }
 
 /* 3. CRIMINAL RECORD CHECK (Bottom Right) */
 .node-criminal {
-  bottom: 8%;
-  right: 10%;
+  bottom: 4%;
+  right: 0%;
   animation: floatN3 4.2s ease-in-out infinite;
 }
 
 /* 4. EMPLOYMENT VERIFICATION (Bottom Left) */
 .node-employment {
-  bottom: 8%;
-  left: 10%;
+  bottom: 4%;
+  left: 0%;
   animation: floatN4 4.8s ease-in-out infinite;
 }
 
 /* 5. DOCUMENT CHECK (Left Side) */
 .node-document {
-  top: 32%;
-  left: 2%;
+  top: 30%;
+  left: -5%;
   animation: floatN5 5.5s ease-in-out infinite;
 }
 

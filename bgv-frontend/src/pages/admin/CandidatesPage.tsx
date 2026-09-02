@@ -114,10 +114,10 @@ export default function CandidatesPage() {
 
   return (
     <AdminLayout>
-      <div style={{ padding: "30px" }}>
-        <div className="page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "15px", marginBottom: "25px" }}>
+      <div className="page-container">
+        <div className="page-header">
           {/* Left: Title */}
-          <h1 className="page-title" style={{ margin: 0 }}>
+          <h1 className="page-title">
             <span className="candidate-emoji-icon">🧑‍💼</span> Candidates
           </h1>
 

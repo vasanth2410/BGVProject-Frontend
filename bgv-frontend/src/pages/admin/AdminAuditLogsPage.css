@@ -29,6 +29,8 @@
   align-items: center;
   gap: 12px;
   margin: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 body.dark-mode .audit-title {
@@ -45,6 +47,7 @@ body.dark-mode .audit-title {
 .audit-action-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   padding: 9px 16px;
   border-radius: 10px;
@@ -56,6 +59,8 @@ body.dark-mode .audit-title {
   color: #334155;
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .audit-action-btn:hover {
@@ -268,11 +273,18 @@ body.dark-mode .audit-search-input::placeholder {
 /* Role Filter Tabs */
 .role-tabs {
   display: flex;
-  gap: 6px;
+  gap: 5px;
   background: #f1f5f9;
-  padding: 4px;
-  border-radius: 12px;
+  padding: 4px 6px;
+  border-radius: 10px;
   border: 1px solid #e2e8f0;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.role-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 body.dark-mode .role-tabs {
@@ -281,18 +293,20 @@ body.dark-mode .role-tabs {
 }
 
 .role-tab-btn {
-  padding: 6px 14px;
-  border-radius: 8px;
+  padding: 5px 12px;
+  border-radius: 7px;
   border: none;
   background: transparent;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: #64748b;
   cursor: pointer;
   transition: all 0.2s ease;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .role-tab-btn:hover {
@@ -319,20 +333,26 @@ body.dark-mode .role-tab-btn.active {
 }
 
 .tab-badge {
-  background: rgba(100, 116, 139, 0.12);
+  background: rgba(100, 116, 139, 0.15);
   padding: 2px 7px;
   border-radius: 10px;
-  font-size: 11px;
+  font-size: 10px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-width: 18px;
 }
 
 .role-tab-btn.active .tab-badge {
-  background: rgba(37, 99, 235, 0.12);
+  background: rgba(37, 99, 235, 0.15);
   color: #2563eb;
 }
 
 body.dark-mode .role-tab-btn.active .tab-badge {
   background: rgba(255, 255, 255, 0.25);
-  color: white;
+  color: #ffffff !important;
 }
 
 /* Badges for Table Rows */
@@ -465,4 +485,39 @@ body.dark-mode .page-nav-btn {
 
 body.dark-mode .page-nav-btn:not(:disabled):hover {
   background: #24293d;
+}
+
+/* ======================================
+   RESPONSIVE MOBILE STYLES FOR AUDIT LOGS
+====================================== */
+
+@media (max-width: 768px) {
+  .audit-page-container {
+    padding: 16px 12px;
+  }
+
+  .audit-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .audit-title {
+    font-size: 22px;
+    white-space: nowrap;
+  }
+
+  .audit-header-actions {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .audit-action-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+    gap: 6px;
+    white-space: nowrap;
+  }
 }
