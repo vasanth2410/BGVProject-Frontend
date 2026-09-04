@@ -578,8 +578,12 @@ export default function CandidateVerificationPage() {
           <Tabs
             value={tabValue}
             onChange={(_, val) => setTabValue(val)}
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
             sx={{
               minHeight: 40,
+              maxWidth: "100%",
               "& .MuiTab-root": {
                 minHeight: 40,
                 textTransform: "none",
@@ -588,6 +592,7 @@ export default function CandidateVerificationPage() {
                 minWidth: "auto",
                 px: 2,
                 color: "#64748B",
+                whiteSpace: "nowrap",
                 transition: "color 0.2s ease",
                 "&:hover": {
                   color: "#0F172A",

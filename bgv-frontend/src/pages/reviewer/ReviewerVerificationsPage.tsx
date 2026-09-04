@@ -327,7 +327,7 @@ export default function ReviewerVerificationsPage() {
           </Box>
 
           {/* Export Action Buttons */}
-          <Stack direction="row" spacing={1.5}>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1.5, width: { xs: "100%", sm: "auto" } }}>
             <Button
               variant="outlined"
               color="success"
@@ -338,6 +338,9 @@ export default function ReviewerVerificationsPage() {
                 textTransform: "none",
                 fontWeight: 600,
                 px: 2,
+                py: 0.8,
+                whiteSpace: "nowrap",
+                width: { xs: "100%", sm: "auto" },
               }}
             >
               Export Excel / CSV
@@ -353,12 +356,15 @@ export default function ReviewerVerificationsPage() {
                 textTransform: "none",
                 fontWeight: 600,
                 px: 2,
+                py: 0.8,
+                whiteSpace: "nowrap",
+                width: { xs: "100%", sm: "auto" },
                 boxShadow: "0 2px 8px rgba(37, 99, 235, 0.25)",
               }}
             >
               Export PDF Report
             </Button>
-          </Stack>
+          </Box>
         </Box>
 
         {/* Filter Controls & Search */}
@@ -377,8 +383,12 @@ export default function ReviewerVerificationsPage() {
           <Tabs
             value={statusTab}
             onChange={(_, newValue) => setStatusTab(newValue)}
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
             sx={{
               minHeight: 40,
+              maxWidth: "100%",
               "& .MuiTab-root": {
                 minHeight: 40,
                 fontWeight: 600,
@@ -386,6 +396,7 @@ export default function ReviewerVerificationsPage() {
                 textTransform: "none",
                 px: 2,
                 color: "#94a3b8",
+                whiteSpace: "nowrap",
                 transition: "color 0.2s",
                 "&:hover": {
                   color: "#e2e8f0",
@@ -440,11 +451,20 @@ export default function ReviewerVerificationsPage() {
           borderRadius: 3,
           border: "1px solid",
           borderColor: "rgba(128, 128, 128, 0.2)",
-          overflow: "hidden",
+          overflowX: "auto",
           bgcolor: "background.paper",
+          width: "100%",
+          boxSizing: "border-box",
+          "&::-webkit-scrollbar": {
+            height: 6,
+          },
+          "&::-webkit-scrollbar-thumb": {
+            bgcolor: "rgba(128, 128, 128, 0.2)",
+            borderRadius: 3,
+          },
         }}
       >
-        <Table sx={{ minWidth: 1000 }}>
+        <Table sx={{ minWidth: { xs: 700, md: 1000 } }}>
           <TableHead>
             <TableRow sx={{ bgcolor: "rgba(128, 128, 128, 0.05)" }}>
               <TableCell sx={{ fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>
@@ -465,7 +485,7 @@ export default function ReviewerVerificationsPage() {
               <TableCell sx={{ fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>
                 New Remarks
               </TableCell>
-              <TableCell align="right" sx={{ fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, pr: 3 }}>
+              <TableCell align="right" sx={{ fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, pr: 6 }}>
                 Actions
               </TableCell>
             </TableRow>
@@ -552,7 +572,7 @@ export default function ReviewerVerificationsPage() {
                     />
                   </TableCell>
 
-                  <TableCell align="right" sx={{ pr: 2 }}>
+                  <TableCell align="right" sx={{ pr: 5 }}>
                     <Stack direction="row" spacing={1} sx={{ justifyContent: "flex-end" }}>
                       <Button
                         size="small"

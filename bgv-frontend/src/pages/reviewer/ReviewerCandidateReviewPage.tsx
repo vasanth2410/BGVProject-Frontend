@@ -400,7 +400,7 @@ const [liveModalOpen, setLiveModalOpen] = useState(false);
 
       <CardContent>
 
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 2, mb: 3 }}>
           <Typography
             variant="h5"
             sx={{
@@ -414,9 +414,18 @@ const [liveModalOpen, setLiveModalOpen] = useState(false);
             color="primary"
             startIcon={<VerifiedIcon />}
             onClick={() => setLiveModalOpen(true)}
-            sx={{ borderRadius: 2, fontWeight: 700 }}
+            sx={{
+              borderRadius: 2,
+              fontWeight: 700,
+              textTransform: "none",
+              whiteSpace: "nowrap",
+              maxWidth: "100%",
+              px: 2,
+              py: 0.8,
+              boxShadow: "0 2px 8px rgba(37, 99, 235, 0.25)",
+            }}
           >
-            Run Live AI/Third-Party Verification Engine
+            Run Live AI Verification
           </Button>
         </Box>
 
@@ -625,32 +634,23 @@ const [liveModalOpen, setLiveModalOpen] = useState(false);
 
     <Divider />
 
-    <TableContainer>
-
-      <Table>
-
+    <TableContainer sx={{ overflowX: "auto", width: "100%" }}>
+      <Table sx={{ minWidth: { xs: 450, sm: 600 } }}>
         <TableHead>
-
           <TableRow>
-
-            <TableCell>
+            <TableCell sx={{ fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, whiteSpace: "nowrap" }}>
               File Name
             </TableCell>
-
-            <TableCell>
+            <TableCell sx={{ fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, whiteSpace: "nowrap" }}>
               Type
             </TableCell>
-
-            <TableCell>
+            <TableCell sx={{ fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, whiteSpace: "nowrap" }}>
               Status
             </TableCell>
-
-            <TableCell align="center">
+            <TableCell align="center" sx={{ fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, whiteSpace: "nowrap" }}>
               Action
             </TableCell>
-
           </TableRow>
-
         </TableHead>
 
         <TableBody>

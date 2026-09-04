@@ -188,8 +188,12 @@ export default function ReviewerNotificationsPage() {
           <Tabs
             value={statusTab}
             onChange={(_, newValue) => setStatusTab(newValue)}
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
             sx={{
               minHeight: 40,
+              maxWidth: "100%",
               "& .MuiTab-root": {
                 minHeight: 40,
                 fontWeight: 600,
@@ -197,6 +201,7 @@ export default function ReviewerNotificationsPage() {
                 textTransform: "none",
                 px: 2,
                 color: "#94a3b8",
+                whiteSpace: "nowrap",
                 transition: "color 0.2s",
                 "&:hover": {
                   color: "#e2e8f0",
@@ -251,11 +256,20 @@ export default function ReviewerNotificationsPage() {
           borderRadius: 3,
           border: "1px solid",
           borderColor: "rgba(128, 128, 128, 0.15)",
-          overflow: "hidden",
+          overflowX: "auto",
           bgcolor: "background.paper",
+          width: "100%",
+          boxSizing: "border-box",
+          "&::-webkit-scrollbar": {
+            height: 6,
+          },
+          "&::-webkit-scrollbar-thumb": {
+            bgcolor: "rgba(128, 128, 128, 0.2)",
+            borderRadius: 3,
+          },
         }}
       >
-        <Table sx={{ minWidth: 850 }}>
+        <Table sx={{ minWidth: { xs: 600, sm: 850 } }}>
           <TableHead>
             <TableRow sx={{ bgcolor: "rgba(128, 128, 128, 0.05)" }}>
               <TableCell sx={{ fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>

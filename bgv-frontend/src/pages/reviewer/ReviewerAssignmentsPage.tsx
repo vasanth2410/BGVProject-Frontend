@@ -135,11 +135,20 @@ export default function ReviewerAssignmentsPage() {
           borderRadius: 3,
           border: "1px solid",
           borderColor: "rgba(128, 128, 128, 0.2)",
-          overflow: "hidden",
+          overflowX: "auto",
           bgcolor: "background.paper",
+          width: "100%",
+          boxSizing: "border-box",
+          "&::-webkit-scrollbar": {
+            height: 6,
+          },
+          "&::-webkit-scrollbar-thumb": {
+            bgcolor: "rgba(128, 128, 128, 0.2)",
+            borderRadius: 3,
+          },
         }}
       >
-        <Table style={{ minWidth: 600 }}>
+        <Table sx={{ minWidth: { xs: 480, sm: 600 } }}>
           <TableHead>
             <TableRow sx={{ bgcolor: "rgba(128, 128, 128, 0.05)" }}>
               <TableCell sx={{ fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>
@@ -148,7 +157,7 @@ export default function ReviewerAssignmentsPage() {
               <TableCell sx={{ fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5 }}>
                 Assigned Date
               </TableCell>
-              <TableCell align="right" sx={{ fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, pr: 3 }}>
+              <TableCell align="right" sx={{ fontWeight: 700, fontSize: 12, textTransform: "uppercase", letterSpacing: 0.5, pr: 6 }}>
                 Action
               </TableCell>
             </TableRow>
@@ -228,7 +237,7 @@ export default function ReviewerAssignmentsPage() {
                       </Box>
                     </TableCell>
 
-                    <TableCell align="right" sx={{ pr: 3 }}>
+                    <TableCell align="right" sx={{ pr: 6 }}>
                       <Button
                         variant="contained"
                         size="small"
