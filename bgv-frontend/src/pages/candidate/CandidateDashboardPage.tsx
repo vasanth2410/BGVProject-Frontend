@@ -4,7 +4,8 @@ import {
   Box,
   Typography,
   Button,
-  CircularProgress
+  CircularProgress,
+  useMediaQuery,
 } from "@mui/material";
 
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -36,6 +37,7 @@ import type {
 
 export default function CandidateDashboardPage() {
   const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width:768px)");
   const [dashboard, setDashboard] = useState<CandidateDashboard | null>(null);
   const [profile, setProfile] = useState<CandidateProfile | null>(null);
   const [verifications, setVerifications] = useState<CandidateVerification[]>([]);
@@ -115,7 +117,7 @@ export default function CandidateDashboardPage() {
           <p className="dashboard-subtitle">
             Here's the status of your background verification process.
           </p>
-          <div style={{ display: "flex", gap: "12px", alignItems: "center", marginTop: "12px" }}>
+          <div style={{ display: "flex", gap: "12px", alignItems: "center", marginTop: "12px", flexWrap: "wrap" }}>
             <div className="dashboard-date-badge">
               <CalendarTodayIcon fontSize="small" />
               <span>{today}</span>
@@ -139,7 +141,7 @@ export default function CandidateDashboardPage() {
                 "&:hover": { backgroundColor: "#15803d" }
               }}
             >
-              {downloadingPdf ? "Generating Report..." : "📄 Download PDF BGV Report"}
+              {downloadingPdf ? "Generating Report..." : (isMobile ? "📄 PDF Report" : "📄 Download PDF BGV Report")}
             </Button>
           </div>
         </div>
@@ -216,7 +218,7 @@ export default function CandidateDashboardPage() {
       <div className="charts-section">
         {/* Left Card: Profile & Progress */}
         <div className="chart-card">
-          <div className="chart-title" style={{ marginBottom: "24px" }}>
+          <div className="chart-title" style={{ marginBottom: "12px" }}>
             Candidate Profile Details
           </div>
           <CandidateProfileCard
@@ -226,14 +228,14 @@ export default function CandidateDashboardPage() {
             appliedRole="Software Engineer"
             status={dashboard.overallStatus}
           />
-          <Box sx={{ mt: 2 }}>
+          <Box sx={{ mt: 0 }}>
             <OverallStatusCard status={dashboard.overallStatus} />
           </Box>
         </div>
 
         {/* Right Card: Pie Chart */}
         <div className="chart-card">
-          <div className="chart-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div className="chart-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
             <span>Verification Document Breakdown</span>
             <span style={{ fontSize: "14px", fontWeight: "normal", color: "#6b7280" }}>
               Total: {dashboard.documentsUploaded}
@@ -248,7 +250,7 @@ export default function CandidateDashboardPage() {
       </div>
 
       {/* Bottom Section: Verification Table */}
-      <div className="pending-section" style={{ marginTop: "30px" }}>
+      <div className="pending-section" style={{ marginTop: isMobile ? "16px" : "30px" }}>
         <h2 style={{ fontSize: "20px", fontWeight: 700, marginBottom: "20px" }}>
           Verification Status Checkpoints
         </h2>

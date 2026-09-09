@@ -544,13 +544,14 @@ export default function CandidateVerificationPage() {
       <Paper
         elevation={0}
         sx={{
-          p: 3,
+          p: { xs: 1.5, sm: 3 },
           borderRadius: 3,
           bgcolor: "#FFFFFF",
           color: "#0F172A",
           border: "1px solid #E2E8F0",
           boxShadow: "0 4px 20px -2px rgba(15, 23, 42, 0.05)",
-          overflow: "hidden",
+          overflowX: "auto",
+          width: "100%",
           "body.dark-mode &": {
             bgcolor: "#1E293B",
             color: "#F8FAFC",
@@ -660,8 +661,9 @@ export default function CandidateVerificationPage() {
           />
         </Box>
 
-        {/* Table */}
-        <Table sx={{ bgcolor: "#FFFFFF", "body.dark-mode &": { bgcolor: "transparent" } }}>
+        {/* Table Wrapper for Horizontal Scroll */}
+        <Box sx={{ overflowX: "auto", width: "100%" }}>
+          <Table sx={{ minWidth: 650, bgcolor: "#FFFFFF", "body.dark-mode &": { bgcolor: "transparent" } }}>
           <TableHead sx={{ bgcolor: "#F8FAFC", "body.dark-mode &": { bgcolor: "rgba(15, 23, 42, 0.7)" } }}>
             <TableRow>
               <TableCell width="50px" sx={{ borderBottom: "1px solid #E2E8F0", "body.dark-mode &": { borderColor: "rgba(255, 255, 255, 0.08)" } }} />
@@ -693,6 +695,7 @@ export default function CandidateVerificationPage() {
             )}
           </TableBody>
         </Table>
+        </Box>
       </Paper>
     </Box>
   );

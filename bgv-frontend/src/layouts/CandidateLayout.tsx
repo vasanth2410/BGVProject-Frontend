@@ -140,43 +140,33 @@ export default function CandidateLayout() {
         display: "flex",
         bgcolor: "var(--background-bg)",
         minHeight: "100vh",
+        width: "100%",
         transition: "background-color 0.3s ease",
       }}
     >
-
       <Drawer
         variant={isMobile ? "temporary" : "permanent"}
         open={isMobile ? mobileOpen : true}
         onClose={() => setMobileOpen(false)}
+        ModalProps={{ disableScrollLock: true }}
+        disableScrollLock
         sx={{
-          width: drawerWidth,
+          width: isMobile ? 0 : drawerWidth,
           flexShrink: 0,
-
           "& .MuiDrawer-paper": {
-
             width: drawerWidth,
-
             background: "var(--sidebar-bg)",
-
             color: "#fff",
-
             border: "none",
-
             display: "flex",
-
             flexDirection: "column",
-
             justifyContent: "space-between",
-
             transition: "background-color 0.3s ease, color 0.3s ease",
-
           },
-
         }}
       >
-
+        {/* Drawer content... */}
         <Box>
-
           <Toolbar
             sx={{
               py: 3,
@@ -184,15 +174,13 @@ export default function CandidateLayout() {
               alignItems: "flex-start",
             }}
           >
-
             <Box>
-
               <Typography
-  variant="h4"
-  sx={{
-    fontWeight: "bold",
-  }}
->
+                variant="h4"
+                sx={{
+                  fontWeight: "bold",
+                }}
+              >
                 BGV System
               </Typography>
 
@@ -204,9 +192,7 @@ export default function CandidateLayout() {
               >
                 Candidate Portal
               </Typography>
-
             </Box>
-
           </Toolbar>
 
           <Divider
@@ -221,7 +207,6 @@ export default function CandidateLayout() {
               px: 2,
             }}
           >
-
             {menus.map((menu) => {
               const isActive = location.pathname === menu.path;
               return (
@@ -296,13 +281,10 @@ export default function CandidateLayout() {
                 </ListItemButton>
               );
             })}
-
           </List>
-
         </Box>
 
         <Box>
-
           <Divider
             sx={{
               borderColor: "var(--sidebar-divider)",
@@ -322,7 +304,6 @@ export default function CandidateLayout() {
               },
             }}
           >
-
             <Avatar
               src={avatarUrl || undefined}
               sx={{
@@ -365,7 +346,6 @@ export default function CandidateLayout() {
                 {profile?.email || "candidate@test.com"}
               </Typography>
             </Box>
-
           </Box>
 
           <Box
@@ -373,7 +353,6 @@ export default function CandidateLayout() {
               p: 1.5,
             }}
           >
-
             <Button
               fullWidth
               variant="text"
@@ -397,106 +376,169 @@ export default function CandidateLayout() {
             >
               Logout
             </Button>
-
           </Box>
-
         </Box>
-
       </Drawer>
 
       <Box
         sx={{
           flexGrow: 1,
+          minWidth: 0,
+          width: "100%",
         }}
       >
-
         <AppBar
-
-          position="static"
-
+          position="sticky"
           elevation={1}
-
           sx={{
-
+            top: 0,
+            zIndex: 1100,
             bgcolor: "var(--appbar-bg)",
-
             color: "var(--appbar-text)",
-
             transition: "background-color 0.3s ease, color 0.3s ease",
-
+            width: "100%",
           }}
-
         >
-
-          <Toolbar>
+          <Toolbar
+            sx={{
+              px: { xs: 1.5, sm: 3 },
+              minHeight: { xs: 56, sm: 64 },
+            }}
+          >
             {isMobile && (
               <IconButton
-                color="inherit"
                 aria-label="open drawer"
-                edge="start"
                 onClick={() => setMobileOpen(!mobileOpen)}
-                sx={{ mr: 1 }}
+                sx={{
+                  ml: { xs: 0.75, sm: 0 },
+                  mr: 1.5,
+                  width: 38,
+                  height: 38,
+                  borderRadius: "10px",
+                  background: "linear-gradient(135deg, #2563EB 0%, #00F0FF 100%)",
+                  color: "#ffffff",
+                  boxShadow: "0 4px 12px rgba(37, 99, 235, 0.35)",
+                  transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+                  "&:hover": {
+                    transform: "translateY(-2px) scale(1.05)",
+                    boxShadow: "0 6px 18px rgba(0, 240, 255, 0.45)",
+                  },
+                }}
               >
-                <MenuIcon />
+                <MenuIcon style={{ fontSize: 22 }} />
               </IconButton>
             )}
 
             <Typography
               sx={{
                 flexGrow: 1,
-                fontWeight: 600,
+                minWidth: 0,
+                fontWeight: 700,
+                fontSize: { xs: "0.85rem", sm: "1.15rem" },
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                mr: { xs: 0.5, sm: 1 },
               }}
             >
-              Home • Dashboard
+              {location.pathname === "/candidate/profile"
+                ? "Profile"
+                : location.pathname === "/candidate/documents"
+                ? "My Documents"
+                : location.pathname === "/candidate/verifications"
+                ? "Verification Status"
+                : (
+                    <>
+                      Welcome, <span style={{ color: "#2563EB" }}>{profile?.fullName ? profile.fullName.split(" ")[0] : "Candidate"}</span>
+                    </>
+                  )}
             </Typography>
 
-            <Box sx={{ mr: 2, display: "flex", alignItems: "center" }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: { xs: 0.8, sm: 1.5 }, flexShrink: 0 }}>
               <DarkModeToggle />
+
+              <IconButton
+                onClick={() => setSearchOpen(true)}
+                sx={{
+                  width: { xs: 34, sm: 40 },
+                  height: { xs: 34, sm: 40 },
+                  bgcolor: "rgba(243, 244, 246, 0.8)",
+                  color: "#475569",
+                  transition: "all 0.25s ease",
+                  "body.dark-mode &": {
+                    bgcolor: "#23283b",
+                    color: "#94a3b8",
+                  },
+                  "&:hover": {
+                    bgcolor: "rgba(229, 231, 235, 1)",
+                    transform: "translateY(-2px)",
+                    "body.dark-mode &": {
+                      bgcolor: "#2e364f",
+                      color: "#ffffff",
+                    },
+                  },
+                }}
+              >
+                <SearchIcon fontSize="small" />
+              </IconButton>
+
+              <IconButton
+                onClick={handleNotificationOpen}
+                sx={{
+                  width: { xs: 34, sm: 40 },
+                  height: { xs: 34, sm: 40 },
+                  bgcolor: "rgba(243, 244, 246, 0.8)",
+                  color: "#475569",
+                  transition: "all 0.25s ease",
+                  "body.dark-mode &": {
+                    bgcolor: "#23283b",
+                    color: "#94a3b8",
+                  },
+                  "&:hover": {
+                    bgcolor: "rgba(229, 231, 235, 1)",
+                    transform: "translateY(-2px)",
+                    "body.dark-mode &": {
+                      bgcolor: "#2e364f",
+                      color: "#ffffff",
+                    },
+                  },
+                }}
+              >
+                <NotificationsNoneIcon fontSize="small" />
+              </IconButton>
+
+              <Avatar
+                src={avatarUrl || undefined}
+                onClick={() => navigate("/candidate/profile")}
+                sx={{
+                  width: { xs: 34, sm: 40 },
+                  height: { xs: 34, sm: 40 },
+                  bgcolor: "#2563EB",
+                  color: "#ffffff",
+                  fontWeight: 700,
+                  fontSize: { xs: 14, sm: 16 },
+                  boxShadow: "0 4px 12px rgba(37, 99, 235, 0.35)",
+                  transition: "all 0.25s ease",
+                  cursor: "pointer",
+                  "&:hover": {
+                    transform: "scale(1.08)",
+                    boxShadow: "0 6px 16px rgba(37, 99, 235, 0.5)",
+                  },
+                }}
+              >
+                {!avatarUrl && (profile?.fullName ? getInitials(profile.fullName) : "C")}
+              </Avatar>
             </Box>
-
-            <IconButton onClick={() => setSearchOpen(true)}>
-
-              <SearchIcon />
-
-            </IconButton>
-
-            <IconButton onClick={handleNotificationOpen}>
-
-              <NotificationsNoneIcon />
-
-            </IconButton>
-
-            <Avatar
-              src={avatarUrl || undefined}
-              onClick={() => navigate("/candidate/profile")}
-              sx={{
-                ml: 2,
-                bgcolor: "var(--sidebar-bg)",
-                fontWeight: 700,
-                transition: "background-color 0.3s ease, transform 0.2s ease",
-                cursor: "pointer",
-                "&:hover": {
-                  transform: "scale(1.05)",
-                },
-              }}
-            >
-              {!avatarUrl && (profile?.fullName ? getInitials(profile.fullName) : "C")}
-            </Avatar>
-
           </Toolbar>
-
         </AppBar>
 
         <Box
           sx={{
-            p: 4,
+            p: { xs: 1.5, sm: 2.5, md: 4 },
           }}
         >
-
           <Outlet />
-
         </Box>
-
       </Box>
 
       {/* Notifications Popover */}

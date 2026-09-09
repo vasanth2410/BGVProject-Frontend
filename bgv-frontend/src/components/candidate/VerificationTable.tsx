@@ -33,8 +33,8 @@ export default function VerificationTable({ data }: Props) {
       elevation={3}
       sx={{
         borderRadius: 3,
-        overflow: "hidden",
-        bgcolor: "var(--card-bg, #1E293B)",
+        overflowX: "auto",
+        width: "100%",
         backgroundImage: "none",
       }}
     >
@@ -65,7 +65,7 @@ export default function VerificationTable({ data }: Props) {
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
                       {getFileIcon(item.fileName)}
                       <Box>
-                        <Typography variant="body2" sx={{ fontWeight: 600, color: "var(--text-color, #F8FAFC)" }}>
+                        <Typography variant="body2" sx={{ fontWeight: 600, color: "text.primary" }}>
                           {item.fileName}
                         </Typography>
                         <Typography variant="caption" sx={{ color: "text.secondary" }}>
@@ -77,7 +77,7 @@ export default function VerificationTable({ data }: Props) {
 
                   <TableCell>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <Box sx={{ flexGrow: 1, height: 6, bgcolor: "rgba(255, 255, 255, 0.1)", borderRadius: 3, overflow: "hidden" }}>
+                      <Box sx={{ flexGrow: 1, height: 6, bgcolor: "action.hover", borderRadius: 3, overflow: "hidden" }}>
                         <Box
                           sx={{
                             height: "100%",

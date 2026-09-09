@@ -155,28 +155,29 @@ export default function AdminDocumentsPage() {
                     </span>
                   </td>
 
-                  <td style={{ textAlign: 'center' }}>
-                    <button
-                      className="btn-view"
-                      style={{ marginRight: '8px' }}
-                      onClick={() =>
-                        downloadDocument(doc.id)
-                      }
-                    >
-                      Download
-                    </button>
+                  <td>
+                    <div className="action-buttons">
+                      <button
+                        className="btn-view"
+                        onClick={() =>
+                          downloadDocument(doc.id)
+                        }
+                      >
+                        Download
+                      </button>
 
-                    <button
-                      className="btn-delete"
-                      onClick={() =>
-                        openDeleteDialog(
-                          doc.id,
-                          doc.fileName
-                        )
-                      }
-                    >
-                      Delete
-                    </button>
+                      <button
+                        className="btn-delete"
+                        onClick={() =>
+                          openDeleteDialog(
+                            doc.id,
+                            doc.fileName
+                          )
+                        }
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

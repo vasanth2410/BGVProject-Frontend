@@ -39,7 +39,8 @@ export default function CandidateDocumentsTable({
       elevation={3}
       sx={{
         borderRadius: 3,
-        overflow: "hidden",
+        overflowX: "auto",
+        width: "100%",
       }}
     >
 
