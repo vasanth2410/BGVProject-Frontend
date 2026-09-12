@@ -340,7 +340,7 @@ function VerificationRow({ item }: { item: CandidateVerification }) {
           <Tooltip title="Download Document">
             <IconButton
               size="small"
-              onClick={() => downloadCandidateDocument(item.documentId)}
+              onClick={() => downloadCandidateDocument(item.documentId, item.fileName)}
               sx={{
                 bgcolor: "#EFF6FF",
                 color: "#2563EB",
