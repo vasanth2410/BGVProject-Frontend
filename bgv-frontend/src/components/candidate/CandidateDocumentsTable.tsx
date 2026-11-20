@@ -8,6 +8,7 @@ import {
   Chip,
   Button,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 
 import DownloadIcon
@@ -17,11 +18,15 @@ import type {
   CandidateDocument,
 } from "../../types/CandidatePortal";
 
+import { formatToISTDate } from "../../utils/dateUtils";
+
 interface Props {
 
   data: CandidateDocument[];
 
-  onDownload: (id: number) => void;
+  onDownload: (id: number, fileName?: string) => void;
+
+  downloadingId?: number | null;
 
 }
 
@@ -30,6 +35,8 @@ export default function CandidateDocumentsTable({
   data,
 
   onDownload,
+
+  downloadingId,
 
 }: Props) {
 
@@ -129,9 +136,7 @@ export default function CandidateDocumentsTable({
 
                 <TableCell>
 
-                  {new Date(
-                    document.uploadedDate
-                  ).toLocaleDateString()}
+                  {formatToISTDate(document.uploadedDate)}
 
                 </TableCell>
 
@@ -139,16 +144,22 @@ export default function CandidateDocumentsTable({
 
                   <Button
                     variant="outlined"
+                    disabled={downloadingId === document.id}
                     startIcon={
-                      <DownloadIcon />
+                      downloadingId === document.id ? (
+                        <CircularProgress size={16} color="inherit" />
+                      ) : (
+                        <DownloadIcon />
+                      )
                     }
                     onClick={() =>
                       onDownload(
-                        document.id
+                        document.id,
+                        document.fileName
                       )
                     }
                   >
-                    Download
+                    {downloadingId === document.id ? "Downloading..." : "Download"}
                   </Button>
 
                 </TableCell>

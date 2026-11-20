@@ -43,6 +43,7 @@ import {
 } from "../../services/ReviewerService";
 
 import type { Verification } from "../../types/Verification";
+import { formatToISTDateTime } from "../../utils/dateUtils";
 
 export default function ReviewerVerificationsPage() {
   const navigate = useNavigate();
@@ -261,7 +262,7 @@ export default function ReviewerVerificationsPage() {
       <body>
         <div class="header">
           <h2>🛡️ BGV SYSTEM - VERIFICATION SUMMARY REPORT</h2>
-          <p>Generated Date: ${new Date().toLocaleString("en-IN")} | Total Filtered Records: ${filteredVerifications.length}</p>
+          <p>Generated Date: ${formatToISTDateTime(new Date())} | Total Filtered Records: ${filteredVerifications.length}</p>
         </div>
         <table>
           <thead>

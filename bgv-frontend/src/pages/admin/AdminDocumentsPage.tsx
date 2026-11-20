@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { Alert } from "@mui/material";
 import "./CandidatesPage.css";
 
 import DeleteDocumentDialog from "../../components/admin/DeleteDocumentDialog";
 
 import {
   getAllDocuments,
-  downloadDocument,
+  viewDocument,
   deleteDocument,
 } from "../../services/DocumentService";
 
@@ -23,6 +24,25 @@ export default function AdminDocumentsPage() {
 
   const [selectedFileName, setSelectedFileName] =
     useState("");
+
+  const [viewError, setViewError] = useState<string | null>(null);
+
+  const [viewingId, setViewingId] = useState<number | null>(null);
+
+  const handleView = async (id: number, fileName: string) => {
+    try {
+      setViewError(null);
+      setViewingId(id);
+      await viewDocument(id, fileName);
+    } catch (error: any) {
+      console.error("View document error:", error);
+      setViewError(
+        error?.message || "Failed to view document. Please try again."
+      );
+    } finally {
+      setViewingId(null);
+    }
+  };
 
   const loadDocuments = async () => {
     try {
@@ -112,6 +132,14 @@ export default function AdminDocumentsPage() {
           </div>
         </div>
 
+        {viewError && (
+          <div style={{ marginBottom: "16px" }}>
+            <Alert severity="error" onClose={() => setViewError(null)}>
+              {viewError}
+            </Alert>
+          </div>
+        )}
+
         <div className="table-container">
           <table className="candidate-table">
             <thead>
@@ -160,10 +188,11 @@ export default function AdminDocumentsPage() {
                       <button
                         className="btn-view"
                         onClick={() =>
-                          downloadDocument(doc.id)
+                          handleView(doc.id, doc.fileName)
                         }
+                        disabled={viewingId === doc.id}
                       >
-                        Download
+                        {viewingId === doc.id ? "Loading..." : "View"}
                       </button>
 
                       <button

@@ -84,6 +84,22 @@ export async function uploadDocument(
   return response.data;
 
 }
+function getExtensionFromMimeType(mimeType: string): string {
+  if (!mimeType) return "";
+  const lower = mimeType.toLowerCase();
+  if (lower.includes("pdf")) return ".pdf";
+  if (lower.includes("png")) return ".png";
+  if (lower.includes("jpeg") || lower.includes("jpg")) return ".jpg";
+  if (lower.includes("webp")) return ".webp";
+  if (lower.includes("wordprocessingml") || lower.includes("docx")) return ".docx";
+  if (lower.includes("msword")) return ".doc";
+  if (lower.includes("sheet") || lower.includes("xlsx")) return ".xlsx";
+  if (lower.includes("excel") || lower.includes("xls")) return ".xls";
+  if (lower.includes("csv")) return ".csv";
+  if (lower.includes("text/plain")) return ".txt";
+  return "";
+}
+
 function getMimeTypeFromFileName(fileName: string): string {
   const ext = fileName.split(".").pop()?.toLowerCase() || "";
   switch (ext) {
@@ -129,15 +145,23 @@ export async function downloadCandidateDocument(
   if (!downloadFileName) {
     const contentDisposition = response.headers["content-disposition"];
     if (contentDisposition) {
-      const match = contentDisposition.match(/filename="?([^";\n]+)"?/);
+      const match = contentDisposition.match(/filename\*?=(?:UTF-8'')?"?([^";\n]+)"?/i);
       if (match && match[1]) {
-        downloadFileName = match[1];
+        downloadFileName = decodeURIComponent(match[1].trim());
       }
     }
   }
 
   if (!downloadFileName) {
-    downloadFileName = "document";
+    const contentType = String(response.headers["content-type"] || "");
+    const ext = getExtensionFromMimeType(contentType);
+    downloadFileName = `document_${id}${ext || ""}`;
+  } else if (!downloadFileName.includes(".")) {
+    const contentType = String(response.headers["content-type"] || "");
+    const ext = getExtensionFromMimeType(contentType);
+    if (ext) {
+      downloadFileName += ext;
+    }
   }
 
   const mimeType = getMimeTypeFromFileName(downloadFileName);
@@ -150,5 +174,9 @@ export async function downloadCandidateDocument(
   document.body.appendChild(link);
   link.click();
   link.remove();
-  window.URL.revokeObjectURL(url);
+
+  // Asynchronous cleanup to prevent Chromium from aborting download before stream finishes
+  setTimeout(() => {
+    window.URL.revokeObjectURL(url);
+  }, 1000);
 }

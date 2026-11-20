@@ -47,11 +47,8 @@ import {
   rejectVerification,
   reReviewVerification,
   createVerification,
+  viewReviewerDocument,
 } from "../../services/ReviewerService";
-
-import {
-  getDocumentUrl,
-} from "../../services/DocumentService";
 
 import type {
   Verification,
@@ -104,6 +101,12 @@ export default function ReviewerCandidateReviewPage() {
 
   const [snackbarMessage, setSnackbarMessage] =
     useState("");
+
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<"success" | "error">("success");
+
+  const [viewingDocId, setViewingDocId] =
+    useState<number | null>(null);
 
     const [dialogOpen, setDialogOpen] =
   useState(false);
@@ -206,9 +209,31 @@ const [liveModalOpen, setLiveModalOpen] = useState(false);
     void loadData();
   }, [id]);
 
-  const showMessage = (message: string) => {
+  const showMessage = (
+    message: string,
+    severity: "success" | "error" = "success"
+  ) => {
     setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
     setOpenSnackbar(true);
+  };
+
+  const handleViewDocument = async (
+    documentId: number,
+    fileName?: string
+  ) => {
+    try {
+      setViewingDocId(documentId);
+      await viewReviewerDocument(documentId, fileName);
+    } catch (err: any) {
+      console.error("View document error:", err);
+      showMessage(
+        err?.message || "Failed to preview document. Please try again.",
+        "error"
+      );
+    } finally {
+      setViewingDocId(null);
+    }
   };
 
   const openConfirmation = (
@@ -698,10 +723,10 @@ const [liveModalOpen, setLiveModalOpen] = useState(false);
                   <Button
                     variant="outlined"
                     startIcon={<VisibilityIcon />}
-                    href={getDocumentUrl(document.id)}
-                    target="_blank"
+                    onClick={() => handleViewDocument(document.id, document.fileName)}
+                    disabled={viewingDocId === document.id}
                   >
-                    View
+                    {viewingDocId === document.id ? "Loading..." : "View"}
                   </Button>
                 </TableCell>
               </TableRow>
@@ -901,7 +926,7 @@ const [liveModalOpen, setLiveModalOpen] = useState(false);
 >
 
   <Alert
-    severity="success"
+    severity={snackbarSeverity}
     variant="filled"
     onClose={() =>
       setOpenSnackbar(false)

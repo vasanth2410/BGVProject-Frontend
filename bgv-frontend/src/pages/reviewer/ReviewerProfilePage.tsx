@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
+import { formatToISTDateTime } from "../../utils/dateUtils";
 
 export default function ReviewerProfilePage() {
   const [name, setName] = useState(localStorage.getItem("name") || "Reviewer User");
@@ -44,7 +45,7 @@ export default function ReviewerProfilePage() {
     assignedCases: 15,
     completedReviews: 10,
     pendingReviews: 5,
-    lastLogin: new Date().toLocaleString(),
+    lastLogin: formatToISTDateTime(new Date()),
   };
 
   const handleOpenEdit = () => {

@@ -53,6 +53,8 @@ import type {
 }
   from "../../types/AdminDashboard";
 
+import { formatToISTDate } from "../../utils/dateUtils";
+
 import {
   useNavigate,
 }
@@ -413,11 +415,7 @@ export default function AdminDashboardPage() {
                         </td>
 
                         <td>
-                          {
-                            new Date(
-                              candidate.createdDate
-                            ).toLocaleDateString()
-                          }
+                          {formatToISTDate(candidate.createdDate)}
                         </td>
 
                         <td>

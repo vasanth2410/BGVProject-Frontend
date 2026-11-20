@@ -21,6 +21,7 @@ import {
 
 import { getAuditLogs } from "../../services/AuditService";
 import type { Audit } from "../../types/Audit";
+import { formatToISTDateTime } from "../../utils/dateUtils";
 
 export default function AdminAuditLogsPage() {
   const [logs, setLogs] = useState<Audit[]>([]);
@@ -111,7 +112,7 @@ export default function AdminAuditLogsPage() {
       `"${log.action || ""}"`,
       `"${log.performedBy || ""}"`,
       `"${log.role || ""}"`,
-      `"${new Date(log.performedAt).toLocaleString()}"`,
+      `"${formatToISTDateTime(log.performedAt)}"`,
     ]);
 
     const csvContent =
@@ -378,10 +379,7 @@ export default function AdminAuditLogsPage() {
                   <td style={{ fontWeight: 500 }}>{log.performedBy}</td>
                   <td>{renderRoleBadge(log.role)}</td>
                   <td style={{ color: "#64748b", fontSize: "13px" }}>
-                    {new Date(log.performedAt).toLocaleString(undefined, {
-                      dateStyle: "medium",
-                      timeStyle: "medium",
-                    })}
+                    {formatToISTDateTime(log.performedAt)}
                   </td>
                 </tr>
               ))

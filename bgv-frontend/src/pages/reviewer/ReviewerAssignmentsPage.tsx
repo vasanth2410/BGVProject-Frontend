@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import { getAssignedCandidates } from "../../services/ReviewerService";
 import type { ReviewerAssignment } from "../../types/ReviewerAssignment";
 import { getSavedAvatar } from "../../utils/avatarUtils";
+import { formatToISTDate } from "../../utils/dateUtils";
 
 export default function ReviewerAssignmentsPage() {
   const navigate = useNavigate();
@@ -186,11 +187,7 @@ export default function ReviewerAssignmentsPage() {
               filteredAssignments.map((assignment) => {
                 const savedAvatar = getSavedAvatar(assignment.candidateId, assignment.candidateName);
                 const avatarColor = getAvatarColor(assignment.candidateName);
-                const formattedDate = new Date(assignment.assignedDate).toLocaleDateString("en-IN", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                });
+                const formattedDate = formatToISTDate(assignment.assignedDate);
 
                 return (
                   <TableRow

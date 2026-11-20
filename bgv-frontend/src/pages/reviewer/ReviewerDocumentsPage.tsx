@@ -15,6 +15,8 @@ import {
   InputAdornment,
   Tabs,
   Tab,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
@@ -26,13 +28,49 @@ import DownloadIcon from "@mui/icons-material/Download";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
 
-import { getReviewerDocuments } from "../../services/ReviewerService";
+import {
+  getReviewerDocuments,
+  downloadReviewerDocument,
+  viewReviewerDocument,
+} from "../../services/ReviewerService";
 import type { ReviewerDocument } from "../../types/ReviewerDocument";
 
 export default function ReviewerDocumentsPage() {
   const [documents, setDocuments] = useState<ReviewerDocument[]>([]);
   const [search, setSearch] = useState("");
   const [statusTab, setStatusTab] = useState<string>("All");
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [actionInProgressId, setActionInProgressId] = useState<number | null>(null);
+
+  const handleView = async (documentId: number, fileName?: string) => {
+    try {
+      setActionError(null);
+      setActionInProgressId(documentId);
+      await viewReviewerDocument(documentId, fileName);
+    } catch (err: any) {
+      console.error("View reviewer document error:", err);
+      setActionError(
+        err?.message || "Failed to preview document. Please try again."
+      );
+    } finally {
+      setActionInProgressId(null);
+    }
+  };
+
+  const handleDownload = async (documentId: number, fileName?: string) => {
+    try {
+      setActionError(null);
+      setActionInProgressId(documentId);
+      await downloadReviewerDocument(documentId, fileName);
+    } catch (err: any) {
+      console.error("Download reviewer document error:", err);
+      setActionError(
+        err?.message || "Failed to download document. Please try again."
+      );
+    } finally {
+      setActionInProgressId(null);
+    }
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -448,12 +486,8 @@ export default function ReviewerDocumentsPage() {
                           size="small"
                           variant="outlined"
                           startIcon={<VisibilityIcon sx={{ fontSize: 15 }} />}
-                          onClick={() =>
-                            window.open(
-                              `${import.meta.env.VITE_API_BASE_URL || "https://bgvsystem-api.onrender.com/api"}/Documents/download/${doc.id}`,
-                              "_blank"
-                            )
-                          }
+                          onClick={() => handleView(doc.id, doc.fileName)}
+                          disabled={actionInProgressId === doc.id}
                           sx={{
                             borderRadius: 2,
                             textTransform: "none",
@@ -467,9 +501,8 @@ export default function ReviewerDocumentsPage() {
                           size="small"
                           variant="contained"
                           startIcon={<DownloadIcon sx={{ fontSize: 15 }} />}
-                          onClick={() =>
-                            (window.location.href = `${import.meta.env.VITE_API_BASE_URL || "https://bgvsystem-api.onrender.com/api"}/Documents/download/${doc.id}`)
-                          }
+                          onClick={() => handleDownload(doc.id, doc.fileName)}
+                          disabled={actionInProgressId === doc.id}
                           sx={{
                             borderRadius: 2,
                             textTransform: "none",
@@ -488,6 +521,20 @@ export default function ReviewerDocumentsPage() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <Snackbar
+        open={Boolean(actionError)}
+        autoHideDuration={6000}
+        onClose={() => setActionError(null)}
+      >
+        <Alert
+          severity="error"
+          variant="filled"
+          onClose={() => setActionError(null)}
+        >
+          {actionError}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

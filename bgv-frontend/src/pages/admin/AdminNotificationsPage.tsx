@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllNotifications } from "../../services/AdminNotificationService";
+import { formatToISTDateTime } from "../../utils/dateUtils";
 import {
   Dialog,
   DialogTitle,
@@ -104,7 +105,7 @@ export default function AdminNotificationsPage() {
                       variant="filled"
                     />
                   </td>
-                  <td>{new Date(n.createdAt).toLocaleString()}</td>
+                  <td>{formatToISTDateTime(n.createdAt)}</td>
                   <td>
                     <Button
                       variant="contained"

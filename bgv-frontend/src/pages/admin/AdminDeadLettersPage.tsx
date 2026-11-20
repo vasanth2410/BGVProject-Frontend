@@ -7,6 +7,7 @@ import "./CandidatesPage.css";
 import {
   getDeadLetters,
 } from "../../services/AdminNotificationService";
+import { formatToISTDateTime } from "../../utils/dateUtils";
 
 export default function AdminDeadLettersPage() {
 
@@ -76,9 +77,7 @@ export default function AdminDeadLettersPage() {
                     </span>
                   </td>
                   <td>
-                    {new Date(
-                      n.createdAt
-                    ).toLocaleString()}
+                    {formatToISTDateTime(n.createdAt)}
                   </td>
                 </tr>
               ))}

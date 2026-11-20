@@ -15,6 +15,7 @@ import {
 
 import EditIcon from "@mui/icons-material/Edit";
 import AdminLayout from "../../layouts/AdminLayout";
+import { formatToISTDateTime } from "../../utils/dateUtils";
 import "./AdminDashboardPage.css";
 
 export default function AdminProfilePage() {
@@ -96,7 +97,7 @@ export default function AdminProfilePage() {
 
             <div className="dashboard-card" style={{ cursor: "default", padding: "20px" }}>
               <h4 style={{ fontSize: "13px", textTransform: "uppercase", letterSpacing: "0.5px" }}>Last Login</h4>
-              <h1 style={{ fontSize: "18px", marginTop: "8px", marginBottom: "0" }}>{new Date().toLocaleString()}</h1>
+              <h1 style={{ fontSize: "18px", marginTop: "8px", marginBottom: "0" }}>{formatToISTDateTime(new Date())}</h1>
             </div>
           </div>
 

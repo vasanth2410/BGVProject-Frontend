@@ -28,6 +28,7 @@ import ScienceIcon from "@mui/icons-material/Science";
 
 import { getNotifications } from "../../services/NotificationService";
 import type { Notification } from "../../types/Notification";
+import { formatToISTDateTime } from "../../utils/dateUtils";
 
 export default function ReviewerNotificationsPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -38,7 +39,7 @@ export default function ReviewerNotificationsPage() {
     const loadData = async () => {
       try {
         const result = await getNotifications();
-        setNotifications(result);
+        setNotifications(Array.isArray(result) ? result : []);
       } catch (error) {
         console.error(error);
       }
@@ -369,7 +370,7 @@ export default function ReviewerNotificationsPage() {
                       <Box sx={{ display: "flex", alignItems: "center", gap: 0.75, color: "text.secondary" }}>
                         <AccessTimeIcon sx={{ fontSize: 15, opacity: 0.7 }} />
                         <Typography variant="body2" sx={{ fontSize: 12.5, fontWeight: 500 }}>
-                          {new Date(n.createdAt).toLocaleString("en-IN", {
+                          {formatToISTDateTime(n.createdAt, {
                             day: "numeric",
                             month: "short",
                             year: "numeric",
@@ -399,7 +400,7 @@ export default function ReviewerNotificationsPage() {
                             }}
                           />
                           <Typography variant="body2" sx={{ fontSize: 12.5, fontWeight: 600 }}>
-                            {new Date(n.sentAt).toLocaleString("en-IN", {
+                            {formatToISTDateTime(n.sentAt, {
                               day: "numeric",
                               month: "short",
                               hour: "2-digit",

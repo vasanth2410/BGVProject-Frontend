@@ -14,6 +14,8 @@ import {
   cleanupDuplicateAssignments,
 } from "../../services/AssignmentService";
 
+import { formatToISTDateTime, formatToISTDate } from "../../utils/dateUtils";
+
 import AssignCandidateModal from "../../components/AssignCandidateModal";
 
 
@@ -87,10 +89,17 @@ export default function AssignmentsPage() {
 
           ||
 
-          new Date(
+          formatToISTDate(
             assignment.assignedDate
           )
-            .toLocaleDateString()
+            .toLowerCase()
+            .includes(keyword)
+
+          ||
+
+          formatToISTDateTime(
+            assignment.assignedDate
+          )
             .toLowerCase()
             .includes(keyword)
 
@@ -192,9 +201,9 @@ export default function AssignmentsPage() {
                       <td>{assignment.candidateName}</td>
                       <td>{assignment.reviewerName}</td>
                       <td>
-                        {new Date(
+                        {formatToISTDateTime(
                           assignment.assignedDate
-                        ).toLocaleString()}
+                        )}
                       </td>
                       <td>
                         <button

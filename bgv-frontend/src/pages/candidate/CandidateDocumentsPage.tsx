@@ -25,6 +25,8 @@ export default function CandidateDocumentsPage() {
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [latestOcr, setLatestOcr] = useState<OcrResult | null>(null);
+  const [downloadingId, setDownloadingId] = useState<number | null>(null);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
 
   const loadDocuments = async () => {
     try {
@@ -41,11 +43,40 @@ export default function CandidateDocumentsPage() {
     loadDocuments();
   }, []);
 
-  const handleDownload = async (id: number) => {
+  const handleDownload = async (id: number, fileName?: string) => {
+    setDownloadingId(id);
+    setDownloadError(null);
     try {
-      await downloadCandidateDocument(id);
-    } catch (error) {
-      console.error(error);
+      await downloadCandidateDocument(id, fileName);
+    } catch (error: any) {
+      console.error("Download failed:", error);
+      let errMsg = `Failed to download "${fileName || "document"}". Please try again.`;
+      if (error?.response?.data instanceof Blob) {
+        try {
+          const text = await error.response.data.text();
+          const parsed = JSON.parse(text);
+          const rawMsg = parsed.Message || parsed.message || parsed.title || text;
+          if (typeof rawMsg === "string" && rawMsg.includes("supabase.co")) {
+            errMsg = "Storage Server Error: Supabase project is currently paused or inactive. Please restore/unpause the Supabase project in your Supabase dashboard.";
+          } else {
+            errMsg = rawMsg;
+          }
+        } catch {
+          // keep fallback
+        }
+      } else if (error?.response?.data?.Message || error?.response?.data?.message) {
+        const rawMsg = error.response.data.Message || error.response.data.message;
+        if (typeof rawMsg === "string" && rawMsg.includes("supabase.co")) {
+          errMsg = "Storage Server Error: Supabase project is currently paused or inactive. Please restore/unpause the Supabase project in your Supabase dashboard.";
+        } else {
+          errMsg = rawMsg;
+        }
+      } else if (error?.message) {
+        errMsg = error.message;
+      }
+      setDownloadError(errMsg);
+    } finally {
+      setDownloadingId(null);
     }
   };
 
@@ -160,7 +191,21 @@ export default function CandidateDocumentsPage() {
 
       {latestOcr && <OcrResultCard ocrData={latestOcr} />}
 
-      <CandidateDocumentsTable data={documents} onDownload={handleDownload} />
+      {downloadError && (
+        <Alert
+          severity="error"
+          sx={{ mb: 3, borderRadius: 2 }}
+          onClose={() => setDownloadError(null)}
+        >
+          {downloadError}
+        </Alert>
+      )}
+
+      <CandidateDocumentsTable
+        data={documents}
+        onDownload={handleDownload}
+        downloadingId={downloadingId}
+      />
     </Box>
   );
-}
+}
